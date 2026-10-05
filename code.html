@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BandarGames</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#ffdad6",
+                      "on-primary-fixed-variant": "#5a00c6",
+                      "inverse-primary": "#732ee4",
+                      "primary-fixed": "#eaddff",
+                      "tertiary-fixed": "#ffd9dc",
+                      "on-surface": "#dae2fd",
+                      "on-error": "#690005",
+                      "primary-fixed-dim": "#d2bbff",
+                      "error-container": "#93000a",
+                      "outline": "#958da1",
+                      "surface-container-high": "#222a3d",
+                      "secondary": "#a6e6ff",
+                      "surface-tint": "#d2bbff",
+                      "surface-container-highest": "#2d3449",
+                      "on-primary-container": "#ede0ff",
+                      "on-tertiary": "#67001f",
+                      "secondary-fixed-dim": "#4cd6ff",
+                      "primary": "#d2bbff",
+                      "inverse-surface": "#dae2fd",
+                      "surface-bright": "#31394d",
+                      "tertiary-container": "#cd0047",
+                      "on-background": "#dae2fd",
+                      "surface-dim": "#0b1326",
+                      "on-secondary-fixed": "#001f28",
+                      "on-secondary": "#003543",
+                      "surface-container-low": "#131b2e",
+                      "surface-container": "#171f33",
+                      "surface-variant": "#2d3449",
+                      "on-tertiary-container": "#ffdee0",
+                      "on-primary-fixed": "#25005a",
+                      "error": "#ffb4ab",
+                      "secondary-container": "#14d1ff",
+                      "tertiary": "#ffb2ba",
+                      "primary-container": "#7c3aed",
+                      "on-primary": "#3f008e",
+                      "tertiary-fixed-dim": "#ffb2ba",
+                      "surface-container-lowest": "#060e20",
+                      "on-tertiary-fixed-variant": "#910030",
+                      "surface": "#0b1326",
+                      "outline-variant": "#4a4455",
+                      "secondary-fixed": "#b7eaff",
+                      "on-secondary-fixed-variant": "#004e60",
+                      "on-surface-variant": "#ccc3d8",
+                      "inverse-on-surface": "#283044",
+                      "background": "#0b1326",
+                      "on-tertiary-fixed": "#400010",
+                      "on-secondary-container": "#00566b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "margin-mobile": "20px",
+                      "md": "16px",
+                      "unit": "4px",
+                      "lg": "24px",
+                      "margin-desktop": "48px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-md": [
+                              "Sora"
+                      ],
+                      "headline-lg-mobile": [
+                              "Sora"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Sora"
+                      ],
+                      "display-lg": [
+                              "Sora"
+                      ],
+                      "label-sm": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+          .glass-panel {
+              background: rgba(30, 41, 59, 0.4);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              border: 1px solid rgba(255, 255, 255, 0.05);
+              box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          }
+          .neon-glow {
+              box-shadow: 0 0 15px rgba(210, 187, 255, 0.15);
+          }
+          .hover-neon:hover {
+              box-shadow: 0 0 20px rgba(210, 187, 255, 0.3);
+              border-color: #d2bbff;
+          }
+          
+          /* Hide scrollbar for horizontal scroll areas */
+          .no-scrollbar::-webkit-scrollbar {
+              display: none;
+          }
+          .no-scrollbar {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+          }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md selection:bg-primary-container selection:text-on-primary-container pb-24 md:pb-0">
+<!-- Header: TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface/80 backdrop-blur-xl fixed top-0 w-full z-50 shadow-[0_4px_20px_rgba(115,46,228,0.15)] flex justify-between items-center px-margin-mobile h-16 transition-all duration-300">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/30 relative">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a futuristic gamer avatar. The character wears sleek, high-tech neon-accented eyewear and glowing dark-mode apparel. The lighting is cinematic, featuring soft rim lights in deep purple and cyan against a pitch-black background. High resolution, hyper-realistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDsOh1X0jyQE3vxacNF971XXL1m7hS7lZpgTvMc1StaQOBp93MyAf1UG064sN-GHg1u3tMzYU1y5PUa_vj9Gqi42SUbUDlxsu2vZc-xmLUwLzdOJDzIoa2gKg5eJe4XMbnG01F4BtWylGBRvSls-ANkkQAgR2aj2sbPv3Yj9ZVQA5xbsx5bXMBxS2zLrS1_yH4P-sjiDA0dhzjJSBEr1RVB1_HWHB4D-YBUoFMkTkBadQZFcvrFt8z"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tighter md:hidden">BandarGames</h1>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tighter hidden md:block">BandarGames</h1>
+</div>
+<!-- Desktop Nav Placeholder -->
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-primary font-title-md text-title-md hover:bg-surface-variant/30 transition-colors px-3 py-2 rounded-lg" href="#">Home</a>
+<a class="text-on-surface-variant font-title-md text-title-md hover:bg-surface-variant/30 transition-colors px-3 py-2 rounded-lg" href="#">Library</a>
+<a class="text-on-surface-variant font-title-md text-title-md hover:bg-surface-variant/30 transition-colors px-3 py-2 rounded-lg" href="#">Community</a>
+</nav>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant/30 transition-colors active:scale-95 duration-200 relative">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full animate-pulse shadow-[0_0_8px_rgba(255,178,186,0.8)]"></span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="pt-24 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto space-y-xl pb-10">
+<!-- Hero Section -->
+<section class="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden glass-panel group">
+<div class="absolute inset-0 w-full h-full">
+<div class="bg-cover bg-center w-full h-full transform group-hover:scale-105 transition-transform duration-700" data-alt="A breathtaking, cinematic wide shot of a futuristic cyberpunk cityscape at night, serving as a video game background. Towering skyscrapers with intricate neon signs reflect in rain-slicked streets. The color palette is dominated by deep blacks, vibrant magenta, and electric blue. Highly detailed, immersive atmosphere, unreal engine 5 render style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfafv_WSNKfkRFKh5xPU159aXPRphzAj5uRHcQjhlyuDWgigoo9Qx_5Aui73AfJ2jhFu2p7mOC44lRqcMg0ShCZKyP-iZt-AgTwJK5huTIgTdKxKH_M7lezbE2nDXC1qxDVrpq0Dj2uWBooPD_bly5_OQq2VcYfilbxNDxOIfJYGTuSJc13Pt3TtCn8y42y-g-C7PGoduDaDYit5ANQhHcsieZfPFUFzoqd6P2zfp7Z_oB3xzWAMz9')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
+</div>
+<div class="absolute bottom-0 left-0 w-full p-lg flex flex-col items-start gap-md z-10">
+<div class="flex gap-sm">
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary rounded-full font-label-sm text-label-sm border border-tertiary/20 backdrop-blur-md flex items-center gap-1">
+<span class="w-2 h-2 bg-tertiary rounded-full animate-pulse inline-block"></span>
+                        LIVE EVENT
+                    </span>
+<span class="px-3 py-1 bg-surface-variant/60 text-on-surface rounded-full font-label-sm text-label-sm border border-outline-variant/30 backdrop-blur-md">
+                        SEASON 4
+                    </span>
+</div>
+<h2 class="font-display-lg text-display-lg text-primary-fixed drop-shadow-lg max-w-2xl">Neon Vanguard: Ascension</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl line-clamp-2 md:line-clamp-3">
+                    Join the elite forces in the neon-drenched streets of Neo-Tokyo. Master new cybernetic abilities and dominate the ranked arenas in the latest competitive season.
+                </p>
+<button class="mt-2 bg-gradient-to-r from-primary-container to-inverse-primary text-on-primary-container px-8 py-3 rounded-lg font-title-md text-title-md shadow-[0_0_20px_rgba(124,58,237,0.4)] hover:shadow-[0_0_30px_rgba(124,58,237,0.6)] transition-all duration-300 active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    Play Now
+                </button>
+</div>
+</section>
+<!-- Categories -->
+<section class="space-y-md">
+<h3 class="font-title-md text-title-md text-primary">Browse Categories</h3>
+<div class="flex overflow-x-auto gap-md pb-4 no-scrollbar -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0">
+<button class="flex flex-col items-center justify-center gap-xs min-w-[90px] h-[90px] glass-panel rounded-xl hover-neon transition-all duration-300 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-primary group-hover:bg-primary-container/20 group-hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-2xl">swords</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors">Action</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-xs min-w-[90px] h-[90px] glass-panel rounded-xl hover-neon transition-all duration-300 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-primary group-hover:bg-primary-container/20 group-hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-2xl">magic_button</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors">RPG</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-xs min-w-[90px] h-[90px] glass-panel rounded-xl hover-neon transition-all duration-300 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-primary group-hover:bg-primary-container/20 group-hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-2xl">chess</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors">Strategy</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-xs min-w-[90px] h-[90px] glass-panel rounded-xl hover-neon transition-all duration-300 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-primary group-hover:bg-primary-container/20 group-hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-2xl">sports_soccer</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors">Sports</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-xs min-w-[90px] h-[90px] glass-panel rounded-xl hover-neon transition-all duration-300 group">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-primary group-hover:bg-primary-container/20 group-hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-2xl">speed</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors">Racing</span>
+</button>
+</div>
+</section><section class="space-y-md">
+<h3 class="font-title-md text-title-md text-primary">Popular Games</h3>
+<div class="grid grid-cols-2 gap-md">
+<!-- Game Card 1 -->
+<div class="glass-panel rounded-xl overflow-hidden group hover-neon transition-all duration-300">
+<div class="relative h-40 overflow-hidden">
+<img alt="Neon Guardian" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCes5UUl0E0GHsGj6ybDcMOGy1CizxvAo13NmPQh7As48vqTV4PFFYJWzoCdnXCsx0N7Ugsw53giZQDMMAVcBn2GF-NYsciICsWDa3OlCwIwqnTyf3piV3htv8w1BuILnQHQ8A-UKO54DWzqkSfyO4mOG4dy4fYVGUaMrd7OwUAfBQuyq7fZfio9I7WBL5Bl4qSo5A6t9ef1ZLx6TIEJpUjVJNgFdPYjCyE-jjm0C7x4rfrCnQ0Au1S"/>
+<div class="absolute top-2 right-2 px-2 py-0.5 bg-primary-container/80 backdrop-blur-md rounded text-[10px] font-label-sm text-on-primary-container">ACTION</div>
+</div>
+<div class="p-3">
+<h4 class="font-title-md text-body-md font-bold text-on-surface truncate">Neon Guardian</h4>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-on-surface-variant">4.9</span>
+</div>
+</div>
+</div>
+<!-- Game Card 2 -->
+<div class="glass-panel rounded-xl overflow-hidden group hover-neon transition-all duration-300">
+<div class="relative h-40 overflow-hidden">
+<img alt="Mystic Ruin" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYJGk7Slx4BTCRwVs2xIer2kHWQsFPdRFX4YqeqGueuYnhrUBsQz0eGLI3BXgZIEcoJTl4X-nuobp3wRbZPmUzy4uOJzUW5G7zdbzgL0w4Og2J_DPYXBq_CJp-cSNjCwByc6tJyVZvVkgmc82Lz2D9UFjs6S5-W2ol6YK6j0HzctkYI5SZ1ZuYdbQ9impLtHBmpRfR91-BoWaXqVvt1aAqFLXd71dwolM6FOuQF-IiUOSLs6Kl8btr"/>
+<div class="absolute top-2 right-2 px-2 py-0.5 bg-primary-container/80 backdrop-blur-md rounded text-[10px] font-label-sm text-on-primary-container">RPG</div>
+</div>
+<div class="p-3">
+<h4 class="font-title-md text-body-md font-bold text-on-surface truncate">Mystic Ruin</h4>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-on-surface-variant">4.7</span>
+</div>
+</div>
+</div>
+<!-- Game Card 3 -->
+<div class="glass-panel rounded-xl overflow-hidden group hover-neon transition-all duration-300">
+<div class="relative h-40 overflow-hidden">
+<img alt="Quantum Rush" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTvlwsB73loD7gmGBuORjcUuTpvS1PWufT3phDY6hOlYW51F426WcMeZ7amrLqz8RObnXBgI11AMwED3AITdxyfQXCsZnq-p_Z_B0LFZ63fB02tj2iDqDIYsYyLuaCCJocZ3SZEeCu_8-QaHpnKyO9P7Ul-Bn_nNNw_QLhiYpHlDax4qzTN_rDpGHHO1QZTHC4kzzMujbkxCSwOOWu_B4i8Lc3BX7NBg5X3K3ERa-rJC4jiCa8ybl5"/>
+<div class="absolute top-2 right-2 px-2 py-0.5 bg-primary-container/80 backdrop-blur-md rounded text-[10px] font-label-sm text-on-primary-container">RACING</div>
+</div>
+<div class="p-3">
+<h4 class="font-title-md text-body-md font-bold text-on-surface truncate">Quantum Rush</h4>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-on-surface-variant">4.8</span>
+</div>
+</div>
+</div>
+<!-- Game Card 4 -->
+<div class="glass-panel rounded-xl overflow-hidden group hover-neon transition-all duration-300">
+<div class="relative h-40 overflow-hidden">
+<img alt="Nebula Conflict" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU_TTyfsY5STEFd8iWa_XM1e3IsLkjwvI9bKZV-xp3ZIXeSDubufU2Un772jP0LnTDXmTCo9AeMyZCNgnbRfMj8iY4XzYuARfbQWZrDibhXyGGNOm-9HggQ8-XclXKxKyiqJT3JSw6jrSQjeLId1UM2eEK00-wGozssRAHfk6lMvFEKVfNVYFTrnGFE0xJ13K_LLZF-_anTeB4D58fg2-GwmybsK9X-99PpRUXz5Ek25IhCo_1El6q"/>
+<div class="absolute top-2 right-2 px-2 py-0.5 bg-primary-container/80 backdrop-blur-md rounded text-[10px] font-label-sm text-on-primary-container">STRATEGY</div>
+</div>
+<div class="p-3">
+<h4 class="font-title-md text-body-md font-bold text-on-surface truncate">Nebula Conflict</h4>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-sm text-on-surface-variant">4.6</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer: BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container/90 dark:bg-surface-container/90 backdrop-blur-2xl fixed bottom-0 w-full z-50 rounded-t-xl border-t border-outline-variant/10 shadow-[0_-4px_24px_rgba(0,0,0,0.4)] flex justify-around items-center h-20 pb-safe px-4">
+<button class="flex flex-col items-center justify-center text-secondary-container bg-secondary-container/10 rounded-xl py-1 px-3 active:scale-90 duration-150 group">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 group">
+<span class="material-symbols-outlined text-2xl mb-1">sports_esports</span>
+<span class="font-label-sm text-label-sm group-hover:text-primary">Library</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 group">
+<span class="material-symbols-outlined text-2xl mb-1">group</span>
+<span class="font-label-sm text-label-sm group-hover:text-primary">Community</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 group">
+<span class="material-symbols-outlined text-2xl mb-1">person</span>
+<span class="font-label-sm text-label-sm group-hover:text-primary">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple header background opacity change on scroll for extra polish
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('bg-surface/95');
+                header.classList.remove('bg-surface/80');
+            } else {
+                header.classList.add('bg-surface/80');
+                header.classList.remove('bg-surface/95');
+            }
+        });
+    </script>
+</body></html>
