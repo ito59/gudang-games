@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use App\Models\FeaturedEvent;
 use App\Models\Game;
 use App\Models\Post;
 use App\Models\User;
@@ -57,35 +56,9 @@ class DatabaseSeeder extends Seeder
             'description' => "{$data['title']} — seeded from the app's mock catalogue.",
         ]))->keyBy('title');
 
-        FeaturedEvent::create([
-            'title' => 'Neon Vanguard: Ascension',
-            'description' => 'Join the elite forces in the neon-drenched streets of '
-                .'Neo-Tokyo. Master new cybernetic abilities and dominate the ranked '
-                .'arenas in the latest competitive season.',
-            'season' => 'SEASON 4',
-            'is_live' => true,
-            'sort_order' => 0,
-        ]);
-
-        FeaturedEvent::create([
-            'title' => 'Neon Guardian: Last Stand',
-            'description' => 'The city falls at midnight. Hold the line through twenty '
-                .'escalating waves and unlock the Guardian prototype armour.',
-            'season' => 'EVENT',
-            'is_live' => true,
-            'game_id' => $games['Neon Guardian']->id,
-            'sort_order' => 1,
-        ]);
-
-        FeaturedEvent::create([
-            'title' => 'Quantum Rush: Velocity',
-            'description' => 'Tear through light-speed circuits in the new time-trial '
-                .'ladder. Top the weekly board to claim the Velocity livery.',
-            'season' => 'SEASON 2',
-            'is_live' => false,
-            'game_id' => $games['Quantum Rush']->id,
-            'sort_order' => 2,
-        ]);
+        // The home carousel shows featured games.
+        $games['Neon Guardian']->update(['is_featured' => true]);
+        $games['Quantum Rush']->update(['is_featured' => true]);
 
         $members = collect([
             [

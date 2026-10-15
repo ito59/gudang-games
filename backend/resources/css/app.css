@@ -1,3 +1,138 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-cream text-ink;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply font-display;
+    }
+}
+
+/*
+ * Shared admin pieces, so every page draws the same card, button and field
+ * as the app: white cards on cream, gold gradient pills, deep red for the
+ * active state and destructive actions.
+ */
+@layer components {
+    .gg-card {
+        @apply rounded-card border border-line-soft bg-white shadow-card;
+    }
+
+    .gg-gold-band {
+        background-image: linear-gradient(90deg, #d9bc80 0%, #e6cf9c 50%, #f3e4bf 100%);
+    }
+
+    .gg-wordmark {
+        @apply inline-flex items-center rounded-full bg-white px-4 py-1.5 font-display text-lg font-bold tracking-tight text-ink shadow-card;
+    }
+
+    /* Buttons */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-deep focus-visible:ring-offset-2 focus-visible:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn-gold {
+        @apply btn border border-gold-deep/40 text-gold-on shadow-card hover:shadow-lift hover:brightness-[1.03];
+        background-image: linear-gradient(90deg, #bf9a55 0%, #d9bc80 50%, #f3e4bf 100%);
+    }
+
+    .btn-red {
+        @apply btn bg-brand text-white shadow-card hover:bg-brand-dark;
+    }
+
+    .btn-outline {
+        @apply btn border border-line bg-white text-ink-soft hover:bg-fill hover:text-ink;
+    }
+
+    .btn-outline-red {
+        @apply btn border border-brand/30 bg-white text-brand hover:bg-brand/10;
+    }
+
+    /* After the variants, so it wins over their padding. */
+    .btn-sm {
+        @apply px-3.5 py-1.5;
+    }
+
+    /* Text links */
+    .gg-link {
+        @apply font-medium text-gold-link hover:text-gold-on hover:underline;
+    }
+
+    .gg-link-danger {
+        @apply font-medium text-brand hover:text-brand-dark hover:underline;
+    }
+
+    /* Form fields */
+    .gg-input {
+        @apply rounded-xl border-line bg-white text-sm text-ink shadow-sm placeholder:text-ink-muted focus:border-gold-deep focus:ring-gold-deep;
+    }
+
+    .gg-label {
+        @apply text-sm font-medium text-ink-soft;
+    }
+
+    .gg-error {
+        @apply text-xs text-brand;
+    }
+
+    .gg-check {
+        @apply rounded border-line text-brand focus:ring-gold-deep;
+    }
+
+    .gg-file {
+        @apply block w-full text-sm text-ink-soft file:mr-3 file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gold-on hover:file:brightness-[1.03];
+    }
+
+    .gg-file::file-selector-button {
+        background-image: linear-gradient(90deg, #bf9a55 0%, #d9bc80 50%, #f3e4bf 100%);
+    }
+
+    .gg-well {
+        @apply border border-line-soft bg-fill-alt;
+    }
+
+    /* Tables */
+    .gg-thead {
+        @apply bg-fill text-xs font-semibold uppercase tracking-wide text-ink-soft;
+    }
+
+    .gg-row {
+        @apply border-t border-line-soft;
+    }
+
+    /* Status chips */
+    .chip {
+        @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+    }
+
+    .chip-gold {
+        @apply chip border border-gold/60 bg-gold-light text-gold-on;
+    }
+
+    .chip-green {
+        @apply chip bg-online/10 text-online-ink;
+    }
+
+    .chip-red {
+        @apply chip bg-brand/10 text-brand;
+    }
+
+    .chip-neutral {
+        @apply chip bg-fill text-ink-soft;
+    }
+
+    /* Toggle-style tabs: the app's bottom-nav active pill. */
+    .gg-tab {
+        @apply rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-soft transition hover:bg-fill hover:text-ink;
+    }
+
+    .gg-tab-active {
+        @apply rounded-full bg-brand/10 px-3.5 py-1.5 text-sm font-semibold text-brand transition;
+    }
+}

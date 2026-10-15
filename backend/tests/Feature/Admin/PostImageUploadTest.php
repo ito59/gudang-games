@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\FeaturedEvent;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,8 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 /**
- * Posts and featured events both carry an `image_path` an admin fills in from
- * the dashboard, and both use the same upload behaviour.
+ * Posts carry an `image_path` an admin fills in from the dashboard.
  */
 class PostImageUploadTest extends TestCase
 {
@@ -181,26 +179,5 @@ class PostImageUploadTest extends TestCase
 
         $post->delete();
         $this->assertSame(0, Post::count());
-    }
-
-    public function test_a_featured_event_uploads_the_same_way(): void
-    {
-        $this->actingAs($this->admin)
-            ->post('/admin/events', [
-                'title' => 'Ascension',
-                'description' => 'The season finale.',
-                'season' => 'SEASON 2',
-                'image' => UploadedFile::fake()->image('banner.jpg'),
-            ])
-            ->assertRedirect('/admin/events');
-
-        $event = FeaturedEvent::firstOrFail();
-
-        $this->assertStringStartsWith('events/', $event->image_path);
-        Storage::disk('public')->assertExists($event->image_path);
-
-        $this->getJson('/api/v1/featured')
-            ->assertOk()
-            ->assertJsonPath('data.0.image', $event->image_url);
     }
 }

@@ -11,17 +11,17 @@ defineProps({
         <template v-for="link in links" :key="link.label">
             <span
                 v-if="!link.url"
-                class="rounded px-3 py-1.5 text-sm text-[#8B84A3]"
+                class="rounded-full px-3 py-1.5 text-sm text-ink-muted"
                 v-html="link.label"
             />
             <Link
                 v-else
                 :href="link.url"
-                class="rounded px-3 py-1.5 text-sm transition"
+                class="rounded-full px-3 py-1.5 text-sm transition"
                 :class="
                     link.active
-                        ? 'bg-[#7C3AED] text-white'
-                        : 'text-[#CCC3D8] hover:bg-white/5'
+                        ? 'bg-brand font-semibold text-white'
+                        : 'text-ink-soft hover:bg-white hover:text-ink'
                 "
                 v-html="link.label"
             />

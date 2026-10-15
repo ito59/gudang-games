@@ -1,4 +1,4 @@
-# BandarGames — backend
+# GudangGames — backend
 
 Laravel 12 + Inertia + Vue 3 admin panel, plus a REST API for the Flutter app
 in the parent directory.
@@ -114,9 +114,8 @@ a missing permission should not look like a missing session.
 | Screen | What it manages |
 | --- | --- |
 | Dashboard | counts, latest feed activity |
-| Games | full CRUD, search, category filter, cover upload |
+| Games | full CRUD, search, category filter, cover upload; the "featured" flag puts a game in the app's home carousel |
 | Categories | inline CRUD; deleting one leaves its games uncategorised |
-| Featured events | carousel slides on the app's home screen |
 | User feed | moderate posts — edit, hide/publish, delete, filter by kind |
 | Users | edit profile and stats, promote/suspend, delete |
 | Reports | what members reported, and what the filter refused |
@@ -400,14 +399,14 @@ cap follows `php.ini`, like the bundle upload.
 
 ## Uploaded images are shrunk
 
-Every image upload — game covers, post and event images, avatars — goes
+Every image upload — game covers, post images, avatars — goes
 through `App\Services\ImageStore`, which downscales anything larger than the
 app will ever draw it:
 
 | | longest edge |
 |---|---|
 | Game cover | 1200 |
-| Post and event image | 1600 |
+| Post image | 1600 |
 | Avatar | 512 |
 
 A 4032×3024 phone photo of 1.71 MB comes out at 189 KB as a cover and 65 KB

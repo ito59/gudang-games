@@ -12,9 +12,9 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-cream">
             <nav
-                class="border-b border-gray-100 bg-white"
+                class="border-b border-line-soft bg-white"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -24,7 +24,7 @@ const showingNavigationDropdown = ref(false);
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
+                                        class="text-base"
                                     />
                                 </Link>
                             </div>
@@ -50,7 +50,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                class="inline-flex items-center rounded-full border border-line-soft bg-white px-3 py-2 text-sm font-medium leading-4 text-ink-soft transition duration-150 ease-in-out hover:bg-fill hover:text-ink focus:outline-none"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -95,7 +95,7 @@ const showingNavigationDropdown = ref(false);
                                     showingNavigationDropdown =
                                         !showingNavigationDropdown
                                 "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                                class="inline-flex items-center justify-center rounded-full p-2 text-ink-soft transition duration-150 ease-in-out hover:bg-fill hover:text-ink focus:bg-fill focus:text-ink focus:outline-none"
                             >
                                 <svg
                                     class="h-6 w-6"
@@ -150,15 +150,15 @@ const showingNavigationDropdown = ref(false);
 
                     <!-- Responsive Settings Options -->
                     <div
-                        class="border-t border-gray-200 pb-1 pt-4"
+                        class="border-t border-line-soft pb-1 pt-4"
                     >
                         <div class="px-4">
                             <div
-                                class="text-base font-medium text-gray-800"
+                                class="text-base font-medium text-ink"
                             >
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="text-sm font-medium text-gray-500">
+                            <div class="text-sm font-medium text-ink-muted">
                                 {{ $page.props.auth.user.email }}
                             </div>
                         </div>
@@ -181,7 +181,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Heading -->
             <header
-                class="bg-white shadow"
+                class="gg-gold-band shadow-card"
                 v-if="$slots.header"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

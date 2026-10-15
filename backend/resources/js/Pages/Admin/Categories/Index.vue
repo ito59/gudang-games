@@ -41,7 +41,7 @@ const destroy = (category) => {
 };
 
 const field =
-    'mt-1 w-full rounded-lg border-white/10 bg-[#0B1326] text-sm text-[#DAE2FD] focus:border-[#7C3AED] focus:ring-[#7C3AED]';
+    'mt-1 w-full gg-input';
 </script>
 
 <template>
@@ -50,9 +50,9 @@ const field =
     <AdminLayout title="Categories">
         <div class="grid gap-6 lg:grid-cols-3">
             <div class="lg:col-span-2">
-                <div class="overflow-x-auto rounded-xl border border-white/5 bg-[#171F33]">
+                <div class="overflow-x-auto gg-card">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-white/5 text-xs uppercase text-[#8B84A3]">
+                        <thead class="gg-thead">
                             <tr>
                                 <th class="px-4 py-3">Name</th>
                                 <th class="px-4 py-3">Icon</th>
@@ -62,24 +62,24 @@ const field =
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="c in categories" :key="c.id" class="border-t border-white/5">
+                            <tr v-for="c in categories" :key="c.id" class="gg-row">
                                 <td class="px-4 py-3 font-medium">{{ c.name }}</td>
-                                <td class="px-4 py-3 font-mono text-xs text-[#CCC3D8]">
+                                <td class="px-4 py-3 text-xs text-ink-soft">
                                     {{ c.icon }}
                                 </td>
                                 <td class="px-4 py-3">{{ c.games_count }}</td>
                                 <td class="px-4 py-3">{{ c.sort_order }}</td>
                                 <td class="px-4 py-3 text-right whitespace-nowrap">
-                                    <button class="text-[#D2BBFF] hover:underline" @click="startEdit(c)">
+                                    <button class="gg-link" @click="startEdit(c)">
                                         Edit
                                     </button>
-                                    <button class="ml-3 text-[#FFB2BA] hover:underline" @click="destroy(c)">
+                                    <button class="ml-3 gg-link-danger" @click="destroy(c)">
                                         Delete
                                     </button>
                                 </td>
                             </tr>
                             <tr v-if="!categories.length">
-                                <td colspan="5" class="px-4 py-8 text-center text-[#8B84A3]">
+                                <td colspan="5" class="px-4 py-8 text-center text-ink-muted">
                                     No categories yet.
                                 </td>
                             </tr>
@@ -89,34 +89,34 @@ const field =
             </div>
 
             <form
-                class="space-y-4 rounded-xl border border-white/5 bg-[#171F33] p-5"
+                class="space-y-4 gg-card p-5"
                 @submit.prevent="submit"
             >
-                <h2 class="font-semibold text-[#D2BBFF]">
+                <h2 class="font-display font-semibold text-ink">
                     {{ editingId ? 'Edit category' : 'New category' }}
                 </h2>
 
                 <div>
-                    <label class="text-sm text-[#CCC3D8]">Name</label>
+                    <label class="gg-label">Name</label>
                     <input v-model="form.name" type="text" :class="field" />
-                    <p v-if="form.errors.name" class="mt-1 text-xs text-[#FFB2BA]">
+                    <p v-if="form.errors.name" class="mt-1 gg-error">
                         {{ form.errors.name }}
                     </p>
                 </div>
 
                 <div>
-                    <label class="text-sm text-[#CCC3D8]">
+                    <label class="gg-label">
                         Icon
-                        <span class="text-[#8B84A3]">— Material Symbols name</span>
+                        <span class="text-ink-muted">— Material Symbols name</span>
                     </label>
                     <input v-model="form.icon" type="text" :class="field" />
-                    <p v-if="form.errors.icon" class="mt-1 text-xs text-[#FFB2BA]">
+                    <p v-if="form.errors.icon" class="mt-1 gg-error">
                         {{ form.errors.icon }}
                     </p>
                 </div>
 
                 <div>
-                    <label class="text-sm text-[#CCC3D8]">Sort order</label>
+                    <label class="gg-label">Sort order</label>
                     <input v-model="form.sort_order" type="number" min="0" :class="field" />
                 </div>
 
@@ -124,14 +124,14 @@ const field =
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="rounded-lg bg-[#7C3AED] px-4 py-2 text-sm font-medium text-white hover:bg-[#732EE4] disabled:opacity-50"
+                        class="btn-gold"
                     >
                         {{ editingId ? 'Save' : 'Add' }}
                     </button>
                     <button
                         v-if="editingId"
                         type="button"
-                        class="text-sm text-[#CCC3D8] hover:underline"
+                        class="text-sm text-ink-soft hover:text-ink hover:underline"
                         @click="cancel"
                     >
                         Cancel

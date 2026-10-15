@@ -68,7 +68,7 @@ const submit = () => {
 };
 
 const field =
-    'mt-1 w-full rounded-lg border-white/10 bg-[#0B1326] text-sm text-[#DAE2FD] placeholder:text-[#8B84A3] focus:border-[#7C3AED] focus:ring-[#7C3AED]';
+    'mt-1 w-full gg-input';
 </script>
 
 <template>
@@ -76,21 +76,21 @@ const field =
 
     <AdminLayout :title="editing ? 'Edit post' : 'New post'">
         <form
-            class="max-w-2xl space-y-5 rounded-xl border border-white/5 bg-[#171F33] p-6"
+            class="max-w-2xl space-y-5 gg-card p-6"
             @submit.prevent="submit"
         >
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
-                    <label class="text-sm text-[#CCC3D8]">Author</label>
+                    <label class="gg-label">Author</label>
                     <div
-                        class="mt-1 rounded-lg border border-white/10 bg-[#0B1326] px-3 py-2 text-sm text-[#DAE2FD]"
+                        class="mt-1 rounded-xl border border-line bg-fill-alt px-3 py-2 text-sm text-ink"
                     >
                         {{ author?.name }}
-                        <span class="text-xs text-[#8B84A3]">
+                        <span class="text-xs text-ink-muted">
                             @{{ author?.username }}
                         </span>
                     </div>
-                    <p class="mt-1 text-xs text-[#8B84A3]">
+                    <p class="mt-1 text-xs text-ink-muted">
                         {{
                             editing
                                 ? 'Whoever wrote it. Editing does not reassign a post.'
@@ -99,7 +99,7 @@ const field =
                     </p>
                 </div>
                 <div>
-                    <label class="text-sm text-[#CCC3D8]">Kind</label>
+                    <label class="gg-label">Kind</label>
                     <select v-model="form.kind" :class="field">
                         <option v-for="k in kinds" :key="k" :value="k">{{ k }}</option>
                     </select>
@@ -107,7 +107,7 @@ const field =
             </div>
 
             <div v-if="isNews">
-                <label class="text-sm text-[#CCC3D8]">Headline</label>
+                <label class="gg-label">Headline</label>
                 <input
                     v-model="form.title"
                     type="text"
@@ -115,16 +115,16 @@ const field =
                     placeholder="Season 2 lands next week"
                     :class="field"
                 />
-                <p class="mt-1 text-xs text-[#8B84A3]">
+                <p class="mt-1 text-xs text-ink-muted">
                     Shown on the feed card and at the top of the article page.
                 </p>
-                <p v-if="form.errors.title" class="mt-1 text-xs text-[#FFB2BA]">
+                <p v-if="form.errors.title" class="mt-1 gg-error">
                     {{ form.errors.title }}
                 </p>
             </div>
 
             <div>
-                <label class="text-sm text-[#CCC3D8]">
+                <label class="gg-label">
                     {{ isNews ? 'Article' : 'Body' }}
                 </label>
                 <textarea
@@ -132,17 +132,17 @@ const field =
                     :rows="isNews ? 12 : 5"
                     :class="field"
                 />
-                <p v-if="isNews" class="mt-1 text-xs text-[#8B84A3]">
+                <p v-if="isNews" class="mt-1 text-xs text-ink-muted">
                     Blank lines start a new paragraph in the app.
                 </p>
-                <p v-if="form.errors.body" class="mt-1 text-xs text-[#FFB2BA]">
+                <p v-if="form.errors.body" class="mt-1 gg-error">
                     {{ form.errors.body }}
                 </p>
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
-                    <label class="text-sm text-[#CCC3D8]">Tagged game</label>
+                    <label class="gg-label">Tagged game</label>
                     <select v-model="form.game_id" :class="field">
                         <option value="">None</option>
                         <option v-for="g in games" :key="g.id" :value="g.id">
@@ -151,19 +151,19 @@ const field =
                     </select>
                 </div>
                 <div>
-                    <label class="text-sm text-[#CCC3D8]">Comments count</label>
+                    <label class="gg-label">Comments count</label>
                     <input v-model="form.comments_count" type="number" min="0" :class="field" />
                 </div>
             </div>
 
             <div>
-                <label class="text-sm text-[#CCC3D8]">
+                <label class="gg-label">
                     {{ isNews ? 'Cover image' : 'Image' }}
                 </label>
 
                 <div class="mt-2 flex flex-wrap items-start gap-4">
                     <div
-                        class="grid h-28 w-44 shrink-0 place-items-center overflow-hidden rounded-lg border border-white/10 bg-[#0B1326]"
+                        class="grid h-28 w-44 shrink-0 place-items-center overflow-hidden rounded-xl gg-well"
                     >
                         <img
                             v-if="preview"
@@ -171,7 +171,7 @@ const field =
                             alt="Image preview"
                             class="h-full w-full object-cover"
                         />
-                        <span v-else class="text-xs text-[#8B84A3]">No image</span>
+                        <span v-else class="text-xs text-ink-muted">No image</span>
                     </div>
 
                     <div class="space-y-2">
@@ -179,37 +179,37 @@ const field =
                             ref="fileInput"
                             type="file"
                             accept="image/jpeg,image/png,image/webp"
-                            class="block w-full text-sm text-[#CCC3D8] file:mr-3 file:rounded-lg file:border-0 file:bg-[#7C3AED] file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-[#732EE4]"
+                            class="gg-file"
                             @change="pickFile"
                         />
-                        <p class="text-xs text-[#8B84A3]">
+                        <p class="text-xs text-ink-muted">
                             JPG, PNG or WebP, up to 4 MB.
                         </p>
 
                         <button
                             v-if="preview"
                             type="button"
-                            class="text-xs text-[#FFB2BA] hover:underline"
+                            class="text-xs gg-link-danger"
                             @click="clearImage"
                         >
                             Remove image
                         </button>
 
-                        <p v-if="form.progress" class="text-xs text-[#D2BBFF]">
+                        <p v-if="form.progress" class="text-xs text-gold-link">
                             Uploading… {{ form.progress.percentage }}%
                         </p>
-                        <p v-if="form.errors.image" class="text-xs text-[#FFB2BA]">
+                        <p v-if="form.errors.image" class="gg-error">
                             {{ form.errors.image }}
                         </p>
                     </div>
                 </div>
             </div>
 
-            <label class="flex items-center gap-2 text-sm text-[#CCC3D8]">
+            <label class="flex items-center gap-2 text-sm text-ink-soft">
                 <input
                     v-model="form.is_published"
                     type="checkbox"
-                    class="rounded border-white/20 bg-[#0B1326] text-[#7C3AED] focus:ring-[#7C3AED]"
+                    class="gg-check"
                 />
                 Published — visible in the app feed
             </label>
@@ -218,11 +218,11 @@ const field =
                 <button
                     type="submit"
                     :disabled="form.processing"
-                    class="rounded-lg bg-[#7C3AED] px-4 py-2 text-sm font-medium text-white hover:bg-[#732EE4] disabled:opacity-50"
+                    class="btn-gold"
                 >
                     {{ editing ? 'Save changes' : 'Create post' }}
                 </button>
-                <Link href="/admin/posts" class="text-sm text-[#CCC3D8] hover:underline">
+                <Link href="/admin/posts" class="text-sm text-ink-soft hover:text-ink hover:underline">
                     Cancel
                 </Link>
             </div>

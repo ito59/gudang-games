@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GameResource;
 use App\Models\Category;
-use App\Models\FeaturedEvent;
 use App\Models\Game;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -61,29 +60,12 @@ class CatalogueController extends Controller
     }
 
     /**
-     * Slides for the app's home carousel.
-     *
-     * Two sources, one list: hand-written campaign slides, then games an
-     * admin has flagged as featured. A game slide carries the game itself, so
-     * the app can open it straight from the carousel.
+     * Slides for the app's home carousel: the games an admin has flagged as
+     * featured. Each slide carries the game itself, so the app can open it
+     * straight from the carousel.
      */
     public function featured(): JsonResponse
     {
-        $events = FeaturedEvent::published()
-            ->orderBy('sort_order')
-            ->get()
-            ->map(fn (FeaturedEvent $event) => [
-                'id' => 'event-'.$event->id,
-                'title' => $event->title,
-                'description' => $event->description,
-                'season' => $event->season,
-                'is_live' => $event->is_live,
-                // Uploaded images resolve to a URL; bundled asset paths pass
-                // through, the same way a game's cover does.
-                'image' => $event->image_url ?? $event->image_path,
-                'game' => null,
-            ]);
-
         $games = Game::featured()
             ->with('category:id,name,slug')
             ->orderBy('sort_order')
@@ -92,13 +74,15 @@ class CatalogueController extends Controller
             ->map(fn (Game $game) => [
                 'id' => 'game-'.$game->id,
                 'title' => $game->title,
-                'description' => $game->description ?: 'Featured on BandarGames.',
+                'description' => $game->description ?: 'Featured on GudangGames.',
+                // Still sent for app builds released before featured events
+                // were removed, which draw these as the slide's badges.
                 'season' => 'FEATURED',
                 'is_live' => false,
                 'image' => $game->cover_url ?? $game->cover_path,
                 'game' => new GameResource($game),
             ]);
 
-        return response()->json(['data' => $events->concat($games)->values()]);
+        return response()->json(['data' => $games->values()]);
     }
 }

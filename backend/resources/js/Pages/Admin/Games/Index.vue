@@ -47,11 +47,11 @@ const destroy = (game) => {
                 v-model="search"
                 type="search"
                 placeholder="Search games…"
-                class="w-56 rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] placeholder:text-[#8B84A3] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="w-56 gg-input"
             />
             <select
                 v-model="category"
-                class="rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="gg-input"
             >
                 <option value="">All categories</option>
                 <option v-for="c in categories" :key="c.id" :value="c.id">
@@ -61,7 +61,7 @@ const destroy = (game) => {
 
             <select
                 v-model="featured"
-                class="rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="gg-input"
             >
                 <option value="">All games</option>
                 <option value="yes">Featured only</option>
@@ -69,15 +69,15 @@ const destroy = (game) => {
 
             <Link
                 href="/admin/games/create"
-                class="ml-auto rounded-lg bg-[#7C3AED] px-4 py-2 text-sm font-medium text-white hover:bg-[#732EE4]"
+                class="btn-gold ml-auto"
             >
                 New game
             </Link>
         </div>
 
-        <div class="overflow-x-auto rounded-xl border border-white/5 bg-[#171F33]">
+        <div class="overflow-x-auto gg-card">
             <table class="w-full text-left text-sm">
-                <thead class="bg-white/5 text-xs uppercase text-[#8B84A3]">
+                <thead class="gg-thead">
                     <tr>
                         <th class="px-4 py-3">Cover</th>
                         <th class="px-4 py-3">Title</th>
@@ -90,29 +90,29 @@ const destroy = (game) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="game in games.data" :key="game.id" class="border-t border-white/5">
+                    <tr v-for="game in games.data" :key="game.id" class="gg-row">
                         <td class="px-4 py-3">
-                            <div class="grid h-10 w-16 place-items-center overflow-hidden rounded border border-white/10 bg-[#0B1326]">
+                            <div class="grid h-10 w-16 place-items-center overflow-hidden rounded-lg gg-well">
                                 <img
                                     v-if="game.cover_url"
                                     :src="game.cover_url"
                                     :alt="game.title"
                                     class="h-full w-full object-cover"
                                 />
-                                <span v-else class="text-[10px] text-[#8B84A3]">none</span>
+                                <span v-else class="text-[10px] text-ink-muted">none</span>
                             </div>
                         </td>
                         <td class="px-4 py-3 font-medium">{{ game.title }}</td>
-                        <td class="px-4 py-3 text-[#CCC3D8]">
+                        <td class="px-4 py-3 text-ink-soft">
                             {{ game.category?.name ?? '—' }}
                         </td>
                         <td class="px-4 py-3">
                             <span
-                                class="rounded-full px-2 py-0.5 text-xs"
+                                class="chip"
                                 :class="
                                     game.source_type === 'zip'
-                                        ? 'bg-[#7C3AED]/25 text-[#D2BBFF]'
-                                        : 'bg-white/10 text-[#CCC3D8]'
+                                        ? 'bg-gold-light text-gold-on'
+                                        : 'bg-fill text-ink-soft'
                                 "
                             >
                                 {{ game.source_type === 'zip' ? 'Hosted ZIP' : 'URL' }}
@@ -122,41 +122,41 @@ const destroy = (game) => {
                                 :href="game.play_url"
                                 target="_blank"
                                 rel="noopener"
-                                class="ml-2 text-xs text-[#D2BBFF] hover:underline"
+                                class="ml-2 text-xs gg-link"
                             >
                                 open ↗
                             </a>
                         </td>
                         <td class="px-4 py-3">{{ Number(game.rating).toFixed(1) }}</td>
                         <td class="px-4 py-3">
-                            <span :class="game.is_published ? 'text-emerald-300' : 'text-amber-300'">
+                            <span :class="game.is_published ? 'chip-green' : 'chip-neutral'">
                                 {{ game.is_published ? 'Published' : 'Draft' }}
                             </span>
                         </td>
                         <td class="px-4 py-3">
                             <span
                                 v-if="game.is_featured"
-                                class="rounded-full bg-[#7C3AED]/25 px-2 py-0.5 text-xs text-[#D2BBFF]"
+                                class="chip-gold"
                             >
                                 In slider
                             </span>
-                            <span v-else class="text-xs text-[#8B84A3]">—</span>
+                            <span v-else class="text-xs text-ink-muted">—</span>
                         </td>
                         <td class="px-4 py-3 text-right whitespace-nowrap">
                             <Link
                                 :href="`/admin/games/${game.id}/edit`"
-                                class="text-[#D2BBFF] hover:underline"
+                                class="gg-link"
                             >
                                 Edit
                             </Link>
                             <Link
                                 :href="`/admin/games/${game.id}/trailer`"
-                                class="ml-3 text-[#D2BBFF] hover:underline"
+                                class="ml-3 gg-link"
                             >
                                 {{ game.trailer_url ? 'Trailer ✓' : 'Trailer' }}
                             </Link>
                             <button
-                                class="ml-3 text-[#FFB2BA] hover:underline"
+                                class="ml-3 gg-link-danger"
                                 @click="destroy(game)"
                             >
                                 Delete
@@ -164,7 +164,7 @@ const destroy = (game) => {
                         </td>
                     </tr>
                     <tr v-if="!games.data.length">
-                        <td colspan="8" class="px-4 py-8 text-center text-[#8B84A3]">
+                        <td colspan="8" class="px-4 py-8 text-center text-ink-muted">
                             No games match this filter.
                         </td>
                     </tr>

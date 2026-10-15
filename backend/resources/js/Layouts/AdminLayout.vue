@@ -15,7 +15,6 @@ const nav = [
     { label: 'Dashboard', route: 'admin.dashboard', match: 'admin.dashboard' },
     { label: 'Games', route: 'admin.games.index', match: 'admin.games' },
     { label: 'Categories', route: 'admin.categories.index', match: 'admin.categories' },
-    { label: 'Featured events', route: 'admin.events.index', match: 'admin.events' },
     { label: 'User feed', route: 'admin.posts.index', match: 'admin.posts' },
     { label: 'Users', route: 'admin.users.index', match: 'admin.users' },
     { label: 'Reports', route: 'admin.reports.index', match: 'admin.reports' },
@@ -26,7 +25,6 @@ const paths = {
     'admin.dashboard': '/admin',
     'admin.games.index': '/admin/games',
     'admin.categories.index': '/admin/categories',
-    'admin.events.index': '/admin/events',
     'admin.posts.index': '/admin/posts',
     'admin.users.index': '/admin/users',
     'admin.reports.index': '/admin/reports',
@@ -42,25 +40,27 @@ const logout = () => router.post('/logout');
 </script>
 
 <template>
-    <div class="min-h-screen bg-[#0B1326] text-[#DAE2FD]">
+    <div class="min-h-screen bg-cream font-sans text-ink">
         <div class="flex">
             <aside
-                class="hidden w-60 shrink-0 border-r border-white/5 bg-[#131B2E] p-4 md:block"
+                class="hidden min-h-screen w-60 shrink-0 border-r border-line-soft bg-white md:block"
             >
-                <div class="mb-8 flex items-center gap-2 px-2">
-                    <span class="text-lg font-bold text-[#D2BBFF]">BandarGames</span>
+                <div class="gg-gold-band flex h-[72px] items-center px-4">
+                    <span class="gg-wordmark">
+                        Gudang<span class="text-brand">Games</span>
+                    </span>
                 </div>
 
-                <nav class="space-y-1">
+                <nav class="space-y-1 p-4">
                     <Link
                         v-for="item in nav"
                         :key="item.route"
                         :href="paths[item.route]"
-                        class="block rounded-lg px-3 py-2 text-sm transition"
+                        class="block rounded-full px-4 py-2 text-sm transition"
                         :class="
                             isActive(item.match)
-                                ? 'bg-[#7C3AED]/25 text-[#D2BBFF]'
-                                : 'text-[#CCC3D8] hover:bg-white/5'
+                                ? 'bg-brand/10 font-semibold text-brand'
+                                : 'font-medium text-ink-soft hover:bg-fill hover:text-ink'
                         "
                     >
                         {{ item.label }}
@@ -70,20 +70,25 @@ const logout = () => router.post('/logout');
 
             <div class="min-w-0 flex-1">
                 <header
-                    class="flex items-center justify-between border-b border-white/5 bg-[#171F33] px-6 py-4"
+                    class="gg-gold-band flex min-h-[72px] items-center justify-between gap-4 px-6 py-3 shadow-card"
                 >
-                    <div>
-                        <h1 class="text-xl font-semibold text-[#D2BBFF]">
+                    <div class="flex min-w-0 items-center gap-3">
+                        <span class="gg-wordmark md:hidden">
+                            Gudang<span class="text-brand">Games</span>
+                        </span>
+                        <h1 class="truncate font-display text-xl font-semibold text-gold-on">
                             {{ title }}
                         </h1>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <span class="hidden text-sm text-[#CCC3D8] sm:inline">
+                    <div class="flex shrink-0 items-center gap-3">
+                        <span
+                            class="hidden rounded-full bg-white/70 px-3 py-1 text-sm font-medium text-gold-on sm:inline"
+                        >
                             {{ user?.name }}
                         </span>
                         <button
-                            class="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-[#CCC3D8] hover:bg-white/5"
+                            class="btn btn-sm border border-gold-deep/40 bg-white text-gold-on hover:bg-cream"
                             @click="logout"
                         >
                             Sign out
@@ -92,9 +97,9 @@ const logout = () => router.post('/logout');
                 </header>
 
                 <!-- Mobile nav -->
-                <div class="border-b border-white/5 bg-[#131B2E] px-4 py-2 md:hidden">
+                <div class="border-b border-line-soft bg-white px-4 py-2 md:hidden">
                     <button
-                        class="text-sm text-[#CCC3D8]"
+                        class="text-sm font-semibold text-ink-soft"
                         @click="open = !open"
                     >
                         Menu
@@ -104,11 +109,11 @@ const logout = () => router.post('/logout');
                             v-for="item in nav"
                             :key="item.route"
                             :href="paths[item.route]"
-                            class="block rounded px-3 py-2 text-sm"
+                            class="block rounded-full px-4 py-2 text-sm"
                             :class="
                                 isActive(item.match)
-                                    ? 'bg-[#7C3AED]/25 text-[#D2BBFF]'
-                                    : 'text-[#CCC3D8]'
+                                    ? 'bg-brand/10 font-semibold text-brand'
+                                    : 'font-medium text-ink-soft'
                             "
                         >
                             {{ item.label }}
@@ -119,7 +124,7 @@ const logout = () => router.post('/logout');
                 <main class="p-6">
                     <div
                         v-if="flash"
-                        class="mb-4 rounded-lg border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200"
+                        class="mb-4 rounded-card border border-online/30 bg-online/10 px-4 py-3 text-sm font-medium text-online-ink"
                     >
                         {{ flash }}
                     </div>

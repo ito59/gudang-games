@@ -7,7 +7,7 @@
  * production.
  */
 return [
-    'app_name' => env('LEGAL_APP_NAME', 'BandarGames'),
+    'app_name' => env('LEGAL_APP_NAME', 'GudangGames'),
 
     'operator' => env('LEGAL_OPERATOR', 'PT LDS'),
 

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\FeaturedEventController;
 use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\Admin\GameTrailerController;
 use App\Http\Controllers\Admin\PostController;
@@ -70,7 +69,6 @@ Route::middleware(['auth', 'admin'])
             ->name('games.trailer.update');
         Route::delete('games/{game}/trailer', [GameTrailerController::class, 'destroy'])
             ->name('games.trailer.destroy');
-        Route::resource('events', FeaturedEventController::class)->except('show');
 
         Route::resource('categories', CategoryController::class)
             ->only(['index', 'store', 'update', 'destroy']);

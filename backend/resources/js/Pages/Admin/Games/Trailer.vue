@@ -55,7 +55,7 @@ const humanSize = (bytes) => {
 
     <AdminLayout :title="`Trailer — ${game.title}`">
         <div class="max-w-2xl space-y-5">
-            <p class="text-sm text-[#8B84A3]">
+            <p class="text-sm text-ink-muted">
                 Uploaded separately from the game's details, because video
                 files are large — a slow upload here never risks the rest of
                 the game's data.
@@ -64,24 +64,24 @@ const humanSize = (bytes) => {
             <!-- What is stored now -->
             <section
                 v-if="hasTrailer"
-                class="space-y-3 rounded-xl border border-white/5 bg-[#171F33] p-5"
+                class="space-y-3 gg-card p-5"
             >
-                <h2 class="font-semibold text-[#D2BBFF]">Current trailer</h2>
+                <h2 class="font-display font-semibold text-ink">Current trailer</h2>
 
                 <video
                     :src="game.trailer_url"
                     controls
                     preload="metadata"
-                    class="w-full rounded-lg bg-black"
+                    class="w-full rounded-xl bg-ink"
                 />
 
-                <p class="text-xs text-[#8B84A3]">
+                <p class="text-xs text-ink-muted">
                     {{ game.trailer_mime }} · {{ humanSize(game.trailer_size) }}
                 </p>
 
                 <button
                     type="button"
-                    class="text-sm text-[#FFB2BA] hover:underline"
+                    class="text-sm gg-link-danger"
                     @click="remove"
                 >
                     Remove trailer
@@ -90,17 +90,17 @@ const humanSize = (bytes) => {
 
             <p
                 v-else
-                class="rounded-xl border border-white/5 bg-[#171F33] px-5 py-8 text-center text-sm text-[#8B84A3]"
+                class="gg-card px-5 py-8 text-center text-sm text-ink-muted"
             >
                 No trailer uploaded yet.
             </p>
 
             <!-- Upload -->
             <form
-                class="space-y-4 rounded-xl border border-white/5 bg-[#171F33] p-5"
+                class="space-y-4 gg-card p-5"
                 @submit.prevent="submit"
             >
-                <h2 class="font-semibold text-[#D2BBFF]">
+                <h2 class="font-display font-semibold text-ink">
                     {{ hasTrailer ? 'Replace trailer' : 'Upload trailer' }}
                 </h2>
 
@@ -108,11 +108,11 @@ const humanSize = (bytes) => {
                     ref="fileInput"
                     type="file"
                     accept="video/mp4,video/webm,video/quicktime"
-                    class="block w-full text-sm text-[#CCC3D8] file:mr-3 file:rounded-lg file:border-0 file:bg-[#7C3AED] file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-[#732EE4]"
+                    class="gg-file"
                     @change="pickFile"
                 />
 
-                <p class="text-xs text-[#8B84A3]">
+                <p class="text-xs text-ink-muted">
                     MP4, WebM or MOV, up to {{ maxTrailerMb }} MB.
                     Uploading a new file replaces the current one.
                 </p>
@@ -122,27 +122,27 @@ const humanSize = (bytes) => {
                     :src="localPreview"
                     controls
                     preload="metadata"
-                    class="w-full rounded-lg bg-black"
+                    class="w-full rounded-xl bg-ink"
                 />
 
-                <p v-if="picked" class="text-xs text-[#D2BBFF]">
+                <p v-if="picked" class="text-xs text-gold-link">
                     {{ picked.name }} · {{ humanSize(picked.size) }}
                 </p>
 
                 <!-- Large files take a while; show real progress. -->
                 <div v-if="form.progress" class="space-y-1">
-                    <div class="h-2 overflow-hidden rounded-full bg-white/10">
+                    <div class="h-2 overflow-hidden rounded-full bg-fill">
                         <div
-                            class="h-full bg-[#7C3AED] transition-all"
+                            class="h-full bg-gradient-to-r from-gold-deep via-gold to-gold-light transition-all"
                             :style="{ width: `${form.progress.percentage}%` }"
                         />
                     </div>
-                    <p class="text-xs text-[#D2BBFF]">
+                    <p class="text-xs text-gold-link">
                         Uploading… {{ form.progress.percentage }}%
                     </p>
                 </div>
 
-                <p v-if="form.errors.trailer" class="text-xs text-[#FFB2BA]">
+                <p v-if="form.errors.trailer" class="gg-error">
                     {{ form.errors.trailer }}
                 </p>
 
@@ -150,13 +150,13 @@ const humanSize = (bytes) => {
                     <button
                         type="submit"
                         :disabled="form.processing || !picked"
-                        class="rounded-lg bg-[#7C3AED] px-4 py-2 text-sm font-medium text-white hover:bg-[#732EE4] disabled:opacity-50"
+                        class="btn-gold"
                     >
                         {{ form.processing ? 'Uploading…' : 'Upload' }}
                     </button>
                     <Link
                         :href="`/admin/games/${game.id}/edit`"
-                        class="text-sm text-[#CCC3D8] hover:underline"
+                        class="text-sm text-ink-soft hover:text-ink hover:underline"
                     >
                         Back to game
                     </Link>

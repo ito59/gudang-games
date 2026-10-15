@@ -12,7 +12,7 @@ class ExampleTest extends TestCase
     /** The root is the public landing page; the panel stays at /admin. */
     public function test_the_root_is_the_landing_page(): void
     {
-        $this->get('/')->assertOk()->assertSee('BandarGames');
+        $this->get('/')->assertOk()->assertSee('GudangGames');
     }
 
     public function test_the_landing_page_speaks_both_languages_and_links_the_legal_pages(): void

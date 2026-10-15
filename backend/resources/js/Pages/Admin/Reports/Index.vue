@@ -46,12 +46,7 @@ const targetLabel = {
                     { key: 'flagged', label: `Filtered automatically (${counts.flagged ?? 0})` },
                 ]"
                 :key="item.key"
-                class="rounded-lg px-3 py-1.5 text-sm transition"
-                :class="
-                    tab === item.key
-                        ? 'bg-[#7C3AED]/25 text-[#D2BBFF]'
-                        : 'text-[#CCC3D8] hover:bg-white/5'
-                "
+                :class="tab === item.key ? 'gg-tab-active' : 'gg-tab'"
                 @click="tab = item.key"
             >
                 {{ item.label }}
@@ -61,11 +56,11 @@ const targetLabel = {
                 <button
                     v-for="option in ['pending', 'resolved', 'dismissed', 'all']"
                     :key="option"
-                    class="rounded-lg border px-3 py-1.5 text-xs capitalize transition"
+                    class="rounded-full border px-3 py-1.5 text-xs font-medium capitalize transition"
                     :class="
                         status === option
-                            ? 'border-[#7C3AED] text-[#D2BBFF]'
-                            : 'border-white/10 text-[#8B84A3] hover:bg-white/5'
+                            ? 'border-brand/30 bg-brand/10 text-brand'
+                            : 'border-line bg-white text-ink-soft hover:bg-fill'
                     "
                     @click="filter(option)"
                 >
@@ -78,7 +73,7 @@ const targetLabel = {
         <div v-if="tab === 'reports'">
             <p
                 v-if="!reports.data.length"
-                class="rounded-xl border border-white/5 bg-[#171F33] px-4 py-10 text-center text-sm text-[#8B84A3]"
+                class="gg-card px-4 py-10 text-center text-sm text-ink-muted"
             >
                 Nothing {{ status === 'all' ? 'reported' : status }} right now.
             </p>
@@ -86,54 +81,54 @@ const targetLabel = {
             <div
                 v-for="report in reports.data"
                 :key="report.id"
-                class="mb-3 rounded-xl border border-white/5 bg-[#171F33] p-4"
+                class="mb-3 gg-card p-4"
             >
                 <div class="flex flex-wrap items-start gap-3">
                     <span
-                        class="rounded-md bg-[#7C3AED]/20 px-2 py-1 text-xs font-medium text-[#D2BBFF]"
+                        class="chip-gold"
                     >
                         {{ targetLabel[report.target] ?? report.target }}
                     </span>
-                    <span class="rounded-md bg-white/5 px-2 py-1 text-xs text-[#CCC3D8]">
+                    <span class="chip-neutral">
                         {{ report.reason }}
                     </span>
                     <span
                         v-if="report.status !== 'pending'"
-                        class="rounded-md bg-emerald-400/10 px-2 py-1 text-xs capitalize text-emerald-200"
+                        class="chip-green capitalize"
                     >
                         {{ report.status }}<template v-if="report.resolved_by">
                             · {{ report.resolved_by }}</template>
                     </span>
-                    <span class="ml-auto text-xs text-[#8B84A3]">{{ report.created_at }}</span>
+                    <span class="ml-auto text-xs text-ink-muted">{{ report.created_at }}</span>
                 </div>
 
                 <!-- The excerpt is a snapshot taken when the report was
                      filed, so it survives the content being deleted. -->
                 <blockquote
                     v-if="report.excerpt"
-                    class="mt-3 border-l-2 border-[#7C3AED]/40 pl-3 text-sm text-[#DAE2FD]"
+                    class="mt-3 border-l-2 border-gold pl-3 text-sm text-ink"
                 >
                     {{ report.excerpt }}
-                    <span v-if="!report.content_exists" class="text-xs text-[#8B84A3]">
+                    <span v-if="!report.content_exists" class="text-xs text-ink-muted">
                         (deleted)
                     </span>
                 </blockquote>
 
-                <p v-if="report.note" class="mt-2 text-sm text-[#CCC3D8]">
-                    <span class="text-xs uppercase text-[#8B84A3]">Note</span>
+                <p v-if="report.note" class="mt-2 text-sm text-ink-soft">
+                    <span class="text-xs uppercase text-ink-muted">Note</span>
                     — {{ report.note }}
                 </p>
 
-                <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#8B84A3]">
+                <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
                     <span>
                         Reported by
-                        <span class="text-[#CCC3D8]">@{{ report.reporter?.username ?? 'gone' }}</span>
+                        <span class="text-ink-soft">@{{ report.reporter?.username ?? 'gone' }}</span>
                     </span>
                     <span v-if="report.reported_user">
                         About
                         <Link
                             :href="`/admin/users/${report.reported_user.id}/edit`"
-                            class="text-[#D2BBFF] hover:underline"
+                            class="gg-link"
                         >
                             @{{ report.reported_user.username }}
                         </Link>
@@ -148,21 +143,21 @@ const targetLabel = {
 
                 <div v-if="report.status === 'pending'" class="mt-4 flex flex-wrap gap-2">
                     <button
-                        class="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-[#CCC3D8] hover:bg-white/5"
+                        class="btn-outline btn-sm"
                         @click="act(report, 'dismiss')"
                     >
                         Dismiss
                     </button>
                     <button
                         v-if="report.target !== 'user' && report.content_exists"
-                        class="rounded-lg bg-[#7C3AED] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#732EE4]"
+                        class="btn-red btn-sm"
                         @click="act(report, 'delete_content', 'Delete this content? It cannot be undone.')"
                     >
                         Delete content
                     </button>
                     <button
                         v-if="report.reported_user?.is_active"
-                        class="rounded-lg border border-red-400/30 px-3 py-1.5 text-sm text-red-200 hover:bg-red-400/10"
+                        class="btn-outline-red btn-sm"
                         @click="
                             act(
                                 report,
@@ -180,9 +175,9 @@ const targetLabel = {
         </div>
 
         <!-- What the filter refused before it was ever stored -->
-        <div v-else class="overflow-x-auto rounded-xl border border-white/5 bg-[#171F33]">
+        <div v-else class="overflow-x-auto gg-card">
             <table class="w-full text-left text-sm">
-                <thead class="bg-white/5 text-xs uppercase text-[#8B84A3]">
+                <thead class="gg-thead">
                     <tr>
                         <th class="px-4 py-3">Member</th>
                         <th class="px-4 py-3">Where</th>
@@ -193,34 +188,34 @@ const targetLabel = {
                 </thead>
                 <tbody>
                     <tr v-if="!flagged.data.length">
-                        <td colspan="5" class="px-4 py-10 text-center text-[#8B84A3]">
+                        <td colspan="5" class="px-4 py-10 text-center text-ink-muted">
                             The filter has not refused anything yet.
                         </td>
                     </tr>
                     <tr
                         v-for="event in flagged.data"
                         :key="event.id"
-                        class="border-t border-white/5"
+                        class="gg-row"
                     >
                         <td class="px-4 py-3">
                             <Link
                                 v-if="event.author"
                                 :href="`/admin/users/${event.author.id}/edit`"
-                                class="text-[#D2BBFF] hover:underline"
+                                class="gg-link"
                             >
                                 @{{ event.author.username }}
                             </Link>
-                            <span v-else class="text-[#8B84A3]">gone</span>
+                            <span v-else class="text-ink-muted">gone</span>
                         </td>
-                        <td class="px-4 py-3 capitalize text-[#CCC3D8]">{{ event.context }}</td>
+                        <td class="px-4 py-3 capitalize text-ink-soft">{{ event.context }}</td>
                         <td class="px-4 py-3">
-                            <span class="capitalize text-[#CCC3D8]">{{ event.reason }}</span>
-                            <span v-if="event.rule" class="text-xs text-[#8B84A3]">
+                            <span class="capitalize text-ink-soft">{{ event.reason }}</span>
+                            <span v-if="event.rule" class="text-xs text-ink-muted">
                                 · {{ event.rule }}
                             </span>
                         </td>
-                        <td class="max-w-md px-4 py-3 text-[#DAE2FD]">{{ event.body }}</td>
-                        <td class="px-4 py-3 text-xs text-[#8B84A3]">{{ event.created_at }}</td>
+                        <td class="max-w-md px-4 py-3 text-ink">{{ event.body }}</td>
+                        <td class="px-4 py-3 text-xs text-ink-muted">{{ event.created_at }}</td>
                     </tr>
                 </tbody>
             </table>

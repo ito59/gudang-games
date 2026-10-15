@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\FeaturedEvent;
 use App\Models\Game;
 use App\Models\Post;
 use App\Models\User;
@@ -20,7 +19,7 @@ class DashboardController extends Controller
                 'games' => Game::count(),
                 'published_games' => Game::published()->count(),
                 'categories' => Category::count(),
-                'events' => FeaturedEvent::count(),
+                'featured' => Game::featured()->count(),
                 'users' => User::count(),
                 'online' => User::online()->count(),
                 'posts' => Post::count(),

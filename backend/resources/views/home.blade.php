@@ -3,6 +3,12 @@
     $terms = route('legal.terms', ['lang' => $lang]);
     $play = $legal['play_store_url'];
 
+    // The app header's wordmark: "Games" in the brand red.
+    $name = $legal['app_name'];
+    $wordmark = str_ends_with($name, 'Games')
+        ? e(substr($name, 0, -5)).'<span>Games</span>'
+        : e($name);
+
     $icons = [
         'play' => '<path d="M8 5.5v13l10.5-6.5L8 5.5Z"/>',
         'spark' => '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>',
@@ -19,7 +25,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $legal['app_name'] }}</title>
     <meta name="description" content="{{ $t['meta_description'] }}">
-    <meta name="theme-color" content="#0b1326">
+    <meta name="theme-color" content="#d9bc80">
     <meta property="og:title" content="{{ $legal['app_name'] }}">
     <meta property="og:description" content="{{ $t['meta_description'] }}">
     <meta property="og:image" content="{{ asset('images/site/hero.jpg') }}">
@@ -29,21 +35,30 @@
     <link rel="alternate" hreflang="id" href="{{ url('/') }}?lang=id">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        /* The app's cream-and-gold palette (lib/theme/app_colors.dart). */
         :root {
-            --bg: #0b1326;
-            --bg-deep: #060e20;
-            --surface: #131b2e;
-            --surface-2: #171f33;
-            --line: #2d3449;
-            --text: #dae2fd;
-            --muted: #a9a3bd;
-            --primary: #d2bbff;
-            --violet: #7c3aed;
-            --cyan: #14d1ff;
-            --pink: #ffb2ba;
-            --radius: 20px;
+            --bg: #f7f1e5;
+            --bg-deep: #efe6d4;
+            --surface: #ffffff;
+            --surface-2: #f5ebd6;
+            --fill: #f4ecdc;
+            --line: #ede3d0;
+            --line-strong: #dccdb0;
+            --text: #221c15;
+            --muted: #6e6254;
+            --red: #b3191e;
+            --red-dark: #8f1217;
+            --gold-light: #f3e4bf;
+            --gold: #d9bc80;
+            --gold-deep: #bf9a55;
+            --on-gold: #2b2116;
+            --gold-ink: #a9823d;
+            --gold-band: linear-gradient(90deg, #d9bc80, #e6cf9c 50%, #f3e4bf);
+            --gold-button: linear-gradient(90deg, #bf9a55, #d9bc80 50%, #f3e4bf);
+            --shadow: 0 6px 18px rgba(90, 66, 32, .08);
+            --radius: 18px;
         }
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -61,38 +76,39 @@
         .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 16px; }
         @media (min-width: 720px) { .wrap { padding: 0 32px; } }
 
-        /* Nav */
-        .nav { position: sticky; top: 0; z-index: 10; background: rgba(11, 19, 38, .82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(45, 52, 73, .6); }
+        /* Nav: the app's gold header band with the white wordmark pill. */
+        .nav { position: sticky; top: 0; z-index: 10; background: var(--gold-band); box-shadow: var(--shadow); }
         .nav .wrap { display: flex; align-items: center; gap: 24px; height: 68px; }
-        .nav-logo img { height: 36px; width: auto; }
-        .nav-links { display: none; gap: 24px; margin-left: auto; font-size: 15px; }
-        .nav-links a { text-decoration: none; color: var(--muted); }
-        .nav-links a:hover { color: var(--text); }
-        .lang { margin-left: auto; display: flex; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; font: 500 12px "JetBrains Mono", monospace; }
+        .nav-logo { text-decoration: none; display: inline-flex; align-items: center; background: #fff; border-radius: 999px; padding: 6px 16px; font: 700 18px Sora, system-ui, sans-serif; letter-spacing: -.01em; color: var(--text); box-shadow: var(--shadow); white-space: nowrap; }
+        .nav-logo span { color: var(--red); }
+        .nav-links { display: none; gap: 24px; margin-left: auto; font-size: 15px; font-weight: 500; }
+        .nav-links a { text-decoration: none; color: var(--on-gold); opacity: .78; }
+        .nav-links a:hover { opacity: 1; }
+        .lang { margin-left: auto; display: flex; gap: 2px; background: rgba(255, 255, 255, .7); border: 1px solid rgba(191, 154, 85, .4); border-radius: 999px; padding: 3px; font: 600 12px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: .04em; }
         .lang a { text-decoration: none; padding: 5px 10px; border-radius: 999px; color: var(--muted); }
-        .lang a[aria-current] { background: var(--violet); color: #fff; }
+        .lang a[aria-current] { background: rgba(179, 25, 30, .1); color: var(--red); }
         @media (min-width: 820px) { .nav-links { display: flex; } .lang { margin-left: 0; } }
 
-        /* Buttons */
-        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 14px; font-weight: 600; font-size: 16px; text-decoration: none; transition: transform .15s ease, background .15s ease; }
+        /* Buttons: pills, gold gradient for the main action. */
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; font-weight: 600; font-size: 16px; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
         .btn:hover { transform: translateY(-1px); }
-        .btn-primary { background: var(--violet); color: #fff; box-shadow: 0 10px 30px -10px rgba(124, 58, 237, .8); }
-        .btn-primary:hover { background: #8b4cf5; }
-        .btn-ghost { border: 1px solid var(--line); color: var(--text); }
-        .btn-ghost:hover { background: var(--surface); }
-        .btn-soon { background: var(--surface-2); color: var(--muted); border: 1px dashed var(--line); cursor: default; }
+        .btn-primary { background: var(--gold-button); color: var(--on-gold); box-shadow: 0 10px 24px -10px rgba(143, 108, 47, .7); }
+        .btn-primary:hover { box-shadow: 0 14px 28px -10px rgba(143, 108, 47, .8); }
+        .btn-ghost { border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); }
+        .btn-ghost:hover { background: var(--fill); }
+        .btn-soon { background: var(--surface-2); color: var(--muted); border: 1px dashed var(--line-strong); cursor: default; }
         .btn-soon:hover { transform: none; }
         .btn svg { width: 20px; height: 20px; flex: none; }
 
         /* Hero */
         .hero { position: relative; padding: 56px 0 72px; overflow: hidden; }
-        .hero::before { content: ""; position: absolute; inset: 0; background: url("{{ asset('images/site/hero.jpg') }}") center / cover; opacity: .16; mask-image: linear-gradient(180deg, #000 20%, transparent 95%); -webkit-mask-image: linear-gradient(180deg, #000 20%, transparent 95%); }
-        .hero::after { content: ""; position: absolute; width: 640px; height: 640px; right: -180px; top: -120px; background: radial-gradient(circle, rgba(124, 58, 237, .45), transparent 65%); pointer-events: none; }
+        .hero::before { content: ""; position: absolute; inset: 0; background: url("{{ asset('images/site/hero.jpg') }}") center / cover; opacity: .07; filter: grayscale(1) sepia(.6); mask-image: linear-gradient(180deg, #000 20%, transparent 95%); -webkit-mask-image: linear-gradient(180deg, #000 20%, transparent 95%); }
+        .hero::after { content: ""; position: absolute; width: 640px; height: 640px; right: -180px; top: -120px; background: radial-gradient(circle, rgba(217, 188, 128, .55), transparent 65%); pointer-events: none; }
         .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; align-items: center; }
-        .eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 500 12px "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--pink); background: rgba(205, 0, 71, .16); border: 1px solid rgba(255, 178, 186, .25); padding: 6px 12px; border-radius: 999px; }
-        .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); }
-        .hero h1 { font-size: clamp(40px, 7vw, 68px); margin: 20px 0 18px; color: #f1ecff; }
-        .hero h1 span { background: linear-gradient(90deg, var(--primary), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 600 12px "Hanken Grotesk", system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--red); background: rgba(179, 25, 30, .08); border: 1px solid rgba(179, 25, 30, .18); padding: 6px 12px; border-radius: 999px; }
+        .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+        .hero h1 { font-size: clamp(40px, 7vw, 68px); margin: 20px 0 18px; color: var(--text); }
+        .hero h1 span { color: var(--red); }
         .hero p.lede { font-size: 19px; color: var(--muted); max-width: 520px; margin: 0 0 30px; }
         .actions { display: flex; flex-wrap: wrap; gap: 12px; }
         .hero-phone { justify-self: center; }
@@ -101,32 +117,32 @@
             .hero .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); }
         }
 
-        /* Phone frame */
-        .phone { width: 290px; max-width: 100%; border-radius: 42px; padding: 10px; background: linear-gradient(160deg, #3a3150, #151b2e); box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .8), 0 0 0 1px rgba(210, 187, 255, .12), 0 0 90px -20px rgba(124, 58, 237, .55); }
+        /* Phone frame: the bronze bezel from the design. */
+        .phone { width: 290px; max-width: 100%; border-radius: 42px; padding: 10px; background: linear-gradient(160deg, #8a6a3f, #3b2c1c); box-shadow: 0 40px 80px -30px rgba(90, 66, 32, .55), 0 0 0 1px rgba(191, 154, 85, .35); }
         .phone img { border-radius: 33px; width: 100%; aspect-ratio: 390 / 844; object-fit: cover; object-position: top; background: var(--bg-deep); }
         .tilt { transform: rotate(2.5deg); }
 
         /* Sections */
         section { padding: 80px 0; }
         .section-head { max-width: 640px; margin-bottom: 44px; }
-        .section-head h2 { font-size: clamp(30px, 4.4vw, 44px); color: #f1ecff; }
+        .section-head h2 { font-size: clamp(30px, 4.4vw, 44px); color: var(--text); }
         .section-head p { color: var(--muted); margin: 14px 0 0; font-size: 18px; }
 
         .features { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
         @media (min-width: 640px) { .features { grid-template-columns: 1fr 1fr; } }
         @media (min-width: 980px) { .features { grid-template-columns: repeat(3, 1fr); } }
-        .feature { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; transition: border-color .2s ease, transform .2s ease; }
-        .feature:hover { border-color: rgba(210, 187, 255, .35); transform: translateY(-2px); }
-        .feature .icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: rgba(124, 58, 237, .18); color: var(--primary); margin-bottom: 18px; }
+        .feature { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); transition: border-color .2s ease, transform .2s ease; }
+        .feature:hover { border-color: var(--gold); transform: translateY(-2px); }
+        .feature .icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--gold-light); color: var(--red); margin-bottom: 18px; }
         .feature .icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
         .feature:first-child .icon svg { fill: currentColor; stroke: none; }
-        .feature h3 { font-size: 19px; margin-bottom: 8px; color: #f1ecff; }
+        .feature h3 { font-size: 19px; margin-bottom: 8px; color: var(--text); }
         .feature p { margin: 0; color: var(--muted); font-size: 16px; }
 
         .showcase { background: linear-gradient(180deg, var(--bg), var(--bg-deep)); }
         .shots { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; }
         .shot { display: grid; gap: 28px; justify-items: center; text-align: center; }
-        .shot h3 { font-size: 22px; color: #f1ecff; margin-bottom: 8px; }
+        .shot h3 { font-size: 22px; color: var(--text); margin-bottom: 8px; }
         .shot p { margin: 0 auto; color: var(--muted); max-width: 320px; }
         .shot .phone { width: 250px; }
         @media (min-width: 900px) {
@@ -136,33 +152,37 @@
 
         .games { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
         @media (min-width: 720px) { .games { grid-template-columns: repeat(4, 1fr); } }
-        .game { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-        .game img { aspect-ratio: 1; width: 100%; object-fit: cover; }
+        .game { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+        .game img { aspect-ratio: 1; width: 100%; object-fit: cover; background: var(--fill); }
         .game div { padding: 12px 14px 14px; }
-        .game strong { display: block; font-family: Sora, sans-serif; font-size: 15px; color: #f1ecff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .game span { font: 500 12px "JetBrains Mono", monospace; color: var(--muted); }
+        .game strong { display: block; font-family: Sora, sans-serif; font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .game span { font: 500 13px "Hanken Grotesk", system-ui, sans-serif; color: var(--muted); }
 
         .faq { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; max-width: 780px; }
-        details { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 0 22px; }
+        details { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 22px; box-shadow: var(--shadow); }
         summary { cursor: pointer; list-style: none; padding: 20px 0; font-weight: 600; display: flex; justify-content: space-between; gap: 16px; }
         summary::-webkit-details-marker { display: none; }
-        summary::after { content: "+"; color: var(--primary); font-size: 22px; line-height: 1; transition: transform .2s ease; }
+        summary::after { content: "+"; color: var(--gold-ink); font-size: 22px; line-height: 1; transition: transform .2s ease; }
         details[open] summary::after { transform: rotate(45deg); }
         details p { margin: 0 0 20px; color: var(--muted); }
-        details a { color: var(--primary); }
+        details a { color: var(--red); }
 
         .cta { text-align: center; }
-        .cta-card { position: relative; overflow: hidden; border-radius: 28px; padding: 64px 24px; background: linear-gradient(135deg, #2a1459, #0f1a3a 60%, #062f3d); border: 1px solid rgba(210, 187, 255, .18); }
-        .cta-card img { width: 64px; margin: 0 auto 20px; }
-        .cta-card h2 { font-size: clamp(32px, 5vw, 48px); color: #fff; }
-        .cta-card p { color: var(--muted); margin: 12px 0 28px; font-size: 18px; }
+        .cta-card { position: relative; overflow: hidden; border-radius: 28px; padding: 64px 24px; background: var(--gold-band); border: 1px solid rgba(191, 154, 85, .4); box-shadow: var(--shadow); }
+        .cta-mark { display: inline-flex; margin: 0 auto 20px; background: #fff; border-radius: 999px; padding: 8px 20px; font: 700 22px Sora, system-ui, sans-serif; letter-spacing: -.01em; color: var(--text); box-shadow: var(--shadow); }
+        .cta-mark span { color: var(--red); }
+        .cta-card h2 { font-size: clamp(32px, 5vw, 48px); color: var(--on-gold); }
+        .cta-card p { color: #5a4a35; margin: 12px 0 28px; font-size: 18px; }
         .cta .actions { justify-content: center; }
+        .cta .btn-primary { background: var(--red); color: #fff; box-shadow: 0 10px 24px -10px rgba(143, 18, 23, .7); }
+        .cta .btn-primary:hover { background: var(--red-dark); }
+        .cta .btn-soon { background: rgba(255, 255, 255, .6); border-color: rgba(191, 154, 85, .6); color: #5a4a35; }
 
-        footer { border-top: 1px solid var(--line); padding: 36px 0 48px; color: var(--muted); font-size: 14px; }
+        footer { border-top: 1px solid var(--line-strong); padding: 36px 0 48px; color: var(--muted); font-size: 14px; }
         footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; }
         footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
         footer a { text-decoration: none; }
-        footer a:hover { color: var(--text); }
+        footer a:hover { color: var(--red); }
 
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
@@ -176,7 +196,7 @@
     <header class="nav">
         <div class="wrap">
             <a class="nav-logo" href="{{ url('/') }}?lang={{ $lang }}" aria-label="{{ $legal['app_name'] }}">
-                <img src="{{ asset('images/site/logo-lockup.png') }}" alt="{{ $legal['app_name'] }}" width="94" height="36">
+                {!! $wordmark !!}
             </a>
             <nav class="nav-links" aria-label="Sections">
                 <a href="#features">{{ $t['nav_features'] }}</a>
@@ -294,7 +314,7 @@
         <section class="cta">
             <div class="wrap">
                 <div class="cta-card">
-                    <img src="{{ asset('images/site/logo-mark.png') }}" alt="" width="64" height="75">
+                    <div class="cta-mark" aria-hidden="true">{!! $wordmark !!}</div>
                     <h2>{{ $t['cta_title'] }}</h2>
                     <p>{{ $t['cta_lede'] }}</p>
                     <div class="actions">

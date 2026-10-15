@@ -49,18 +49,18 @@ const destroy = (post) => {
                 v-model="search"
                 type="search"
                 placeholder="Search post text…"
-                class="w-64 rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] placeholder:text-[#8B84A3] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="w-64 gg-input"
             />
             <select
                 v-model="kind"
-                class="rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="gg-input"
             >
                 <option value="">All kinds</option>
                 <option v-for="k in kinds" :key="k" :value="k">{{ k }}</option>
             </select>
             <select
                 v-model="status"
-                class="rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="gg-input"
             >
                 <option value="">Any status</option>
                 <option value="pending">Hidden only</option>
@@ -68,7 +68,7 @@ const destroy = (post) => {
 
             <Link
                 href="/admin/posts/create"
-                class="ml-auto rounded-lg bg-[#7C3AED] px-4 py-2 text-sm font-medium text-white hover:bg-[#732EE4]"
+                class="btn-gold ml-auto"
             >
                 New post
             </Link>
@@ -78,7 +78,7 @@ const destroy = (post) => {
             <article
                 v-for="post in posts.data"
                 :key="post.id"
-                class="rounded-xl border border-white/5 bg-[#171F33] p-4"
+                class="gg-card p-4"
             >
                 <div class="flex flex-wrap items-start gap-3">
                     <span
@@ -94,39 +94,39 @@ const destroy = (post) => {
                     <div class="min-w-0 flex-1">
                         <div class="flex flex-wrap items-center gap-2 text-sm">
                             <span class="font-medium">{{ post.author?.name }}</span>
-                            <span class="text-xs text-[#8B84A3]">@{{ post.author?.username }}</span>
-                            <span class="rounded-full bg-[#7C3AED]/25 px-2 py-0.5 text-xs text-[#D2BBFF]">
+                            <span class="text-xs text-ink-muted">@{{ post.author?.username }}</span>
+                            <span class="chip-gold">
                                 {{ post.kind }}
                             </span>
-                            <span v-if="post.game" class="text-xs text-[#8B84A3]">
+                            <span v-if="post.game" class="text-xs text-ink-muted">
                                 · {{ post.game.title }}
                             </span>
                             <span
                                 class="text-xs"
-                                :class="post.is_published ? 'text-emerald-300' : 'text-amber-300'"
+                                :class="post.is_published ? 'text-online-ink' : 'text-brand'"
                             >
                                 · {{ post.is_published ? 'Published' : 'Hidden' }}
                             </span>
                         </div>
 
-                        <p v-if="post.title" class="mt-2 text-sm font-medium text-[#DAE2FD]">
+                        <p v-if="post.title" class="mt-2 text-sm font-medium text-ink">
                             {{ post.title }}
                         </p>
-                        <p class="mt-1 line-clamp-3 text-sm text-[#CCC3D8]">{{ post.body }}</p>
+                        <p class="mt-1 line-clamp-3 text-sm text-ink-soft">{{ post.body }}</p>
 
-                        <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-[#8B84A3]">
+                        <div class="mt-3 flex flex-wrap items-center gap-4 text-xs text-ink-muted">
                             <span>{{ post.likes_count }} likes</span>
                             <span>{{ post.comments_count }} comments</span>
                             <Link
                                 :href="`/admin/posts/${post.id}/edit`"
-                                class="text-[#D2BBFF] hover:underline"
+                                class="gg-link"
                             >
                                 Edit
                             </Link>
-                            <button class="text-[#D2BBFF] hover:underline" @click="toggle(post)">
+                            <button class="gg-link" @click="toggle(post)">
                                 {{ post.is_published ? 'Hide' : 'Publish' }}
                             </button>
-                            <button class="text-[#FFB2BA] hover:underline" @click="destroy(post)">
+                            <button class="gg-link-danger" @click="destroy(post)">
                                 Delete
                             </button>
                         </div>
@@ -134,7 +134,7 @@ const destroy = (post) => {
                 </div>
             </article>
 
-            <p v-if="!posts.data.length" class="rounded-xl border border-white/5 bg-[#171F33] px-4 py-8 text-center text-[#8B84A3]">
+            <p v-if="!posts.data.length" class="gg-card px-4 py-8 text-center text-ink-muted">
                 No posts match this filter.
             </p>
         </div>

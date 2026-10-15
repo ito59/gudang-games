@@ -40,11 +40,11 @@ const destroy = (user) => {
                 v-model="search"
                 type="search"
                 placeholder="Name, handle or email…"
-                class="w-64 rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] placeholder:text-[#8B84A3] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="w-64 gg-input"
             />
             <select
                 v-model="status"
-                class="rounded-lg border-white/10 bg-[#171F33] text-sm text-[#DAE2FD] focus:border-[#7C3AED] focus:ring-[#7C3AED]"
+                class="gg-input"
             >
                 <option value="">All members</option>
                 <option value="online">Online now</option>
@@ -53,15 +53,15 @@ const destroy = (user) => {
 
             <Link
                 href="/admin/users/create"
-                class="ml-auto rounded-lg bg-[#7C3AED] px-4 py-2 text-sm font-medium text-white hover:bg-[#732EE4]"
+                class="btn-gold ml-auto"
             >
                 New account
             </Link>
         </div>
 
-        <div class="overflow-x-auto rounded-xl border border-white/5 bg-[#171F33]">
+        <div class="overflow-x-auto gg-card">
             <table class="w-full text-left text-sm">
-                <thead class="bg-white/5 text-xs uppercase text-[#8B84A3]">
+                <thead class="gg-thead">
                     <tr>
                         <th class="px-4 py-3">Member</th>
                         <th class="px-4 py-3">Email</th>
@@ -72,7 +72,7 @@ const destroy = (user) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="user in users.data" :key="user.id" class="border-t border-white/5">
+                    <tr v-for="user in users.data" :key="user.id" class="gg-row">
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 <span
@@ -86,34 +86,34 @@ const destroy = (user) => {
                                 </span>
                                 <div>
                                     <div class="font-medium">{{ user.name }}</div>
-                                    <div class="text-xs text-[#8B84A3]">@{{ user.username }}</div>
+                                    <div class="text-xs text-ink-muted">@{{ user.username }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-[#CCC3D8]">{{ user.email }}</td>
+                        <td class="px-4 py-3 text-ink-soft">{{ user.email }}</td>
                         <td class="px-4 py-3">
-                            <span v-if="user.is_online" class="text-emerald-300">
+                            <span v-if="user.is_online" class="chip-green">
                                 {{ user.playing ? user.playing : 'Online' }}
                             </span>
-                            <span v-else class="text-[#8B84A3]">Offline</span>
+                            <span v-else class="text-ink-muted">Offline</span>
                         </td>
                         <td class="px-4 py-3">{{ user.posts_count }}</td>
                         <td class="px-4 py-3">
-                            <span v-if="user.is_admin" class="rounded-full bg-[#7C3AED]/25 px-2 py-0.5 text-xs text-[#D2BBFF]">
+                            <span v-if="user.is_admin" class="chip-gold">
                                 Admin
                             </span>
-                            <span v-else-if="!user.is_active" class="text-amber-300">Suspended</span>
-                            <span v-else class="text-[#CCC3D8]">Member</span>
+                            <span v-else-if="!user.is_active" class="chip-red">Suspended</span>
+                            <span v-else class="text-ink-soft">Member</span>
                         </td>
                         <td class="px-4 py-3 text-right whitespace-nowrap">
                             <Link
                                 :href="`/admin/users/${user.id}/edit`"
-                                class="text-[#D2BBFF] hover:underline"
+                                class="gg-link"
                             >
                                 Edit
                             </Link>
                             <button
-                                class="ml-3 text-[#FFB2BA] hover:underline"
+                                class="ml-3 gg-link-danger"
                                 @click="destroy(user)"
                             >
                                 Delete
@@ -121,7 +121,7 @@ const destroy = (user) => {
                         </td>
                     </tr>
                     <tr v-if="!users.data.length">
-                        <td colspan="6" class="px-4 py-8 text-center text-[#8B84A3]">
+                        <td colspan="6" class="px-4 py-8 text-center text-ink-muted">
                             No members match this filter.
                         </td>
                     </tr>

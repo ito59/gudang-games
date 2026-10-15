@@ -4,7 +4,6 @@ namespace Tests\Feature\Api;
 
 use App\Models\Category;
 use App\Models\Comment;
-use App\Models\FeaturedEvent;
 use App\Models\Game;
 use App\Models\Post;
 use App\Models\User;
@@ -20,11 +19,12 @@ class ApiTest extends TestCase
     {
         $action = Category::factory()->create(['name' => 'Action']);
         // In the category, so it is one the app has reason to show.
-        Game::factory()->for($action)->create(['title' => 'Neon Guardian']);
-        FeaturedEvent::factory()->create(['title' => 'Ascension']);
+        Game::factory()->for($action)->create([
+            'title' => 'Neon Guardian',
+            'is_published' => true,
+            'is_featured' => true,
+        ]);
 
-        // Present, not first: the featured event's factory quietly makes a
-        // game of its own, and its category sorts wherever it likes.
         $this->getJson('/api/v1/categories')
             ->assertOk()
             ->assertJsonFragment(['label' => 'Action']);
@@ -35,7 +35,7 @@ class ApiTest extends TestCase
 
         $this->getJson('/api/v1/featured')
             ->assertOk()
-            ->assertJsonPath('data.0.title', 'Ascension');
+            ->assertJsonPath('data.0.title', 'Neon Guardian');
     }
 
     public function test_an_empty_category_is_not_offered(): void
@@ -115,9 +115,8 @@ class ApiTest extends TestCase
             ->assertJsonPath('data.0.body', 'Shown');
     }
 
-    public function test_featured_games_join_the_carousel(): void
+    public function test_the_carousel_is_the_featured_games(): void
     {
-        FeaturedEvent::factory()->create(['title' => 'Campaign slide']);
         Game::factory()->create(['title' => 'Plain game', 'is_published' => true]);
         Game::factory()->create([
             'title' => 'Promoted game',
@@ -130,14 +129,12 @@ class ApiTest extends TestCase
 
         $titles = collect($response->json('data'))->pluck('title');
 
-        // Hand-written slides first, then featured games.
-        $this->assertSame(['Campaign slide', 'Promoted game'], $titles->all());
-        $this->assertNull($response->json('data.0.game'));
+        $this->assertSame(['Promoted game'], $titles->all());
 
-        // A game slide carries the game, so the carousel can open it.
-        $this->assertSame('Promoted game', $response->json('data.1.game.title'));
-        $this->assertSame('Worth your evening.', $response->json('data.1.description'));
-        $this->assertSame('FEATURED', $response->json('data.1.season'));
+        // A slide carries the game, so the carousel can open it.
+        $this->assertSame('Promoted game', $response->json('data.0.game.title'));
+        $this->assertSame('Worth your evening.', $response->json('data.0.description'));
+        $this->assertSame('FEATURED', $response->json('data.0.season'));
     }
 
     public function test_an_unpublished_game_cannot_be_featured_in_the_carousel(): void
