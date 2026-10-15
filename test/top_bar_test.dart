@@ -51,7 +51,7 @@ Future<void> _pumpHome(
 
 /// The brand lockup, which the avatar now sits to the right of.
 final _brand = find.byWidgetPredicate(
-  (widget) => widget is Semantics && widget.properties.label == 'BandarGames',
+  (widget) => widget is Semantics && widget.properties.label == 'GudangGames',
 );
 
 void main() {

@@ -49,7 +49,7 @@ class _Placeholder extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF2A1B4D), Color(0xFF131B2E)],
+          colors: [AppColors.goldLight, AppColors.surfaceContainerHighest],
         ),
       ),
       child: Center(
@@ -65,7 +65,7 @@ class _Placeholder extends StatelessWidget {
             : Icon(
                 AppIcons.videogameAsset,
                 size: 32,
-                color: AppColors.primary.withValues(alpha: 0.5),
+                color: AppColors.goldDeep.withValues(alpha: 0.7),
               ),
       ),
     );

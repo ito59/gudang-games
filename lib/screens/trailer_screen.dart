@@ -135,7 +135,7 @@ class _TrailerScreenState extends State<TrailerScreen> {
                       child: Icon(
                         AppIcons.arrowBack,
                         size: 22,
-                        color: AppColors.onSurface,
+                        color: AppColors.onImage,
                       ),
                     ),
                   ),
@@ -162,7 +162,7 @@ class _TrailerError extends StatelessWidget {
         message,
         textAlign: TextAlign.center,
         style: AppTextStyles.bodyMd.copyWith(
-          color: AppColors.onSurfaceVariant,
+          color: AppColors.onImage.withValues(alpha: 0.75),
         ),
       ),
     );

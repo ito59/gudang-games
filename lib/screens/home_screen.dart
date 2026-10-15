@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../data/mock_data.dart';
-import '../models/featured_event.dart';
 import '../models/game.dart';
 import '../models/game_category.dart';
 import '../services/game_repository.dart';
@@ -34,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Null until the first load finishes.
   GamesResult? _result;
-  List<FeaturedEvent> _slides = featuredEvents;
+  List<Game> _slides = featuredGames;
   List<GameCategory> _categories = gameCategories;
 
   /// Slug of the category being browsed; null means everything.
@@ -108,10 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: 40 + 80 + padding.bottom,
               ),
               children: [
-                HeroSlider(
-                  events: _slides,
-                  onPlay: _openSlide,
-                ),
+                HeroSlider(games: _slides, onPlay: _openGame),
                 const SizedBox(height: AppTheme.xl),
                 const _Gutter(child: SectionTitle('Browse Categories')),
                 const SizedBox(height: AppTheme.md),
@@ -157,27 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// A slide promoting a game opens that game; a campaign slide has nowhere
-  /// to go yet.
-  void _openSlide(FeaturedEvent slide) {
-    final game = slide.game;
-    if (game == null) {
-      _showSoon(slide.title);
-      return;
-    }
-    _openGame(game);
-  }
-
   void _openTrailer(Game game) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => TrailerScreen(game: game)),
     );
-  }
-
-  void _showSoon(String title) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$title — coming soon')));
   }
 }
 

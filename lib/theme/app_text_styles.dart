@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-/// Type scale from the Tailwind `fontSize` config in `code.html`.
+/// Type scale: Sora for display/headline/title, Hanken Grotesk for body and
+/// labels.
 /// Line heights are expressed as a ratio of the font size.
 class AppTextStyles {
   const AppTextStyles._();
@@ -40,12 +41,13 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
-  /// 12/16, +0.05em, w500 — badges, nav and category labels.
+  /// 12/16, w500 — badges, nav and category labels. The same friendly
+  /// grotesk as the body copy, as in `games-design.webp`.
   static const labelSm = TextStyle(
-    fontFamily: 'JetBrains Mono',
+    fontFamily: 'Hanken Grotesk',
     fontSize: 12,
     height: 16 / 12,
-    letterSpacing: 12 * 0.05,
+    letterSpacing: 0.1,
     fontWeight: FontWeight.w500,
   );
 

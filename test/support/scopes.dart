@@ -33,7 +33,7 @@ Widget wrapScreen(
         child: AuthScope(
           notifier: auth ?? Auth(),
           child: MaterialApp(
-            theme: AppTheme.dark,
+            theme: AppTheme.light,
             home: Scaffold(body: child),
           ),
         ),

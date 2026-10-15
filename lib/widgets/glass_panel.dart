@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// The `.glass-panel` rule from `code.html`:
+/// The card every panel in the app sits on: white on the cream page, a
+/// hairline warm border and a soft drop shadow, as in `games-design.webp`.
 ///
-/// ```css
-/// background: rgba(30, 41, 59, 0.4);
-/// backdrop-filter: blur(12px);
-/// border: 1px solid rgba(255, 255, 255, 0.05);
-/// box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-/// ```
+/// The name is kept from the earlier frosted-glass look so call sites did not
+/// have to change.
 class GlassPanel extends StatelessWidget {
   const GlassPanel({
     super.key,
@@ -21,12 +19,23 @@ class GlassPanel extends StatelessWidget {
   final Widget child;
   final double radius;
 
-  /// `.neon-glow`: `0 0 15px rgba(210, 187, 255, 0.15)`.
+  /// Marks the panel as selected: a gold outline and a warmer glow.
   final bool neonGlow;
 
-  static const fill = Color.fromRGBO(30, 41, 59, 0.4);
-  static const borderColor = Color.fromRGBO(255, 255, 255, 0.05);
-  static const highlight = Color.fromRGBO(255, 255, 255, 0.1);
+  static const fill = AppColors.surfaceContainer;
+  static const borderColor = Color(0xFFEDE3D0);
+
+  static const _shadow = BoxShadow(
+    color: Color.fromRGBO(90, 66, 32, 0.08),
+    blurRadius: 18,
+    offset: Offset(0, 6),
+  );
+
+  static const _glow = BoxShadow(
+    color: Color.fromRGBO(191, 154, 85, 0.35),
+    blurRadius: 18,
+    offset: Offset(0, 4),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -36,34 +45,18 @@ class GlassPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: fill,
         borderRadius: borderRadius,
-        border: Border.all(color: borderColor),
-        boxShadow: neonGlow
-            ? const [
-                BoxShadow(
-                  color: Color.fromRGBO(210, 187, 255, 0.15),
-                  blurRadius: 15,
-                ),
-              ]
-            : null,
+        border: Border.all(
+          color: neonGlow ? AppColors.goldDeep : borderColor,
+          width: neonGlow ? 1.5 : 1,
+        ),
+        boxShadow: [neonGlow ? _glow : _shadow],
       ),
+      // The child is clipped to the rounded corners so artwork does not
+      // poke out past them. passthrough hands the panel's own constraints to
+      // the content; without it the child is laid out loose and shrinks.
       child: Stack(
-        // passthrough hands the panel's own constraints to the content.
-        // Without it the child is laid out loose, shrinks to its intrinsic
-        // width and sits against the top-left corner instead of filling.
         fit: StackFit.passthrough,
-        children: [
-          ClipRRect(borderRadius: borderRadius, child: child),
-          // inset 0 1px 0 — a hairline highlight along the top edge.
-          Positioned(
-            top: 0,
-            left: radius / 2,
-            right: radius / 2,
-            child: const SizedBox(
-              height: 1,
-              child: ColoredBox(color: highlight),
-            ),
-          ),
-        ],
+        children: [ClipRRect(borderRadius: borderRadius, child: child)],
       ),
     );
   }

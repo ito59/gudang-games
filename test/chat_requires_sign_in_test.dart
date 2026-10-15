@@ -38,7 +38,7 @@ Future<void> _open(
       child: AuthScope(
         notifier: auth,
         child: MaterialApp(
-          theme: AppTheme.dark,
+          theme: AppTheme.light,
           home: Builder(
             builder: (context) => Scaffold(
               body: Center(
@@ -81,7 +81,7 @@ Future<FakeChatServer> _pumpCommunitySignedOut(WidgetTester tester) async {
       child: AuthScope(
         notifier: auth,
         child: MaterialApp(
-          theme: AppTheme.dark,
+          theme: AppTheme.light,
           home: Scaffold(
             body: CommunityScreen(
               repository: FeedRepository(auth: auth, client: feed.client),

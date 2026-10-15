@@ -7,18 +7,20 @@ import 'package:bandar_games/theme/app_colors.dart';
 import 'package:bandar_games/theme/app_icons.dart';
 import 'package:bandar_games/theme/app_theme.dart';
 import 'package:bandar_games/widgets/category_card.dart';
+import 'package:bandar_games/widgets/game_card.dart';
 import 'package:bandar_games/widgets/glass_panel.dart';
 
 import 'support/fake_games.dart';
 
 void main() {
   testWidgets('home screen renders its main sections', (tester) async {
-    await tester.pumpWidget(BandarGamesApp(gameRepository: fakeGameRepository()));
+    await tester.pumpWidget(GudangGamesApp(gameRepository: fakeGameRepository()));
 
     // The wordmark is the brand image now, not text.
-    expect(find.bySemanticsLabel('BandarGames'), findsOneWidget);
-    expect(find.text('Neon Vanguard: Ascension'), findsOneWidget);
-    expect(find.text('LIVE EVENT'), findsOneWidget);
+    expect(find.bySemanticsLabel('GudangGames'), findsOneWidget);
+    // Nothing featured on the fake server: the bundled slide shows.
+    expect(find.text(featuredGames.first.description), findsOneWidget);
+    expect(find.text('FEATURED'), findsOneWidget);
     expect(find.text('Play Now'), findsOneWidget);
 
     // The lower sections sit below the fold in the test viewport. The page has
@@ -29,7 +31,14 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
     expect(find.text('Browse Categories'), findsOneWidget);
-    expect(find.text('Neon Guardian'), findsOneWidget);
+    // In the grid; the hero slide may show the same game.
+    expect(
+      find.descendant(
+        of: find.byType(GameCard),
+        matching: find.text('Neon Guardian'),
+      ),
+      findsOneWidget,
+    );
     expect(find.text('4.9'), findsOneWidget);
   });
 
@@ -38,7 +47,7 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
         home: Scaffold(
           body: Center(child: CategoryCard(category: gameCategories.first)),
         ),
@@ -62,7 +71,7 @@ void main() {
   testWidgets('tapping a nav destination updates the selection', (
     tester,
   ) async {
-    await tester.pumpWidget(BandarGamesApp(gameRepository: fakeGameRepository()));
+    await tester.pumpWidget(GudangGamesApp(gameRepository: fakeGameRepository()));
 
     Icon iconFor(IconData data) =>
         tester.widget<Icon>(find.byIcon(data).first);

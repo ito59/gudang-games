@@ -39,7 +39,7 @@ Future<void> _pump(WidgetTester tester, ChatController chat, String id) async {
       child: AuthScope(
         notifier: auth,
         child: MaterialApp(
-          theme: AppTheme.dark,
+          theme: AppTheme.light,
           home: ChatScreen(conversationId: id),
         ),
       ),

@@ -26,7 +26,7 @@ Future<void> _pump(
       child: ProfileScope(
         notifier: profile,
         child: MaterialApp(
-          theme: AppTheme.dark,
+          theme: AppTheme.light,
           home: const Scaffold(body: ProfileScreen()),
         ),
       ),

@@ -21,7 +21,7 @@ Widget _wrap(Widget child, Auth auth, ProfileController profile) {
       notifier: auth,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
         home: Scaffold(body: child),
       ),
     ),

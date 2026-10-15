@@ -24,7 +24,7 @@ Widget _wrap(Widget child) {
       notifier: _auth,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
         home: child,
       ),
     ),
@@ -106,7 +106,7 @@ void main() {
           notifier: auth,
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.dark,
+            theme: AppTheme.light,
             home: const SignInScreen(),
           ),
         ),
@@ -136,7 +136,7 @@ void main() {
           ),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.dark,
+            theme: AppTheme.light,
             home: const SignInScreen(showUnconfiguredGoogle: true),
           ),
         ),

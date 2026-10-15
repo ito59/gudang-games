@@ -18,7 +18,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(BandarGamesApp(gameRepository: fakeGameRepository()));
+    await tester.pumpWidget(GudangGamesApp(gameRepository: fakeGameRepository()));
     await tester.pumpAndSettle();
     await precacheAllImages(tester);
 

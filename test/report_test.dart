@@ -36,7 +36,7 @@ Future<void> _pumpApp(WidgetTester tester, {FakeChatServer? chat}) async {
   await auth.signIn(email: 'a@b.c', password: 'x');
 
   await tester.pumpWidget(
-    BandarGamesApp(
+    GudangGamesApp(
       gameRepository: fakeGameRepository(),
       feedRepository: FeedRepository(auth: auth, client: feed.client),
       memberRepository: MemberRepository(auth: auth, client: feed.client),
@@ -175,7 +175,7 @@ void main() {
         child: AuthScope(
           notifier: auth,
           child: MaterialApp(
-            theme: AppTheme.dark,
+            theme: AppTheme.light,
             home: ChatScreen(
               conversationId: id,
               reports: ReportRepository(auth: auth, client: feed.client),
@@ -224,7 +224,7 @@ void main() {
         child: AuthScope(
           notifier: auth,
           child: MaterialApp(
-            theme: AppTheme.dark,
+            theme: AppTheme.light,
             home: ChatScreen(
               conversationId: id,
               reports: ReportRepository(auth: auth, client: feed.client),

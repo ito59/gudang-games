@@ -84,7 +84,7 @@ class _MemberSheet extends StatelessWidget {
                                 right: AppTheme.xs,
                               ),
                               decoration: const BoxDecoration(
-                                color: Color(0xFF4ADE80),
+                                color: AppColors.online,
                                 shape: BoxShape.circle,
                               ),
                             ),
@@ -95,7 +95,7 @@ class _MemberSheet extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.labelSm.copyWith(
                                 color: member.isOnline
-                                    ? const Color(0xFF4ADE80)
+                                    ? AppColors.online
                                     : AppColors.onSurfaceVariant,
                               ),
                             ),

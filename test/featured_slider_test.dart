@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bandar_games/models/featured_event.dart';
+import 'package:bandar_games/data/mock_data.dart';
 import 'package:bandar_games/models/game.dart';
 import 'package:bandar_games/screens/game_detail_screen.dart';
 import 'package:bandar_games/screens/home_screen.dart';
@@ -33,23 +33,18 @@ void main() {
     await tester.pumpWidget(
       _app(fakeGameRepository(
         games: const [_promoted],
-        slides: const [
-          FeaturedEvent(
-            title: 'Promoted Game',
-            description: 'Flagged as featured in the admin panel.',
-            season: 'FEATURED',
-            isLive: false,
-            image: '',
-            game: _promoted,
-          ),
-        ],
+        slides: const [_promoted],
       )),
     );
     await tester.pumpAndSettle();
 
     expect(find.text('FEATURED'), findsOneWidget);
+    expect(
+      find.text('Flagged as featured in the admin panel.'),
+      findsOneWidget,
+    );
     // The bundled sample slides must not show once the backend answers.
-    expect(find.text('Neon Vanguard: Ascension'), findsNothing);
+    expect(find.text(featuredGames.first.title), findsNothing);
   });
 
   testWidgets('the slider opens the game it promotes', (tester) async {
@@ -60,16 +55,7 @@ void main() {
     await tester.pumpWidget(
       _app(fakeGameRepository(
         games: const [_promoted],
-        slides: const [
-          FeaturedEvent(
-            title: 'Promoted Game',
-            description: 'Flagged as featured.',
-            season: 'FEATURED',
-            isLive: false,
-            image: '',
-            game: _promoted,
-          ),
-        ],
+        slides: const [_promoted],
       )),
     );
     await tester.pumpAndSettle();
@@ -92,6 +78,6 @@ void main() {
     await tester.pumpWidget(_app(fakeGameRepository(games: const [_promoted])));
     await tester.pumpAndSettle();
 
-    expect(find.text('Neon Vanguard: Ascension'), findsOneWidget);
+    expect(find.text(featuredGames.first.title), findsOneWidget);
   });
 }

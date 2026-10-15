@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/community_member.dart';
-import '../models/featured_event.dart';
 import '../models/game.dart';
 import '../models/game_category.dart';
 import '../models/user_profile.dart';
@@ -14,37 +13,26 @@ const brandLogo = 'assets/brand/logo.png';
 const brandLockup = 'assets/brand/logo_lockup.png';
 const brandMark = 'assets/brand/logo_mark.png';
 
-/// Slides for the hero carousel. The first is the one specified in
-/// `code.html`; the others reuse the bundled artwork so the slider has
-/// something to rotate through until real campaign data is wired up.
-const featuredEvents = <FeaturedEvent>[
-  FeaturedEvent(
-    title: 'Neon Vanguard: Ascension',
-    description:
-        'Join the elite forces in the neon-drenched streets of Neo-Tokyo. '
-        'Master new cybernetic abilities and dominate the ranked arenas in '
-        'the latest competitive season.',
-    season: 'SEASON 4',
-    isLive: true,
-    image: 'assets/images/hero.jpg',
-  ),
-  FeaturedEvent(
-    title: 'Neon Guardian: Last Stand',
+/// Bundled carousel slides, shown when the backend cannot be reached or has
+/// no game flagged as featured yet, so the hero is never blank.
+const featuredGames = <Game>[
+  Game(
+    title: 'Neon Guardian',
+    category: 'ACTION',
+    rating: 4.9,
+    image: 'assets/images/neon_guardian.jpg',
     description:
         'The city falls at midnight. Hold the line through twenty escalating '
         'waves and unlock the Guardian prototype armour.',
-    season: 'EVENT',
-    isLive: true,
-    image: 'assets/images/neon_guardian.jpg',
   ),
-  FeaturedEvent(
-    title: 'Quantum Rush: Velocity',
-    description:
-        'Tear through light-speed circuits in the new time-trial ladder. '
-        'Top the weekly board to claim the Velocity livery.',
-    season: 'SEASON 2',
-    isLive: false,
+  Game(
+    title: 'Quantum Rush',
+    category: 'RACING',
+    rating: 4.8,
     image: 'assets/images/quantum_rush.jpg',
+    description:
+        'Tear through light-speed circuits in the time-trial ladder. Top the '
+        'weekly board to claim the Velocity livery.',
   ),
 ];
 
@@ -88,7 +76,7 @@ const onlineMembers = <CommunityMember>[
     id: 1,
     name: 'Rey Anandra',
     handle: 'neonrey',
-    accent: Color(0xFFD2BBFF),
+    accent: Color(0xFFB3191E),
     playing: 'Neon Guardian',
     isOnline: true,
     avatar: avatarImage,
@@ -102,7 +90,7 @@ const onlineMembers = <CommunityMember>[
     id: 2,
     name: 'Dita Prameswari',
     handle: 'ditaprams',
-    accent: Color(0xFF14D1FF),
+    accent: Color(0xFFBF9A55),
     playing: 'Mystic Ruin',
     isOnline: true,
     bio: 'Support main. If you are still standing, you are welcome.',
@@ -115,7 +103,7 @@ const onlineMembers = <CommunityMember>[
     id: 3,
     name: 'Bagas Wirawan',
     handle: 'bagaswr',
-    accent: Color(0xFFFFB2BA),
+    accent: Color(0xFFE07A1F),
     playing: 'Quantum Rush',
     isOnline: true,
     bio: 'Time-trial grinder. Tuning setups until the lap times stop hurting.',
@@ -128,7 +116,7 @@ const onlineMembers = <CommunityMember>[
     id: 4,
     name: 'Salsa Nurhaliza',
     handle: 'salsanh',
-    accent: Color(0xFF4ADE80),
+    accent: Color(0xFF2E9E5B),
     playing: 'Nebula Conflict',
     isOnline: true,
     bio: 'Strategy nerd. I read patch notes for fun so you do not have to.',
@@ -140,7 +128,7 @@ const onlineMembers = <CommunityMember>[
     id: 5,
     name: 'Ilham Pratama',
     handle: 'ilhamp',
-    accent: Color(0xFFFFC46B),
+    accent: Color(0xFFC0700F),
     playing: 'Neon Guardian',
     isOnline: true,
     bio: 'Clip hunter. Every match is a highlight reel waiting to happen.',
@@ -152,7 +140,7 @@ const onlineMembers = <CommunityMember>[
     id: 6,
     name: 'Kirana Ayu',
     handle: 'kiranaayu',
-    accent: Color(0xFF7C3AED),
+    accent: Color(0xFFA3195B),
     playing: null,
     bio: 'Taking a break from ranked. Back for the next season.',
     gamesOwned: 63,

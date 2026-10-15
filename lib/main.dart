@@ -33,17 +33,18 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
+      // Dark icons: the header is a light gold band and the page is cream.
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
       systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.dark,
       // Otherwise the platform paints a scrim behind the bar, which reads as
       // a grey band over our own nav panel.
       systemNavigationBarContrastEnforced: false,
     ),
   );
 
-  runApp(const BandarGamesApp());
+  runApp(const GudangGamesApp());
 }
 
 /// Portrait only.
@@ -59,8 +60,8 @@ void lockToPortrait() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 }
 
-class BandarGamesApp extends StatefulWidget {
-  const BandarGamesApp({
+class GudangGamesApp extends StatefulWidget {
+  const GudangGamesApp({
     super.key,
     this.gameRepository,
     this.feedRepository,
@@ -88,10 +89,10 @@ class BandarGamesApp extends StatefulWidget {
   final ProfileController? profileController;
 
   @override
-  State<BandarGamesApp> createState() => _BandarGamesAppState();
+  State<GudangGamesApp> createState() => _GudangGamesAppState();
 }
 
-class _BandarGamesAppState extends State<BandarGamesApp> {
+class _GudangGamesAppState extends State<GudangGamesApp> {
   late final _auth =
       widget.auth ?? Auth(google: GoogleSignInAuthenticator());
   late final _profile =
@@ -146,9 +147,9 @@ class _BandarGamesAppState extends State<BandarGamesApp> {
             child: AuthScope(
               notifier: _auth,
               child: MaterialApp(
-                title: 'BandarGames',
+                title: 'GudangGames',
                 debugShowCheckedModeBanner: false,
-                theme: AppTheme.dark,
+                theme: AppTheme.light,
                 home: AppShell(
                   gameRepository: widget.gameRepository,
                   feedRepository: widget.feedRepository,

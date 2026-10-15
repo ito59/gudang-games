@@ -524,7 +524,7 @@ class _StatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final online = member.isOnline;
-    final color = online ? const Color(0xFF4ADE80) : AppColors.onSurfaceVariant;
+    final color = online ? AppColors.online : AppColors.onSurfaceVariant;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

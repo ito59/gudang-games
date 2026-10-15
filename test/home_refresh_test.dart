@@ -5,6 +5,7 @@ import 'package:bandar_games/models/game.dart';
 import 'package:bandar_games/models/game_category.dart';
 import 'package:bandar_games/screens/home_screen.dart';
 import 'package:bandar_games/theme/app_icons.dart';
+import 'package:bandar_games/widgets/game_card.dart';
 
 import 'support/fake_games.dart';
 import 'support/scopes.dart';
@@ -38,6 +39,11 @@ Future<void> _pullDown(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+/// A game's tile in the grid. The hero slider can show the same title, so a
+/// bare text finder would count the game twice.
+Finder _card(String title) =>
+    find.descendant(of: find.byType(GameCard), matching: find.text(title));
+
 void main() {
   testWidgets('the home page can be pulled down', (tester) async {
     await _pump(tester, FakeCatalogueServer(games: [_game('Neon Guardian')]));
@@ -49,15 +55,15 @@ void main() {
     final server = FakeCatalogueServer(games: [_game('Neon Guardian')]);
     await _pump(tester, server);
 
-    expect(find.text('Neon Guardian'), findsOneWidget);
-    expect(find.text('Mystic Ruin'), findsNothing);
+    expect(_card('Neon Guardian'), findsOneWidget);
+    expect(_card('Mystic Ruin'), findsNothing);
 
     // Somebody adds one in the admin panel.
     server.games = [_game('Neon Guardian'), _game('Mystic Ruin')];
 
     await _pullDown(tester);
 
-    expect(find.text('Mystic Ruin'), findsOneWidget);
+    expect(_card('Mystic Ruin'), findsOneWidget);
   });
 
   testWidgets('a game unpublished since opening the app goes away', (
@@ -67,12 +73,12 @@ void main() {
       games: [_game('Neon Guardian'), _game('Mystic Ruin')],
     );
     await _pump(tester, server);
-    expect(find.text('Mystic Ruin'), findsOneWidget);
+    expect(_card('Mystic Ruin'), findsOneWidget);
 
     server.games = [_game('Neon Guardian')];
     await _pullDown(tester);
 
-    expect(find.text('Mystic Ruin'), findsNothing);
+    expect(_card('Mystic Ruin'), findsNothing);
   });
 
   testWidgets('the refresh asks for the whole catalogue, not just games', (
@@ -158,12 +164,12 @@ void main() {
 
     await tester.tap(find.text('Action'));
     await tester.pumpAndSettle();
-    expect(find.text('Mystic Ruin'), findsNothing);
+    expect(_card('Mystic Ruin'), findsNothing);
 
     await _pullDown(tester);
 
     // Pulling for new games must not silently drop the filter.
-    expect(find.text('Neon Guardian'), findsOneWidget);
-    expect(find.text('Mystic Ruin'), findsNothing);
+    expect(_card('Neon Guardian'), findsOneWidget);
+    expect(_card('Mystic Ruin'), findsNothing);
   });
 }

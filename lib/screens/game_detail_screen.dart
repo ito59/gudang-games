@@ -89,27 +89,35 @@ class _Poster extends StatelessWidget {
       pinned: true,
       backgroundColor: AppColors.surfaceContainer,
       foregroundColor: AppColors.onSurface,
-      leading: IconButton(
-        onPressed: () => Navigator.of(context).pop(),
-        tooltip: 'Back',
-        icon: const Icon(AppIcons.arrowBack),
+      // A white disc, like the reference's close button, so the arrow
+      // reads over any artwork without darkening the art itself.
+      leading: Padding(
+        padding: const EdgeInsets.all(AppTheme.sm),
+        child: IconButton.filled(
+          onPressed: () => Navigator.of(context).pop(),
+          tooltip: 'Back',
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.surfaceContainer,
+            foregroundColor: AppColors.onSurface,
+            elevation: 2,
+            shadowColor: AppColors.shadow,
+          ),
+          icon: const Icon(AppIcons.arrowBack, size: 20),
+        ),
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
           children: [
             GameCover(game: game),
-            // Keeps the collapsing title and back button legible over art.
+            // Melts the art into the cream page below it.
             const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  colors: [
-                    AppColors.background,
-                    Color.fromRGBO(11, 19, 38, 0.35),
-                    Color.fromRGBO(11, 19, 38, 0.55),
-                  ],
+                  stops: [0, 0.35],
+                  colors: [AppColors.background, Color(0x00F7F1E5)],
                 ),
               ),
             ),

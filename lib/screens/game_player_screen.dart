@@ -122,7 +122,9 @@ class _CloseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withValues(alpha: 0.55),
+      color: AppColors.surfaceContainer,
+      elevation: 3,
+      shadowColor: AppColors.shadow,
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
       child: InkWell(

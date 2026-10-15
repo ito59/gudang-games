@@ -580,7 +580,7 @@ class _OnlineMember extends StatelessWidget {
                       width: 13,
                       height: 13,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF4ADE80),
+                        color: AppColors.online,
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: AppColors.surfaceContainer,

@@ -62,7 +62,7 @@ void main() {
       await tester.pumpWidget(
         MediaQuery(
           data: MediaQueryData(textScaler: TextScaler.linear(scale)),
-          child: BandarGamesApp(
+          child: GudangGamesApp(
             gameRepository: fakeGameRepository(),
             feedRepository: FeedRepository(auth: auth, client: feed.client),
             memberRepository: MemberRepository(auth: auth, client: feed.client),

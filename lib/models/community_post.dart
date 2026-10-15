@@ -69,13 +69,13 @@ class CommunityPost {
     );
   }
 
-  /// "#14D1FF" from the backend; falls back to the brand violet.
+  /// "#14D1FF" from the backend; falls back to the brand red.
   static Color colorFrom(String? hex) {
     if (hex == null || hex.length != 7 || !hex.startsWith('#')) {
-      return const Color(0xFF7C3AED);
+      return const Color(0xFFB3191E);
     }
     final value = int.tryParse(hex.substring(1), radix: 16);
-    return value == null ? const Color(0xFF7C3AED) : Color(0xFF000000 | value);
+    return value == null ? const Color(0xFFB3191E) : Color(0xFF000000 | value);
   }
 
   final String id;

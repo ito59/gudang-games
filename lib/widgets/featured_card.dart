@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../models/featured_event.dart';
+import '../models/game.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
+import 'game_cover.dart';
 import 'glass_panel.dart';
 import 'gradient_button.dart';
 
-/// Hero `<section>`: 400px tall, artwork behind a bottom-up scrim,
-/// content pinned to the bottom edge.
+/// Hero slide for a featured game: 400px tall, artwork behind a bottom-up
+/// scrim, content pinned to the bottom edge.
 class FeaturedCard extends StatelessWidget {
-  const FeaturedCard({super.key, required this.event, this.onPlay});
+  const FeaturedCard({super.key, required this.game, this.onPlay});
 
-  final FeaturedEvent event;
+  final Game game;
   final VoidCallback? onPlay;
 
   /// Hero height from `code.html` (`h-[400px]`).
@@ -36,31 +37,17 @@ class FeaturedCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (event.image.isEmpty)
-              const ColoredBox(color: AppColors.surfaceContainerHigh)
-            else if (event.imageIsRemote)
-              Image.network(
-                event.image,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) =>
-                    const ColoredBox(color: AppColors.surfaceContainerHigh),
-              )
-            else
-              Image.asset(
-                event.image,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) =>
-                    const ColoredBox(color: AppColors.surfaceContainerHigh),
-              ),
-            // from-background via-background/60 to-transparent
+            GameCover(game: game),
+            // A warm dark scrim, so the white headline reads over any art.
             const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
+                  stops: [0, 0.55, 1],
                   colors: [
-                    AppColors.background,
-                    Color.fromRGBO(11, 19, 38, 0.6),
+                    Color.fromRGBO(38, 26, 10, 0.92),
+                    Color.fromRGBO(38, 26, 10, 0.45),
                     Colors.transparent,
                   ],
                 ),
@@ -82,19 +69,19 @@ class FeaturedCard extends StatelessWidget {
                       spacing: AppTheme.sm,
                       runSpacing: AppTheme.sm,
                       children: [
-                        if (event.isLive) const _LiveBadge(),
-                        _SeasonBadge(label: event.season),
+                        const _FeaturedBadge(),
+                        _CategoryBadge(label: game.category),
                       ],
                     ),
                     const SizedBox(height: AppTheme.md),
                     Text(
-                      event.title,
+                      game.title,
                       // Bounded so a large text setting cannot grow the
                       // headline past the height reserved for the card.
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.displayLg.copyWith(
-                        color: AppColors.primaryFixed,
+                        color: AppColors.onImage,
                         shadows: const [
                           Shadow(
                             color: Color.fromRGBO(0, 0, 0, 0.5),
@@ -104,17 +91,20 @@ class FeaturedCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppTheme.md),
-                    Text(
-                      event.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.bodyMd.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                    if (game.description.isNotEmpty) ...[
+                      const SizedBox(height: AppTheme.md),
+                      Text(
+                        game.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.bodyMd.copyWith(
+                          color: AppColors.onImage.withValues(alpha: 0.82),
+                        ),
                       ),
-                    ),
+                    ],
                     const SizedBox(height: AppTheme.md),
                     GradientButton(
+                      tone: ButtonTone.red,
                       icon: AppIcons.playArrow,
                       iconFill: 1,
                       label: 'Play Now',
@@ -131,33 +121,35 @@ class FeaturedCard extends StatelessWidget {
   }
 }
 
-/// `bg-tertiary-container/20`, `border-tertiary/20`, pulsing dot.
-class _LiveBadge extends StatelessWidget {
-  const _LiveBadge();
+/// Solid red pill with a star.
+class _FeaturedBadge extends StatelessWidget {
+  const _FeaturedBadge();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.tertiaryContainer.withValues(alpha: 0.2),
+        color: AppColors.primaryContainer,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              color: AppColors.tertiary,
-              shape: BoxShape.circle,
-            ),
-            child: SizedBox(width: 8, height: 8),
+          const Icon(
+            AppIcons.star,
+            fill: 1,
+            size: 12,
+            color: AppColors.onImage,
           ),
           const SizedBox(width: AppTheme.xs),
           Text(
-            'LIVE EVENT',
-            style: AppTextStyles.labelSm.copyWith(color: AppColors.tertiary),
+            'FEATURED',
+            style: AppTextStyles.labelSm.copyWith(
+              color: AppColors.onImage,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.6,
+            ),
           ),
         ],
       ),
@@ -165,9 +157,9 @@ class _LiveBadge extends StatelessWidget {
   }
 }
 
-/// `bg-surface-variant/60`, `border-outline-variant/30`.
-class _SeasonBadge extends StatelessWidget {
-  const _SeasonBadge({required this.label});
+/// Gold pill with dark ink.
+class _CategoryBadge extends StatelessWidget {
+  const _CategoryBadge({required this.label});
 
   final String label;
 
@@ -176,15 +168,18 @@ class _SeasonBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
+        gradient: const LinearGradient(
+          colors: [AppColors.gold, AppColors.goldLight],
         ),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         label,
-        style: AppTextStyles.labelSm.copyWith(color: AppColors.onSurface),
+        style: AppTextStyles.labelSm.copyWith(
+          color: AppColors.onGold,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.6,
+        ),
       ),
     );
   }

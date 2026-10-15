@@ -7,8 +7,8 @@ import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
 
-/// Bottom `<nav>`: 80px tall, `bg-surface-container/90`, `backdrop-blur-2xl`,
-/// rounded top corners. The active item is cyan on a 10% cyan pill.
+/// Bottom nav: 80px tall, white with rounded top corners and a soft shadow
+/// cast upward. The active item is red on a pale red pill.
 class LoungeNavBar extends StatelessWidget {
   const LoungeNavBar({
     super.key,
@@ -36,36 +36,45 @@ class LoungeNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.paddingOf(context).bottom;
 
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(AppTheme.radiusXl),
-      ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-        child: Container(
-          height: 80 + bottomInset,
-          padding: EdgeInsets.only(bottom: bottomInset, left: 16, right: 16),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceContainer.withValues(alpha: 0.9),
-            border: Border(
-              top: BorderSide(
-                color: AppColors.outlineVariant.withValues(alpha: 0.1),
-              ),
-            ),
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppTheme.radiusXl),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromRGBO(90, 66, 32, 0.10),
+            blurRadius: 24,
+            offset: Offset(0, -4),
           ),
-          child: Row(
-            children: [
-              for (var i = 0; i < _items.length; i++)
-                Expanded(
-                  child: _NavItem(
-                    icon: _items[i].icon,
-                    label: _items[i].label,
-                    selected: i == currentIndex,
-                    unread: unreadTabs.contains(i),
-                    onTap: () => onTap(i),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppTheme.radiusXl),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+          child: Container(
+            height: 80 + bottomInset,
+            padding: EdgeInsets.only(bottom: bottomInset, left: 16, right: 16),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer.withValues(alpha: 0.96),
+            ),
+            child: Row(
+              children: [
+                for (var i = 0; i < _items.length; i++)
+                  Expanded(
+                    child: _NavItem(
+                      icon: _items[i].icon,
+                      label: _items[i].label,
+                      selected: i == currentIndex,
+                      unread: unreadTabs.contains(i),
+                      onTap: () => onTap(i),
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -104,7 +113,10 @@ class _Marked extends StatelessWidget {
                 shape: BoxShape.circle,
                 // Separates the dot from the icon behind it, whichever
                 // colour the icon happens to be.
-                border: Border.all(color: AppColors.surfaceContainer, width: 1.5),
+                border: Border.all(
+                  color: AppColors.surfaceContainer,
+                  width: 1.5,
+                ),
               ),
             ),
           ),
@@ -131,10 +143,7 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // code.html marks the active tab with `secondary-container` (#14D1FF).
-    // That cyan is the only blue accent in an otherwise violet palette, so the
-    // app uses `primary` instead — the same lavender as the wordmark, section
-    // titles and slider dots.
+    // The deep red of the primary action, as on the reference's Home tab.
     final color = selected ? AppColors.primary : AppColors.onSurfaceVariant;
 
     // The pill hugs its content, so the item is centred in its slot rather
@@ -144,7 +153,7 @@ class _NavItem extends StatelessWidget {
       builder: (context, constraints) => Center(
         child: Material(
           color: selected
-              ? AppColors.primaryContainer.withValues(alpha: 0.22)
+              ? AppColors.primary.withValues(alpha: 0.10)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(AppTheme.radiusXl),
           clipBehavior: Clip.antiAlias,
@@ -175,7 +184,13 @@ class _NavItem extends StatelessWidget {
                         label,
                         maxLines: 1,
                         softWrap: false,
-                        style: AppTextStyles.labelSm.copyWith(color: color),
+                        style: AppTextStyles.labelSm.copyWith(
+                          fontSize: 13,
+                          color: selected ? color : AppColors.onSurface,
+                          fontWeight: selected
+                              ? FontWeight.w500
+                              : FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),

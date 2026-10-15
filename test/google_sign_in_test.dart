@@ -65,7 +65,7 @@ Future<void> _pumpSignIn(
     AuthScope(
       notifier: auth,
       child: MaterialApp(
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
         home: SignInScreen(showUnconfiguredGoogle: showUnconfiguredGoogle),
       ),
     ),

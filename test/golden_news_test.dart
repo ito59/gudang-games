@@ -25,7 +25,7 @@ Widget _wrap(Widget child) {
       notifier: _auth,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
         home: child,
       ),
     ),

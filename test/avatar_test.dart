@@ -43,7 +43,7 @@ Future<void> _pumpEditor(
     ProfileScope(
       notifier: profile,
       child: MaterialApp(
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
         home: EditProfileScreen(profile: profile.profile, picker: picker),
       ),
     ),

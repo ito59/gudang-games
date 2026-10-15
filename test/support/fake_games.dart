@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 import 'package:bandar_games/data/mock_data.dart';
-import 'package:bandar_games/models/featured_event.dart';
 import 'package:bandar_games/models/game.dart';
 import 'package:bandar_games/models/game_category.dart';
 import 'package:bandar_games/services/game_repository.dart';
@@ -15,7 +14,7 @@ import 'package:bandar_games/services/game_repository.dart';
 /// dependent on whether a dev server happens to be running.
 GameRepository fakeGameRepository({
   List<Game>? games,
-  List<FeaturedEvent>? slides,
+  List<Game>? slides,
   List<GameCategory>? categories,
 }) {
   final categoryPayload = categoriesPayload(categories ?? const []);
@@ -42,14 +41,14 @@ GameRepository fakeGameRepository({
 class FakeCatalogueServer {
   FakeCatalogueServer({
     List<Game>? games,
-    List<FeaturedEvent>? slides,
+    List<Game>? slides,
     List<GameCategory>? categories,
   }) : games = games ?? popularGames,
        slides = slides ?? const [],
        categories = categories ?? const [];
 
   List<Game> games;
-  List<FeaturedEvent> slides;
+  List<Game> slides;
   List<GameCategory> categories;
 
   /// Makes every request fail, the way an unreachable server does.
@@ -97,31 +96,27 @@ Map<String, Object?> categoriesPayload(List<GameCategory> categories) {
 }
 
 /// @nodoc
-Map<String, Object?> featuredPayload(List<FeaturedEvent> slides) {
+Map<String, Object?> featuredPayload(List<Game> games) {
   return {
     'data': [
-      for (final slide in slides)
+      for (final game in games)
         {
-          'id': 'slide',
-          'title': slide.title,
-          'description': slide.description,
-          'season': slide.season,
-          'is_live': slide.isLive,
-          'image': slide.image,
-          'game': slide.game == null
-              ? null
-              : {
-                  'title': slide.game!.title,
-                  'slug': slide.game!.slug,
-                  'category': slide.game!.category,
-                  'rating': slide.game!.rating,
-                  'description': slide.game!.description,
-                  'plays_count': slide.game!.playsCount,
-                  'image': slide.game!.image,
-                  'play_url': slide.game!.playUrl,
-                  'trailer_url': slide.game!.trailerUrl,
-                  'source_type': slide.game!.isHosted ? 'zip' : 'url',
-                },
+          'id': 'game-${game.slug}',
+          'title': game.title,
+          'description': game.description,
+          'image': game.image,
+          'game': {
+            'title': game.title,
+            'slug': game.slug,
+            'category': game.category,
+            'rating': game.rating,
+            'description': game.description,
+            'plays_count': game.playsCount,
+            'image': game.image,
+            'play_url': game.playUrl,
+            'trailer_url': game.trailerUrl,
+            'source_type': game.isHosted ? 'zip' : 'url',
+          },
         },
     ],
   };

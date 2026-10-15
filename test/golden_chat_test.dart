@@ -171,7 +171,7 @@ Widget _wrap(ChatController chat, Auth auth, Widget child) {
       notifier: auth,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
         home: child,
       ),
     ),

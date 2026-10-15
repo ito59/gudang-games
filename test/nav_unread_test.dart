@@ -31,7 +31,7 @@ Future<FakeRealtime> _pumpApp(WidgetTester tester, FakeChatServer chat) async {
   final realtime = FakeRealtime();
 
   await tester.pumpWidget(
-    BandarGamesApp(
+    GudangGamesApp(
       gameRepository: fakeGameRepository(),
       feedRepository: FeedRepository(auth: auth, client: feed.client),
       memberRepository: MemberRepository(auth: auth, client: feed.client),

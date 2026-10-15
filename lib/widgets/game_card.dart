@@ -98,7 +98,7 @@ class GameCard extends StatelessWidget {
                           AppIcons.star,
                           fill: 1,
                           size: _starSize,
-                          color: AppColors.tertiary,
+                          color: AppColors.goldDeep,
                         ),
                         const SizedBox(width: AppTheme.xs),
                         Text(
@@ -130,7 +130,7 @@ class _TrailerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withValues(alpha: 0.6),
+      color: AppColors.shadow.withValues(alpha: 0.7),
       borderRadius: BorderRadius.circular(999),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -144,14 +144,14 @@ class _TrailerButton extends StatelessWidget {
                 AppIcons.playCircle,
                 fill: 1,
                 size: 14,
-                color: AppColors.onSurface,
+                color: AppColors.onImage,
               ),
               const SizedBox(width: AppTheme.xs),
               Text(
                 'Trailer',
                 style: AppTextStyles.labelSm.copyWith(
                   fontSize: 10,
-                  color: AppColors.onSurface,
+                  color: AppColors.onImage,
                 ),
               ),
             ],
@@ -170,16 +170,17 @@ class _CategoryPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.primaryContainer.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
+        color: AppColors.surfaceContainer.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         label,
         style: AppTextStyles.labelSm.copyWith(
           fontSize: 10,
-          color: AppColors.onPrimaryContainer,
+          fontWeight: FontWeight.w700,
+          color: AppColors.primary,
         ),
       ),
     );

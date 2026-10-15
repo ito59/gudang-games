@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/glass_panel.dart';
 import 'app_colors.dart';
 import 'app_text_styles.dart';
 
 class AppTheme {
   const AppTheme._();
 
-  /// Spacing scale from `code.html`.
+  /// Spacing scale.
   static const xs = 4.0;
   static const sm = 8.0;
   static const md = 16.0;
@@ -15,60 +14,85 @@ class AppTheme {
   static const xl = 32.0;
   static const marginMobile = 20.0;
 
-  /// borderRadius scale: DEFAULT 4, lg 8, xl 12.
-  static const radiusDefault = 4.0;
-  static const radiusLg = 8.0;
-  static const radiusXl = 12.0;
+  /// borderRadius scale. Rounder than the old cyber look: the reference is
+  /// all soft cards and pill buttons.
+  static const radiusDefault = 6.0;
+  static const radiusLg = 12.0;
+  static const radiusXl = 18.0;
 
-  static ThemeData get dark {
-    final base = ThemeData.dark(useMaterial3: true);
+  /// Bottom sheets and dialogs.
+  static const radiusSheet = 28.0;
+
+  static ThemeData get light {
+    final base = ThemeData.light(useMaterial3: true);
 
     return base.copyWith(
       scaffoldBackgroundColor: AppColors.background,
       colorScheme: base.colorScheme.copyWith(
         primary: AppColors.primary,
+        onPrimary: AppColors.onPrimaryContainer,
         primaryContainer: AppColors.primaryContainer,
         onPrimaryContainer: AppColors.onPrimaryContainer,
+        secondary: AppColors.goldDeep,
         secondaryContainer: AppColors.secondaryContainer,
         tertiary: AppColors.tertiary,
         surface: AppColors.surface,
         onSurface: AppColors.onSurface,
         onSurfaceVariant: AppColors.onSurfaceVariant,
+        surfaceContainer: AppColors.surfaceContainer,
+        surfaceContainerHigh: AppColors.surfaceContainerHigh,
+        surfaceContainerHighest: AppColors.surfaceContainerHighest,
+        outline: AppColors.outlineVariant,
         outlineVariant: AppColors.outlineVariant,
+        // Dark ink on a cream page: the snackbar and tooltips stay readable.
+        inverseSurface: AppColors.onSurface,
+        onInverseSurface: AppColors.primaryFixed,
       ),
-      // Material 3 defaults these to `inverseSurface`, which is a LIGHT colour
-      // in a dark scheme — a white slab over the cyber UI. Theme them here so
-      // no call site has to remember.
+      dividerTheme: const DividerThemeData(color: AppColors.outlineVariant),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.primary,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? AppColors.onPrimaryContainer
+              : AppColors.onSurfaceVariant,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? AppColors.primary
+              : AppColors.surfaceContainerHighest,
+        ),
+      ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: AppColors.surfaceContainerHigh,
+        backgroundColor: AppColors.onSurface,
         contentTextStyle: AppTextStyles.bodyMd.copyWith(
-          color: AppColors.onSurface,
+          color: AppColors.primaryFixed,
         ),
-        actionTextColor: AppColors.primary,
-        closeIconColor: AppColors.onSurfaceVariant,
+        actionTextColor: AppColors.gold,
+        closeIconColor: AppColors.goldLight,
         insetPadding: const EdgeInsets.all(md),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLg),
-          side: const BorderSide(color: GlassPanel.borderColor),
         ),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.surfaceContainer,
         surfaceTintColor: Colors.transparent,
-        modalBarrierColor: Color.fromRGBO(0, 0, 0, 0.6),
+        modalBarrierColor: Color.fromRGBO(40, 28, 12, 0.55),
         showDragHandle: false,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(radiusXl),
+            top: Radius.circular(radiusSheet),
           ),
         ),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.surfaceContainerHigh,
+        backgroundColor: AppColors.surfaceContainer,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radiusXl),
+          borderRadius: BorderRadius.circular(radiusSheet),
         ),
         titleTextStyle: AppTextStyles.titleMd.copyWith(
           color: AppColors.onSurface,
@@ -80,14 +104,12 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary,
-          textStyle: AppTextStyles.bodyMd.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
+          textStyle: AppTextStyles.bodyMd.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       textSelectionTheme: const TextSelectionThemeData(
         cursorColor: AppColors.primary,
-        selectionColor: Color.fromRGBO(210, 187, 255, 0.3),
+        selectionColor: Color.fromRGBO(217, 188, 128, 0.45),
         selectionHandleColor: AppColors.primary,
       ),
       textTheme: base.textTheme

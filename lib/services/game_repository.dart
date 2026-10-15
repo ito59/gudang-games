@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../data/mock_data.dart';
-import '../models/featured_event.dart';
 import '../models/game.dart';
 import '../models/game_category.dart';
 import 'api_config.dart';
@@ -88,30 +87,35 @@ class GameRepository {
     }
   }
 
-  /// Carousel slides: campaign slides plus games flagged as featured.
+  /// Carousel slides: the games an admin flagged as featured.
   ///
-  /// Falls back to the bundled slides so the home screen is never blank.
-  Future<List<FeaturedEvent>> fetchFeatured() async {
+  /// Each slide in the payload carries its game. Slides without one are
+  /// skipped — an older server may still send hand-written campaign slides,
+  /// which have nothing to open. Falls back to the bundled slides so the home
+  /// screen is never blank.
+  Future<List<Game>> fetchFeatured() async {
     try {
       final response = await _client
           .get(ApiConfig.endpoint('featured'))
           .timeout(ApiConfig.timeout);
 
-      if (response.statusCode != 200) return featuredEvents;
+      if (response.statusCode != 200) return featuredGames;
 
       final body = jsonDecode(response.body);
       final data = (body is Map<String, dynamic>) ? body['data'] : null;
-      if (data is! List) return featuredEvents;
+      if (data is! List) return featuredGames;
 
-      final slides = data
+      final games = data
           .whereType<Map<String, dynamic>>()
-          .map(FeaturedEvent.fromJson)
+          .map((slide) => slide['game'])
+          .whereType<Map<String, dynamic>>()
+          .map(Game.fromJson)
           .toList();
 
       // An empty carousel would leave a hole where the hero belongs.
-      return slides.isEmpty ? featuredEvents : slides;
+      return games.isEmpty ? featuredGames : games;
     } catch (_) {
-      return featuredEvents;
+      return featuredGames;
     }
   }
 

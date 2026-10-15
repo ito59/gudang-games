@@ -6,7 +6,8 @@ import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
 import 'glass_panel.dart';
 
-/// Category chip: 90x90 glass panel, icon in a `bg-surface-variant` circle.
+/// Category chip: 90x90 white card, its icon tinted in one of the cheerful
+/// accents of the reference's shortcut grid.
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
     super.key,
@@ -21,8 +22,27 @@ class CategoryCard extends StatelessWidget {
   /// Whether this category is the one currently being browsed.
   final bool selected;
 
+  /// Green, red, orange, gold, crimson — the shortcut icons in
+  /// `games-design.webp`.
+  static const accents = [
+    Color(0xFF2E9E5B),
+    Color(0xFFC62828),
+    Color(0xFFE07A1F),
+    Color(0xFFB8913F),
+    Color(0xFFA3195B),
+  ];
+
+  /// A stable accent per category, so "Action" is the same colour on every
+  /// launch and wherever it appears in the strip.
+  static Color accentFor(String key) =>
+      accents[key.codeUnits.fold(0, (a, b) => a + b) % accents.length];
+
   @override
   Widget build(BuildContext context) {
+    final accent = accentFor(
+      category.slug.isEmpty ? category.label : category.slug,
+    );
+
     return SizedBox(
       width: 90,
       height: 90,
@@ -39,17 +59,13 @@ class CategoryCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: selected
-                        ? AppColors.primaryContainer
-                        : AppColors.surfaceVariant,
+                    color: selected ? accent : accent.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     category.icon,
                     size: 24,
-                    color: selected
-                        ? AppColors.onPrimaryContainer
-                        : AppColors.primary,
+                    color: selected ? AppColors.onPrimaryContainer : accent,
                   ),
                 ),
                 const SizedBox(height: AppTheme.xs),
@@ -60,9 +76,9 @@ class CategoryCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.labelSm.copyWith(
-                      color: selected
-                          ? AppColors.primary
-                          : AppColors.onSurfaceVariant,
+                      fontSize: 13,
+                      color: AppColors.onSurface,
+                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                     ),
                   ),
                 ),

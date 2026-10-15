@@ -118,11 +118,16 @@ class _Identity extends StatelessWidget {
             height: 104,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.primary, width: 2),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.goldDeep, AppColors.goldLight],
+              ),
               boxShadow: const [
                 BoxShadow(
-                  color: Color.fromRGBO(210, 187, 255, 0.25),
-                  blurRadius: 24,
+                  color: Color.fromRGBO(191, 154, 85, 0.35),
+                  blurRadius: 20,
+                  offset: Offset(0, 6),
                 ),
               ],
             ),

@@ -23,7 +23,7 @@ Future<void> _openProfile(WidgetTester tester) async {
   final profile = await loadedProfile(server, auth);
 
   await tester.pumpWidget(
-    BandarGamesApp(
+    GudangGamesApp(
       gameRepository: fakeGameRepository(),
       auth: auth,
       profileController: profile,

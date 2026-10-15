@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bandar_games/main.dart';
+import 'package:bandar_games/screens/home_screen.dart';
 
 import 'support/fake_games.dart';
 
@@ -30,7 +31,7 @@ void main() {
     final auth = await signedInAuth(server);
 
     await tester.pumpWidget(
-      BandarGamesApp(
+      GudangGamesApp(
         gameRepository: fakeGameRepository(),
         auth: auth,
         profileController: await loadedProfile(server, auth),
@@ -39,7 +40,11 @@ void main() {
     await tester.pumpAndSettle();
     await precacheAllImages(tester);
 
-    await tester.tap(find.text('Play Now'));
+    // Shown directly: what is under test is the themed snackbar, and the
+    // home screen no longer has a tap that raises one.
+    ScaffoldMessenger.of(
+      tester.element(find.byType(HomeScreen)),
+    ).showSnackBar(const SnackBar(content: Text('Profile updated')));
     await tester.pumpAndSettle();
 
     await expectLater(
@@ -58,7 +63,7 @@ void main() {
     final auth = await signedInAuth(server);
 
     await tester.pumpWidget(
-      BandarGamesApp(
+      GudangGamesApp(
         gameRepository: fakeGameRepository(),
         auth: auth,
         profileController: await loadedProfile(server, auth),

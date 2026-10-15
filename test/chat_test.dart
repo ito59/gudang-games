@@ -46,7 +46,7 @@ Future<void> _pumpThread(
       child: AuthScope(
         notifier: auth,
         child: MaterialApp(
-          theme: AppTheme.dark,
+          theme: AppTheme.light,
           home: ChatScreen(conversationId: id),
         ),
       ),
@@ -61,7 +61,7 @@ Widget _app(FakeChatServer chat) {
   final feed = FakeFeedServer();
   final auth = Auth(client: feed.client);
 
-  return BandarGamesApp(
+  return GudangGamesApp(
     gameRepository: fakeGameRepository(),
     feedRepository: FeedRepository(auth: auth, client: feed.client),
     memberRepository: MemberRepository(auth: auth, client: feed.client),

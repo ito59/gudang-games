@@ -104,6 +104,28 @@ void main() {
 
     expect(result.fromBackend, isFalse);
   });
+
+  test('the carousel keeps only slides that carry a game', () async {
+    // An older server still sends hand-written campaign slides, which have
+    // no game to open.
+    final repository = GameRepository(
+      client: _clientReturning({
+        'data': [
+          {'id': 'event-1', 'title': 'Campaign', 'game': null},
+          {
+            'id': 'game-3',
+            'title': 'Quantum Rush',
+            'game': {'title': 'Quantum Rush', 'slug': 'quantum-rush'},
+          },
+        ],
+      }),
+    );
+
+    final games = await repository.fetchFeatured();
+
+    expect(games.map((game) => game.title), ['Quantum Rush']);
+    expect(games.single.slug, 'quantum-rush');
+  });
 }
 
 /// Stands in for a network failure without depending on dart:io.

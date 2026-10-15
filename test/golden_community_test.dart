@@ -35,7 +35,7 @@ void main() {
           notifier: auth,
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.dark,
+            theme: AppTheme.light,
             home: Scaffold(
               body: CommunityScreen(
                 repository: FeedRepository(auth: auth, client: server.client),

@@ -53,7 +53,7 @@ Future<Auth> _pumpCommunity(
       child: AuthScope(
         notifier: auth,
         child: MaterialApp(
-          theme: AppTheme.dark,
+          theme: AppTheme.light,
           home: Scaffold(
             body: CommunityScreen(
               repository: FeedRepository(auth: auth, client: server.client),
@@ -148,7 +148,7 @@ void main() {
         child: AuthScope(
           notifier: auth,
           child: MaterialApp(
-            theme: AppTheme.dark,
+            theme: AppTheme.light,
             home: Scaffold(
               body: CommunityScreen(
                 repository: FeedRepository(auth: auth, client: server.client),

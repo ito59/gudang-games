@@ -44,7 +44,7 @@ Future<void> _pump(WidgetTester tester, ChatController chat, Widget screen) asyn
       // a session to be left alone.
       child: AuthScope(
         notifier: auth,
-        child: MaterialApp(theme: AppTheme.dark, home: screen),
+        child: MaterialApp(theme: AppTheme.light, home: screen),
       ),
     ),
   );

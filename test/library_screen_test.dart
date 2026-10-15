@@ -24,7 +24,7 @@ Widget _library(PlayHistory history) {
   return PlayHistoryScope(
     notifier: history,
     child: MaterialApp(
-      theme: AppTheme.dark,
+      theme: AppTheme.light,
       home: const Scaffold(body: LibraryScreen()),
     ),
   );
@@ -81,7 +81,7 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      BandarGamesApp(
+      GudangGamesApp(
         gameRepository: fakeGameRepository(
           games: [_game('Star Wars', 'star-wars')],
         ),

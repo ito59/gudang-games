@@ -158,7 +158,7 @@ class _ConversationTile extends StatelessWidget {
                           width: 12,
                           height: 12,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF4ADE80),
+                            color: AppColors.online,
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: AppColors.surfaceContainer,

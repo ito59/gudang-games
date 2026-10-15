@@ -217,7 +217,7 @@ class _Presence extends StatelessWidget {
               height: 8,
               margin: const EdgeInsets.only(right: AppTheme.xs),
               decoration: const BoxDecoration(
-                color: Color(0xFF4ADE80),
+                color: AppColors.online,
                 shape: BoxShape.circle,
               ),
             ),

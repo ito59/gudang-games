@@ -1,4 +1,4 @@
-# BandarGames
+# GudangGames
 
 A game discovery app built with Flutter. The home screen is a port of
 `code.html` (Tailwind mockup), with `screen.png` as the visual reference.
@@ -36,7 +36,7 @@ Three things that otherwise fail silently:
   bundled sample catalogue and says so on screen, so stale samples are never
   mistaken for live data.
 
-`GameRepository` is injectable (`BandarGamesApp(gameRepository: …)`) and every
+`GameRepository` is injectable (`GudangGamesApp(gameRepository: …)`) and every
 widget test passes a fake, so the suite never touches the network.
 
 ### Browsing by category

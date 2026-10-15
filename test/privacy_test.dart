@@ -16,7 +16,7 @@ Future<void> _pump(WidgetTester tester) async {
   await tester.pumpWidget(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
+      theme: AppTheme.light,
       home: const PrivacyScreen(),
     ),
   );

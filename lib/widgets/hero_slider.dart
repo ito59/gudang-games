@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../models/featured_event.dart';
+import '../models/game.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'featured_card.dart';
 
-/// Auto-advancing carousel of [FeaturedCard]s with a dot indicator.
+/// Auto-advancing carousel of featured games, one [FeaturedCard] each, with a
+/// dot indicator.
 ///
 /// Autoplay pauses while the user is touching the slider and resumes when
 /// they let go. It is skipped entirely when the platform asks for reduced
@@ -15,18 +16,18 @@ import 'featured_card.dart';
 class HeroSlider extends StatefulWidget {
   const HeroSlider({
     super.key,
-    required this.events,
+    required this.games,
     this.autoPlay = true,
     this.interval = const Duration(seconds: 5),
     this.transition = const Duration(milliseconds: 550),
     this.onPlay,
   });
 
-  final List<FeaturedEvent> events;
+  final List<Game> games;
   final bool autoPlay;
   final Duration interval;
   final Duration transition;
-  final ValueChanged<FeaturedEvent>? onPlay;
+  final ValueChanged<Game>? onPlay;
 
   @override
   State<HeroSlider> createState() => _HeroSliderState();
@@ -51,7 +52,7 @@ class _HeroSliderState extends State<HeroSlider> {
     super.didUpdateWidget(oldWidget);
     if (widget.autoPlay != oldWidget.autoPlay ||
         widget.interval != oldWidget.interval ||
-        widget.events.length != oldWidget.events.length) {
+        widget.games.length != oldWidget.games.length) {
       _restartTimer();
     }
   }
@@ -65,7 +66,7 @@ class _HeroSliderState extends State<HeroSlider> {
   }
 
   bool get _canAutoPlay =>
-      widget.autoPlay && !_reduceMotion && widget.events.length > 1;
+      widget.autoPlay && !_reduceMotion && widget.games.length > 1;
 
   void _restartTimer() {
     _timer?.cancel();
@@ -75,7 +76,7 @@ class _HeroSliderState extends State<HeroSlider> {
 
   void _advance() {
     if (!mounted || !_controller.hasClients) return;
-    final next = (_index + 1) % widget.events.length;
+    final next = (_index + 1) % widget.games.length;
     _controller.animateToPage(
       next,
       duration: widget.transition,
@@ -97,26 +98,26 @@ class _HeroSliderState extends State<HeroSlider> {
             onPointerCancel: (_) => _restartTimer(),
             child: PageView.builder(
               controller: _controller,
-              itemCount: widget.events.length,
+              itemCount: widget.games.length,
               onPageChanged: (index) => setState(() => _index = index),
               itemBuilder: (context, index) {
-                final event = widget.events[index];
+                final game = widget.games[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppTheme.marginMobile,
                   ),
                   child: FeaturedCard(
-                    event: event,
-                    onPlay: () => widget.onPlay?.call(event),
+                    game: game,
+                    onPlay: () => widget.onPlay?.call(game),
                   ),
                 );
               },
             ),
           ),
         ),
-        if (widget.events.length > 1) ...[
+        if (widget.games.length > 1) ...[
           const SizedBox(height: AppTheme.md),
-          _Dots(count: widget.events.length, index: _index),
+          _Dots(count: widget.games.length, index: _index),
         ],
       ],
     );

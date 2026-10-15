@@ -130,8 +130,9 @@ class _SendButton extends StatelessWidget {
           boxShadow: enabled
               ? const [
                   BoxShadow(
-                    color: Color.fromRGBO(124, 58, 237, 0.4),
-                    blurRadius: 14,
+                    color: Color.fromRGBO(179, 25, 30, 0.30),
+                    blurRadius: 12,
+                    offset: Offset(0, 4),
                   ),
                 ]
               : null,
