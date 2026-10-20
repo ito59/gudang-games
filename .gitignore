@@ -51,3 +51,7 @@ app.*.map.json
 /android/key.properties
 *.jks
 *.keystore
+
+# HTML5 game sources and their upload bundles: large, and kept out of git
+/games-html5-ki/
+/games-html5-ki-zip/
