@@ -17,7 +17,7 @@ class ApiConfig {
 
   static const baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://bebandargames.lds.co.id',
+    defaultValue: 'https://begg.ki89.co.id',
   );
 
   static Uri endpoint(String path, [Map<String, String>? query]) =>
