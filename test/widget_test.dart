@@ -8,7 +8,6 @@ import 'package:bandar_games/theme/app_icons.dart';
 import 'package:bandar_games/theme/app_theme.dart';
 import 'package:bandar_games/widgets/category_card.dart';
 import 'package:bandar_games/widgets/game_card.dart';
-import 'package:bandar_games/widgets/glass_panel.dart';
 
 import 'support/fake_games.dart';
 
@@ -23,49 +22,53 @@ void main() {
     expect(find.text('FEATURED'), findsOneWidget);
     expect(find.text('Play Now'), findsOneWidget);
 
-    // The lower sections sit below the fold in the test viewport. The page has
-    // several scrollables (category strip, grid), so target the outer list.
+    // The category menu sits at the top, under the header.
+    expect(find.text('All'), findsOneWidget);
+
+    // The game list sits below the fold in the test viewport. The slider is
+    // a scrollable too, so target the outer list.
+    // In the list; the featured slide shows the same game.
+    final row = find.descendant(
+      of: find.byType(GameCard),
+      matching: find.text('Neon Guardian'),
+    );
     await tester.scrollUntilVisible(
-      find.text('Popular Games'),
+      row,
       300,
       scrollable: find.byType(Scrollable).first,
     );
-    expect(find.text('Browse Categories'), findsOneWidget);
-    // In the grid; the hero slide may show the same game.
+    expect(find.text('Popular Games'), findsOneWidget);
+    expect(row, findsOneWidget);
     expect(
-      find.descendant(
-        of: find.byType(GameCard),
-        matching: find.text('Neon Guardian'),
-      ),
+      find.descendant(of: find.byType(GameCard), matching: find.text('4.9')),
       findsOneWidget,
     );
-    expect(find.text('4.9'), findsOneWidget);
   });
 
-  testWidgets('category card content fills the card and stays centred', (
+  testWidgets('category tile keeps its icon centred over the label', (
     tester,
   ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.light,
         home: Scaffold(
-          body: Center(child: CategoryCard(category: gameCategories.first)),
+          body: Center(
+            child: SizedBox(
+              width: 90,
+              child: CategoryCard(category: gameCategories.first),
+            ),
+          ),
         ),
       ),
     );
 
-    final card = tester.getRect(find.byType(GlassPanel));
-    final content = tester.getRect(find.byType(Column).first);
-    final circle = tester.getRect(
-      find
-          .ancestor(of: find.byType(Icon), matching: find.byType(Container))
-          .first,
-    );
+    final tile = tester.getRect(find.byType(CategoryCard));
+    final icon = tester.getRect(find.byType(Icon));
+    final label = tester.getRect(find.text(gameCategories.first.label));
 
-    // A loose Stack fit used to shrink the content to its intrinsic width and
-    // pin it to the top-left, pulling the icon off centre.
-    expect(content.width, card.width);
-    expect(circle.center.dx, card.center.dx);
+    expect(icon.center.dx, closeTo(tile.center.dx, 0.5));
+    expect(label.center.dx, closeTo(tile.center.dx, 0.5));
+    expect(label.top, greaterThan(icon.bottom));
   });
 
   testWidgets('tapping a nav destination updates the selection', (

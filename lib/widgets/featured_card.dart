@@ -6,24 +6,24 @@ import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
 import 'game_cover.dart';
-import 'glass_panel.dart';
 import 'gradient_button.dart';
 
-/// Hero slide for a featured game: 400px tall, artwork behind a bottom-up
-/// scrim, content pinned to the bottom edge.
+/// Featured game, laid out like the "Watch & learn in 60 seconds" block in
+/// `games-design.webp`: headline and blurb, then a panel with the game's
+/// numbers on the left and its artwork on the right, then a full-width red
+/// button.
 class FeaturedCard extends StatelessWidget {
   const FeaturedCard({super.key, required this.game, this.onPlay});
 
   final Game game;
   final VoidCallback? onPlay;
 
-  /// Hero height from `code.html` (`h-[400px]`).
-  static const baseHeight = 400.0;
+  static const baseHeight = 380.0;
 
   /// The card is a fixed height (a [PageView] needs one), so it has to grow
-  /// with the text scale or the headline pushes the badges out of the top of
-  /// the card — silently, since the content is bottom-anchored in a [Stack].
-  /// Clamped so a very large setting cannot produce an absurd hero.
+  /// with the text scale. The artwork panel takes whatever is left over, so
+  /// larger text squeezes the picture rather than overflowing the card.
+  /// Clamped so a very large setting cannot produce an absurd slide.
   static double heightFor(BuildContext context) {
     final scale = MediaQuery.textScalerOf(context).scale(16) / 16;
     return baseHeight * scale.clamp(1.0, 1.75);
@@ -33,89 +33,155 @@ class FeaturedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: heightFor(context),
-      child: GlassPanel(
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            GameCover(game: game),
-            // A warm dark scrim, so the white headline reads over any art.
-            const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  stops: [0, 0.55, 1],
-                  colors: [
-                    Color.fromRGBO(38, 26, 10, 0.92),
-                    Color.fromRGBO(38, 26, 10, 0.45),
-                    Colors.transparent,
-                  ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Wrap(
+            spacing: AppTheme.sm,
+            runSpacing: AppTheme.xs,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              const _FeaturedBadge(),
+              Text(
+                game.category,
+                style: AppTextStyles.labelSm.copyWith(
+                  color: AppColors.goldInk,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.8,
                 ),
               ),
+            ],
+          ),
+          const SizedBox(height: AppTheme.sm),
+          Text(
+            game.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.headlineLgMobile.copyWith(
+              color: AppColors.onSurface,
+              fontWeight: FontWeight.w700,
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(AppTheme.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Wrap, not Row: at larger text scales the two badges no
-                    // longer fit side by side and must reflow.
-                    Wrap(
-                      spacing: AppTheme.sm,
-                      runSpacing: AppTheme.sm,
-                      children: [
-                        const _FeaturedBadge(),
-                        _CategoryBadge(label: game.category),
-                      ],
-                    ),
-                    const SizedBox(height: AppTheme.md),
-                    Text(
-                      game.title,
-                      // Bounded so a large text setting cannot grow the
-                      // headline past the height reserved for the card.
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.displayLg.copyWith(
-                        color: AppColors.onImage,
-                        shadows: const [
-                          Shadow(
-                            color: Color.fromRGBO(0, 0, 0, 0.5),
-                            blurRadius: 15,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (game.description.isNotEmpty) ...[
-                      const SizedBox(height: AppTheme.md),
-                      Text(
-                        game.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.bodyMd.copyWith(
-                          color: AppColors.onImage.withValues(alpha: 0.82),
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: AppTheme.md),
-                    GradientButton(
-                      tone: ButtonTone.red,
-                      icon: AppIcons.playArrow,
-                      iconFill: 1,
-                      label: 'Play Now',
-                      onPressed: onPlay,
-                    ),
-                  ],
-                ),
+          ),
+          if (game.description.isNotEmpty) ...[
+            const SizedBox(height: AppTheme.xs),
+            Text(
+              game.description,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.bodyMd.copyWith(
+                fontSize: 14,
+                height: 20 / 14,
+                color: AppColors.onSurfaceVariant,
               ),
             ),
           ],
-        ),
+          const SizedBox(height: AppTheme.md),
+          Expanded(child: _ShowcasePanel(game: game)),
+          const SizedBox(height: AppTheme.md),
+          GradientButton(
+            tone: ButtonTone.red,
+            icon: AppIcons.playArrow,
+            iconFill: 1,
+            label: 'Play Now',
+            expand: true,
+            onPressed: onPlay,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Numbers on a cream column beside the artwork, inside one white card.
+class _ShowcasePanel extends StatelessWidget {
+  const _ShowcasePanel({required this.game});
+
+  final Game game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppTheme.sm),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainer,
+        borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+        border: Border.all(color: const Color(0xFFEDE3D0)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromRGBO(90, 66, 32, 0.08),
+            blurRadius: 18,
+            offset: Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            width: 96,
+            padding: const EdgeInsets.symmetric(horizontal: AppTheme.sm),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceVariant,
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _Stat(label: 'Played', value: _compact(game.playsCount)),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: AppTheme.sm),
+                  child: Divider(height: 1, color: AppColors.outlineVariant),
+                ),
+                _Stat(label: 'Rating', value: game.rating.toStringAsFixed(1)),
+              ],
+            ),
+          ),
+          const SizedBox(width: AppTheme.sm),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+              child: GameCover(game: game),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 2700 → "2.7k", as the reference writes its counts.
+  static String _compact(int n) {
+    if (n < 1000) return '$n';
+    final k = n / 1000;
+    return '${k >= 10 ? k.round() : k.toStringAsFixed(1)}k';
+  }
+}
+
+class _Stat extends StatelessWidget {
+  const _Stat({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    // Scales down rather than overflowing the narrow column at large text.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.labelSm.copyWith(
+              fontSize: 13,
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: AppTextStyles.cardTitle.copyWith(fontSize: 17),
+          ),
+        ],
       ),
     );
   }
@@ -128,7 +194,7 @@ class _FeaturedBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.primaryContainer,
         borderRadius: BorderRadius.circular(999),
@@ -146,40 +212,13 @@ class _FeaturedBadge extends StatelessWidget {
           Text(
             'FEATURED',
             style: AppTextStyles.labelSm.copyWith(
+              fontSize: 11,
               color: AppColors.onImage,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.6,
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Gold pill with dark ink.
-class _CategoryBadge extends StatelessWidget {
-  const _CategoryBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.gold, AppColors.goldLight],
-        ),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: AppTextStyles.labelSm.copyWith(
-          color: AppColors.onGold,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.6,
-        ),
       ),
     );
   }

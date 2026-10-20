@@ -9,69 +9,79 @@ import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
 import 'profile_photo.dart';
 
-/// Home header: the gold band from `games-design.webp`, rounded along its
-/// bottom edge, with the wordmark in a white pill and the member's photo.
-/// The shadow under it deepens once the page is scrolled.
-class TopBar extends StatelessWidget implements PreferredSizeWidget {
-  const TopBar({super.key, this.scrolled = false});
+/// Home header: the tall gold band from `games-design.webp`. The wordmark
+/// chip, a "current balance"-style chip counting the games on offer, and the
+/// member's photo sit on one row, with a greeting below them.
+///
+/// It scrolls with the page rather than floating over it, so the category
+/// panel underneath can sit flush against it.
+class TopBar extends StatelessWidget {
+  const TopBar({super.key, this.gameCount});
 
-  final bool scrolled;
-
-  static const height = 64.0;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(height);
+  /// Null while the catalogue is still loading.
+  final int? gameCount;
 
   @override
   Widget build(BuildContext context) {
     final topInset = MediaQuery.paddingOf(context).top;
 
-    return Container(
-      height: height + topInset,
-      padding: EdgeInsets.only(
-        top: topInset,
-        left: AppTheme.marginMobile,
-        right: AppTheme.marginMobile,
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        AppTheme.marginMobile,
+        topInset + AppTheme.sm,
+        AppTheme.marginMobile,
+        AppTheme.lg,
       ),
-      decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: const BorderRadius.vertical(
-          bottom: Radius.circular(AppTheme.radiusSheet),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(90, 66, 32, scrolled ? 0.22 : 0.10),
-            blurRadius: 20,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Expanded(
-            child: Align(alignment: Alignment.centerLeft, child: Wordmark()),
-          ),
-          const SizedBox(width: AppTheme.sm),
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.surfaceContainer, width: 2),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color.fromRGBO(90, 66, 32, 0.18),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
+          Row(
+            children: [
+              const Expanded(
+                child: Align(alignment: Alignment.centerLeft, child: Wordmark()),
+              ),
+              const SizedBox(width: AppTheme.sm),
+              _GamesChip(count: gameCount),
+              const SizedBox(width: AppTheme.sm),
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.surfaceContainer, width: 2),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(90, 66, 32, 0.18),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
+                clipBehavior: Clip.antiAlias,
+                // Only once the member's own profile has actually arrived.
+                // Signed out, the controller still holds the bundled sample
+                // member, and drawing their face here would tell a visitor
+                // they are logged in as somebody.
+                child: ProfilePhoto(profile: _signedInProfile(context)),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppTheme.lg),
+          Text(
+            'Ready to play?',
+            style: AppTextStyles.headlineLgMobile.copyWith(
+              color: AppColors.onGold,
+              fontWeight: FontWeight.w700,
             ),
-            clipBehavior: Clip.antiAlias,
-            // Only once the member's own profile has actually arrived.
-            // Signed out, the controller still holds the bundled sample
-            // member, and drawing their face here would tell a visitor
-            // they are logged in as somebody.
-            child: ProfilePhoto(profile: _signedInProfile(context)),
+          ),
+          const SizedBox(height: AppTheme.xs),
+          Text(
+            'Pick a category or jump into today\'s featured game.',
+            style: AppTextStyles.bodyMd.copyWith(
+              fontSize: 14,
+              height: 20 / 14,
+              color: AppColors.onGold.withValues(alpha: 0.72),
+            ),
           ),
         ],
       ),
@@ -86,6 +96,65 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   );
 }
 
+/// The reference's "Current balance" chip, counting games instead of money.
+class _GamesChip extends StatelessWidget {
+  const _GamesChip({required this.count});
+
+  final int? count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(6, 6, 12, 6),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainer.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              AppIcons.videogameAsset,
+              fill: 1,
+              size: 20,
+              color: AppColors.goldDeep,
+            ),
+          ),
+          const SizedBox(width: AppTheme.sm),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Games',
+                style: AppTextStyles.labelSm.copyWith(
+                  fontSize: 11,
+                  height: 14 / 11,
+                  color: AppColors.onGold.withValues(alpha: 0.7),
+                ),
+              ),
+              Text(
+                count?.toString() ?? '–',
+                style: AppTextStyles.cardTitle.copyWith(
+                  height: 20 / 16,
+                  color: AppColors.onGold,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// "GudangGames" in a white pill with a gold trophy, like the reference's
 /// name chip. Drawn as text rather than the old violet lockup image, which
 /// was made for a dark header.
@@ -95,6 +164,9 @@ class Wordmark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      // Its own node, so screen readers do not run the brand into the
+      // games count and greeting beside it.
+      container: true,
       label: 'GudangGames',
       excludeSemantics: true,
       // Shrinks rather than overflows when a large text setting would push

@@ -5,6 +5,7 @@ import '../models/game.dart';
 import '../models/game_category.dart';
 import '../services/game_repository.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
 import '../widgets/category_card.dart';
@@ -26,10 +27,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _scrolled = false;
-
-  late final GameRepository _repository =
-      widget.repository ?? GameRepository();
+  late final GameRepository _repository = widget.repository ?? GameRepository();
 
   /// Null until the first load finishes.
   GamesResult? _result;
@@ -66,80 +64,94 @@ class _HomeScreenState extends State<HomeScreen> {
   void _toggleCategory(GameCategory category) {
     setState(() {
       // Tapping the active one clears the filter, so there is always a way
-      // back to the full list without hunting for a "show all" control.
-      _selectedCategory =
-          _selectedCategory == category.slug ? null : category.slug;
+      // back to the full list besides "All".
+      _selectedCategory = _selectedCategory == category.slug
+          ? null
+          : category.slug;
     });
   }
 
-  bool _onScroll(ScrollNotification notification) {
-    // Mirrors the scroll listener in code.html: the header darkens past 10px.
-    // Only the outer page scroll counts, not the category strip or slider.
-    if (notification.depth != 0) return false;
-    final scrolled = notification.metrics.pixels > 10;
-    if (scrolled != _scrolled) {
-      setState(() => _scrolled = scrolled);
-    }
-    return false;
-  }
+  void _showAll() => setState(() => _selectedCategory = null);
 
   @override
   Widget build(BuildContext context) {
     final padding = MediaQuery.paddingOf(context);
 
-    return Stack(
-      children: [
-        NotificationListener<ScrollNotification>(
-          onNotification: _onScroll,
-          child: RefreshIndicator(
+    // White underneath, so the sheet runs to the bottom of the screen
+    // however short the list is.
+    return ColoredBox(
+      color: AppColors.surfaceContainer,
+      child: Stack(
+        children: [
+          RefreshIndicator(
             onRefresh: _load,
             color: AppColors.primary,
             backgroundColor: AppColors.surfaceContainer,
-            // The header floats over the list rather than sitting in it, so
-            // the spinner has to be pushed clear of it — at the default
-            // offset it appears behind the wordmark.
-            edgeOffset: padding.top + TopBar.height,
+            edgeOffset: padding.top,
             child: ListView(
-              padding: EdgeInsets.only(
-                // main has pt-24 measured from the top of the page, and the
-                // header (h-16) floats above it.
-                top: padding.top + 96,
-                bottom: 40 + 80 + padding.bottom,
-              ),
+              padding: EdgeInsets.only(bottom: 40 + 80 + padding.bottom),
               children: [
-                HeroSlider(games: _slides, onPlay: _openGame),
-                const SizedBox(height: AppTheme.xl),
-                const _Gutter(child: SectionTitle('Browse Categories')),
-                const SizedBox(height: AppTheme.md),
-                _CategoryStrip(
-                  categories: _categories,
-                  selected: _selectedCategory,
-                  onTap: _toggleCategory,
+                // Gold header, cream shortcut menu, white sheet: the three
+                // layers of the reference's home screen.
+                DecoratedBox(
+                  decoration: const BoxDecoration(gradient: TopBar.gradient),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TopBar(gameCount: _result?.games.length),
+                      _CategoryMenu(
+                        categories: _categories,
+                        selected: _selectedCategory,
+                        onTap: _toggleCategory,
+                        onShowAll: _showAll,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: AppTheme.xl),
-                const _Gutter(child: SectionTitle('Popular Games')),
-                const SizedBox(height: AppTheme.md),
-                _Gutter(
-                  child: _PopularGames(
-                    result: _result,
-                    category: _selectedCategory,
-                    onTap: _openGame,
-                    onPlayTrailer: _openTrailer,
-                    onClearCategory: () =>
-                        setState(() => _selectedCategory = null),
+                ColoredBox(
+                  color: _CategoryMenu.fill,
+                  child: Container(
+                    padding: const EdgeInsets.only(top: AppTheme.lg),
+                    decoration: const BoxDecoration(
+                      color: AppColors.surfaceContainer,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(AppTheme.radiusSheet),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        HeroSlider(games: _slides, onPlay: _openGame),
+                        const SizedBox(height: AppTheme.xl),
+                        const _Gutter(child: SectionTitle('Popular Games')),
+                        const SizedBox(height: AppTheme.md),
+                        _Gutter(
+                          child: _PopularGames(
+                            result: _result,
+                            category: _selectedCategory,
+                            onTap: _openGame,
+                            onPlayTrailer: _openTrailer,
+                            onClearCategory: _showAll,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: TopBar(scrolled: _scrolled),
-        ),
-      ],
+          // The header scrolls away with the page, so the status bar needs
+          // its own backing or the list runs underneath the clock.
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: padding.top,
+            child: const ColoredBox(color: AppColors.gold),
+          ),
+        ],
+      ),
     );
   }
 
@@ -154,9 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openTrailer(Game game) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => TrailerScreen(game: game)),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => TrailerScreen(game: game)));
   }
 }
 
@@ -175,33 +187,64 @@ class _Gutter extends StatelessWidget {
   }
 }
 
-/// Full-bleed horizontal strip (`-mx-margin-mobile px-margin-mobile`).
-class _CategoryStrip extends StatelessWidget {
-  const _CategoryStrip({
+/// The cream shortcut panel: every category as an icon in a four-column
+/// grid, led by "All", like the menu grid in `games-design.webp`.
+class _CategoryMenu extends StatelessWidget {
+  const _CategoryMenu({
     required this.categories,
     required this.selected,
     required this.onTap,
+    required this.onShowAll,
   });
+
+  static const fill = AppColors.surfaceContainerLow;
+
+  static const _all = GameCategory(label: 'All', icon: AppIcons.videogameAsset);
 
   final List<GameCategory> categories;
   final String? selected;
   final ValueChanged<GameCategory> onTap;
+  final VoidCallback onShowAll;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 90,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: AppTheme.marginMobile),
-        itemCount: categories.length,
-        separatorBuilder: (_, _) => const SizedBox(width: AppTheme.md),
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          return CategoryCard(
-            category: category,
-            selected: category.slug == selected,
-            onTap: () => onTap(category),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(
+        AppTheme.sm,
+        AppTheme.md,
+        AppTheme.sm,
+        AppTheme.lg,
+      ),
+      decoration: const BoxDecoration(
+        color: fill,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppTheme.radiusSheet),
+        ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final width = constraints.maxWidth / 4;
+          return Wrap(
+            runSpacing: AppTheme.xs,
+            children: [
+              SizedBox(
+                width: width,
+                child: CategoryCard(
+                  category: _all,
+                  selected: selected == null,
+                  onTap: onShowAll,
+                ),
+              ),
+              for (final category in categories)
+                SizedBox(
+                  width: width,
+                  child: CategoryCard(
+                    category: category,
+                    selected: category.slug == selected,
+                    onTap: () => onTap(category),
+                  ),
+                ),
+            ],
           );
         },
       ),
@@ -240,9 +283,7 @@ class _PopularGames extends StatelessWidget {
 
     final games = category == null
         ? result.games
-        : result.games
-              .where((game) => game.categorySlug == category)
-              .toList();
+        : result.games.where((game) => game.categorySlug == category).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -251,11 +292,7 @@ class _PopularGames extends StatelessWidget {
         if (games.isEmpty)
           _EmptyCategory(onClear: onClearCategory)
         else
-          _PopularGrid(
-            games: games,
-            onTap: onTap,
-            onPlayTrailer: onPlayTrailer,
-          ),
+          _GameList(games: games, onTap: onTap, onPlayTrailer: onPlayTrailer),
       ],
     );
   }
@@ -281,10 +318,7 @@ class _EmptyCategory extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppTheme.sm),
-          TextButton(
-            onPressed: onClear,
-            child: const Text('Show all games'),
-          ),
+          TextButton(onPressed: onClear, child: const Text('Show all games')),
         ],
       ),
     );
@@ -353,8 +387,9 @@ class _GamesMessage extends StatelessWidget {
   }
 }
 
-class _PopularGrid extends StatelessWidget {
-  const _PopularGrid({
+/// One row per game, stacked.
+class _GameList extends StatelessWidget {
+  const _GameList({
     required this.games,
     required this.onTap,
     required this.onPlayTrailer,
@@ -366,26 +401,18 @@ class _PopularGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: games.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: AppTheme.md,
-        mainAxisSpacing: AppTheme.md,
-        // Derived from the card's own metrics so it tracks the text scale.
-        mainAxisExtent: GameCard.extentFor(context),
-      ),
-      itemBuilder: (context, index) {
-        final game = games[index];
-        return GameCard(
-          game: game,
-          onTap: () => onTap(game),
-          onPlayTrailer: () => onPlayTrailer(game),
-        );
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < games.length; i++) ...[
+          if (i > 0) const SizedBox(height: 12),
+          GameCard(
+            game: games[i],
+            onTap: () => onTap(games[i]),
+            onPlayTrailer: () => onPlayTrailer(games[i]),
+          ),
+        ],
+      ],
     );
   }
 }

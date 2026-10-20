@@ -34,6 +34,8 @@ class HeroSlider extends StatefulWidget {
 }
 
 class _HeroSliderState extends State<HeroSlider> {
+  static const _shadowRoom = AppTheme.md;
+
   final _controller = PageController();
   Timer? _timer;
   int _index = 0;
@@ -89,7 +91,9 @@ class _HeroSliderState extends State<HeroSlider> {
     return Column(
       children: [
         SizedBox(
-          height: FeaturedCard.heightFor(context),
+          // Extra room below the card so the button's shadow is not cut off
+          // by the page view's clip.
+          height: FeaturedCard.heightFor(context) + _shadowRoom,
           child: Listener(
             // Hold the rotation while a finger is down so a slide cannot be
             // yanked out from under the user mid-read.
@@ -103,8 +107,11 @@ class _HeroSliderState extends State<HeroSlider> {
               itemBuilder: (context, index) {
                 final game = widget.games[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.marginMobile,
+                  padding: const EdgeInsets.fromLTRB(
+                    AppTheme.marginMobile,
+                    0,
+                    AppTheme.marginMobile,
+                    _shadowRoom,
                   ),
                   child: FeaturedCard(
                     game: game,
@@ -116,7 +123,6 @@ class _HeroSliderState extends State<HeroSlider> {
           ),
         ),
         if (widget.games.length > 1) ...[
-          const SizedBox(height: AppTheme.md),
           _Dots(count: widget.games.length, index: _index),
         ],
       ],

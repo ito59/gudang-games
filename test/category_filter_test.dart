@@ -58,12 +58,6 @@ Future<void> _pumpHome(WidgetTester tester) async {
     ),
   );
   await tester.pumpAndSettle();
-  await tester.scrollUntilVisible(
-    find.text('Browse Categories'),
-    300,
-    scrollable: find.byType(Scrollable).first,
-  );
-  await tester.pumpAndSettle();
 }
 
 void main() {

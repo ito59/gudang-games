@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../models/game.dart';
@@ -8,9 +6,9 @@ import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
 import 'game_cover.dart';
-import 'glass_panel.dart';
 
-/// Game tile: 160px cover, category pill top-right, title and rating below.
+/// One row in the home game list: square cover on the left, title with
+/// category and rating beside it, and a gold play disc at the end.
 class GameCard extends StatelessWidget {
   const GameCard({
     super.key,
@@ -25,63 +23,33 @@ class GameCard extends StatelessWidget {
   /// Separate from [onTap] so watching a trailer never starts the game.
   final VoidCallback? onPlayTrailer;
 
-  static const coverHeight = 160.0;
-  static const _padding = 12.0;
-  static const _starSize = 14.0;
-
-  /// Height this card needs at the current text scale.
-  ///
-  /// The grid must not hard-code a number: the title and rating lines grow
-  /// with the user's font-size setting, and a fixed extent overflows as soon
-  /// as that setting is above 100%.
-  static double extentFor(BuildContext context) {
-    final scaler = MediaQuery.textScalerOf(context);
-
-    double lineHeight(TextStyle style) =>
-        scaler.scale(style.fontSize!) * (style.height ?? 1);
-
-    final title = lineHeight(AppTextStyles.cardTitle);
-    final rating = math.max(_starSize, lineHeight(AppTextStyles.labelSm));
-
-    return coverHeight + _padding * 2 + title + AppTheme.xs + rating;
-  }
+  static const coverSize = 76.0;
 
   @override
   Widget build(BuildContext context) {
-    return GlassPanel(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Material(
+      color: AppColors.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+            border: Border.all(color: const Color(0xFFEDE3D0)),
+          ),
+          child: Row(
             children: [
-              // Flexible so any leftover or missing pixel lands on the cover
-              // instead of overflowing the text below it.
-              Expanded(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      GameCover(game: game),
-                      Positioned(
-                        top: AppTheme.sm,
-                        right: AppTheme.sm,
-                        child: _CategoryPill(label: game.category),
-                      ),
-                      if (game.hasTrailer)
-                        Positioned(
-                          left: AppTheme.sm,
-                          bottom: AppTheme.sm,
-                          child: _TrailerButton(onTap: onPlayTrailer),
-                        ),
-                    ],
-                  ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+                child: SizedBox.square(
+                  dimension: coverSize,
+                  child: GameCover(game: game),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(_padding),
+              const SizedBox(width: 14),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -91,27 +59,42 @@ class GameCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.cardTitle,
                     ),
-                    const SizedBox(height: AppTheme.xs),
-                    Row(
+                    const SizedBox(height: 6),
+                    // Wrap so the pill, rating and trailer reflow under a
+                    // large text setting instead of overflowing the row.
+                    Wrap(
+                      spacing: AppTheme.sm,
+                      runSpacing: AppTheme.xs,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(
-                          AppIcons.star,
-                          fill: 1,
-                          size: _starSize,
-                          color: AppColors.goldDeep,
+                        _CategoryPill(label: game.category),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              AppIcons.star,
+                              fill: 1,
+                              size: 14,
+                              color: AppColors.goldDeep,
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              game.rating.toStringAsFixed(1),
+                              style: AppTextStyles.labelSm.copyWith(
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: AppTheme.xs),
-                        Text(
-                          game.rating.toStringAsFixed(1),
-                          style: AppTextStyles.labelSm.copyWith(
-                            color: AppColors.onSurfaceVariant,
-                          ),
-                        ),
+                        if (game.hasTrailer)
+                          _TrailerButton(onTap: onPlayTrailer),
                       ],
                     ),
                   ],
                 ),
               ),
+              const SizedBox(width: AppTheme.sm),
+              const _PlayDisc(),
             ],
           ),
         ),
@@ -120,8 +103,42 @@ class GameCard extends StatelessWidget {
   }
 }
 
-/// Overlaid on the cover so a trailer is one tap away, without stealing the
-/// card's own tap.
+/// The gold round button from the reference's balance sheet. Decorative:
+/// the whole row is the tap target.
+class _PlayDisc extends StatelessWidget {
+  const _PlayDisc();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.goldLight, AppColors.gold, AppColors.goldDeep],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromRGBO(191, 154, 85, 0.35),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: const Icon(
+        AppIcons.playArrow,
+        fill: 1,
+        size: 22,
+        color: AppColors.onGold,
+      ),
+    );
+  }
+}
+
+/// A trailer one tap away, without stealing the row's own tap.
 class _TrailerButton extends StatelessWidget {
   const _TrailerButton({this.onTap});
 
@@ -130,7 +147,7 @@ class _TrailerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.shadow.withValues(alpha: 0.7),
+      color: AppColors.goldLight,
       borderRadius: BorderRadius.circular(999),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -144,14 +161,15 @@ class _TrailerButton extends StatelessWidget {
                 AppIcons.playCircle,
                 fill: 1,
                 size: 14,
-                color: AppColors.onImage,
+                color: AppColors.goldInk,
               ),
               const SizedBox(width: AppTheme.xs),
               Text(
                 'Trailer',
                 style: AppTextStyles.labelSm.copyWith(
-                  fontSize: 10,
-                  color: AppColors.onImage,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.onGold,
                 ),
               ),
             ],
@@ -172,7 +190,7 @@ class _CategoryPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainer.withValues(alpha: 0.92),
+        color: AppColors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
