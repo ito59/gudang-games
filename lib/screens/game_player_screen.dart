@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../l10n/language.dart';
 import '../models/game.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -45,7 +46,10 @@ class _GamePlayerScreenState extends State<GamePlayerScreen> {
     } catch (error) {
       // No WebView on this platform (and none in unit tests). Better a clear
       // message than a crash on a screen whose whole job is to show a page.
-      _error = 'Playing games is not supported on this device.';
+      _error = tr(
+        'Perangkat ini belum mendukung main game.',
+        'Playing games is not supported on this device.',
+      );
     }
   }
 
@@ -90,7 +94,12 @@ class _GamePlayerScreenState extends State<GamePlayerScreen> {
               WebViewWidget(controller: _controller!)
             else
               _PlayError(
-                message: _error ?? 'The player could not start.',
+                message:
+                    _error ??
+                    context.tr(
+                      'Pemutar game tidak bisa dimulai.',
+                      'The player could not start.',
+                    ),
                 game: widget.game,
               ),
 
@@ -129,9 +138,9 @@ class _CloseButton extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        child: const Tooltip(
-          message: 'Back',
-          child: Padding(
+        child: Tooltip(
+          message: context.tr('Kembali', 'Back'),
+          child: const Padding(
             padding: EdgeInsets.all(8),
             child: Icon(
               AppIcons.arrowBack,
@@ -166,7 +175,10 @@ class _PlayError extends StatelessWidget {
             ),
             const SizedBox(height: AppTheme.md),
             Text(
-              '${game.title} could not be loaded.',
+              context.tr(
+                '${game.title} tidak bisa dimuat.',
+                '${game.title} could not be loaded.',
+              ),
               textAlign: TextAlign.center,
               style: AppTextStyles.cardTitle,
             ),

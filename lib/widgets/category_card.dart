@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import '../models/game_category.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
-import '../theme/app_theme.dart';
 
-/// One shortcut in the home menu grid: a line icon in its accent colour
-/// over a short label, like the Profile / Top player / Tutorial grid in
-/// `games-design.webp`. The chosen category gets a tinted rounded square.
+/// A category filter chip: its icon in the category's accent colour beside
+/// the name, in a white pill. The chosen one is tinted and outlined in that
+/// accent.
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
     super.key,
@@ -42,56 +41,49 @@ class CategoryCard extends StatelessWidget {
     final accent = accentFor(
       category.slug.isEmpty ? category.label : category.slug,
     );
+    final radius = BorderRadius.circular(999);
 
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppTheme.sm),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: selected
-                      ? accent.withValues(alpha: 0.14)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: selected ? accent : Colors.transparent,
-                    width: 1.5,
-                  ),
-                ),
-                child: Icon(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: selected
+            ? accent.withValues(alpha: 0.14)
+            : AppColors.surfaceContainer,
+        borderRadius: radius,
+        border: Border.all(
+          color: selected ? accent : AppColors.outlineVariant,
+          width: selected ? 1.5 : 1,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: radius,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 11, 16, 11),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
                   category.icon,
-                  size: 32,
+                  size: 20,
                   fill: selected ? 1 : 0,
-                  weight: 300,
                   color: accent,
                 ),
-              ),
-              const SizedBox(height: AppTheme.xs),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Text(
+                const SizedBox(width: 8),
+                Text(
                   category.label,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                   style: AppTextStyles.labelSm.copyWith(
-                    fontSize: 13,
+                    fontSize: 14,
                     color: AppColors.onSurface,
                     fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

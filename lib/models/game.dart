@@ -1,3 +1,5 @@
+import '../l10n/language.dart';
+
 class Game {
   const Game({
     required this.title,
@@ -16,7 +18,7 @@ class Game {
   /// Builds a game from the `/api/v1/games` payload.
   factory Game.fromJson(Map<String, dynamic> json) {
     return Game(
-      title: (json['title'] as String?) ?? 'Untitled',
+      title: (json['title'] as String?) ?? tr('Tanpa judul', 'Untitled'),
       slug: (json['slug'] as String?) ?? '',
       description: (json['description'] as String?) ?? '',
       playsCount: (json['plays_count'] as num?)?.toInt() ?? 0,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
@@ -51,7 +52,7 @@ class PageHeader extends StatelessWidget {
           if (onBack != null)
             IconButton(
               onPressed: onBack,
-              tooltip: 'Back',
+              tooltip: context.tr('Kembali', 'Back'),
               icon: const Icon(AppIcons.arrowBack, color: AppColors.onSurface),
             ),
           Expanded(

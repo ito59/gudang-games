@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../l10n/language.dart';
+
 /// Client IDs baked into this build.
 ///
 /// Normally empty: the backend hands the app its client IDs at startup, so
@@ -146,12 +148,20 @@ class GoogleSignInAuthenticator implements GoogleAuthenticator {
       await _initialize();
     } catch (error) {
       _initialized = null; // Let a later attempt try again.
-      throw const GoogleAuthException('Google sign-in could not start.');
+      throw GoogleAuthException(
+        tr(
+          'Masuk dengan Google tidak bisa dimulai.',
+          'Google sign-in could not start.',
+        ),
+      );
     }
 
     if (!_client.supportsAuthenticate()) {
-      throw const GoogleAuthException(
-        'Google sign-in is not available on this device.',
+      throw GoogleAuthException(
+        tr(
+          'Masuk dengan Google tidak tersedia di perangkat ini.',
+          'Google sign-in is not available on this device.',
+        ),
       );
     }
 
@@ -171,7 +181,10 @@ class GoogleSignInAuthenticator implements GoogleAuthenticator {
     } catch (error) {
       debugPrint('Google sign-in failed: $error');
       throw GoogleAuthException(
-        'Google sign-in did not complete.',
+        tr(
+          'Masuk dengan Google tidak selesai.',
+          'Google sign-in did not complete.',
+        ),
         detail: '$error',
       );
     }
@@ -203,13 +216,27 @@ class GoogleSignInAuthenticator implements GoogleAuthenticator {
     // re-verify. Naming one of them would be a guess, so the line below
     // points at the detail, which is the part that actually says which.
     GoogleSignInExceptionCode.canceled =>
-      'Sign-in closed before it finished. If you did not close it yourself, '
-          'the reason below is from Google — see docs/google-sign-in.md.',
+      tr(
+        'Proses masuk ditutup sebelum selesai. Kalau bukan kamu yang '
+            'menutupnya, alasan di bawah berasal dari Google — lihat '
+            'docs/google-sign-in.md.',
+        'Sign-in closed before it finished. If you did not close it yourself, '
+            'the reason below is from Google — see docs/google-sign-in.md.',
+      ),
     GoogleSignInExceptionCode.clientConfigurationError ||
     GoogleSignInExceptionCode.providerConfigurationError =>
-      'Google sign-in is not configured for this app build.',
-    GoogleSignInExceptionCode.uiUnavailable => 'Google sign-in could not open.',
-    GoogleSignInExceptionCode.interrupted => 'Google sign-in was interrupted.',
-    _ => 'Google sign-in failed.',
+      tr(
+        'Masuk dengan Google belum diatur untuk versi aplikasi ini.',
+        'Google sign-in is not configured for this app build.',
+      ),
+    GoogleSignInExceptionCode.uiUnavailable => tr(
+      'Masuk dengan Google tidak bisa dibuka.',
+      'Google sign-in could not open.',
+    ),
+    GoogleSignInExceptionCode.interrupted => tr(
+      'Masuk dengan Google terputus.',
+      'Google sign-in was interrupted.',
+    ),
+    _ => tr('Masuk dengan Google gagal.', 'Google sign-in failed.'),
   };
 }

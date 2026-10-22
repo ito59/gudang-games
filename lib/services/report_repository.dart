@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../l10n/language.dart';
 import '../state/auth_scope.dart';
 import 'api_config.dart';
 
@@ -31,13 +32,25 @@ class ReportRepository {
   /// Used if the server cannot be reached. The sheet is worth opening with a
   /// stale list — a report filed under a slightly wrong reason still reaches
   /// a human, and an empty sheet reaches nobody.
-  static const fallbackReasons = [
-    ReportReason(value: 'spam', label: 'Spam or scam'),
-    ReportReason(value: 'harassment', label: 'Harassment or bullying'),
-    ReportReason(value: 'hate', label: 'Hate speech'),
-    ReportReason(value: 'sexual', label: 'Sexual content'),
-    ReportReason(value: 'violence', label: 'Violence or threats'),
-    ReportReason(value: 'other', label: 'Something else'),
+  static List<ReportReason> get fallbackReasons => [
+    ReportReason(
+      value: 'spam',
+      label: tr('Spam atau penipuan', 'Spam or scam'),
+    ),
+    ReportReason(
+      value: 'harassment',
+      label: tr('Pelecehan atau perundungan', 'Harassment or bullying'),
+    ),
+    ReportReason(value: 'hate', label: tr('Ujaran kebencian', 'Hate speech')),
+    ReportReason(
+      value: 'sexual',
+      label: tr('Konten seksual', 'Sexual content'),
+    ),
+    ReportReason(
+      value: 'violence',
+      label: tr('Kekerasan atau ancaman', 'Violence or threats'),
+    ),
+    ReportReason(value: 'other', label: tr('Lainnya', 'Something else')),
   ];
 
   Future<List<ReportReason>> reasons() async {
@@ -80,7 +93,9 @@ class ReportRepository {
   }) async {
     // Ids travel as strings through the models; the API wants the number.
     final numericId = int.tryParse(id);
-    if (numericId == null) return 'That cannot be reported.';
+    if (numericId == null) {
+      return tr('Itu tidak bisa dilaporkan.', 'That cannot be reported.');
+    }
 
     try {
       final response = await _client
@@ -96,12 +111,15 @@ class ReportRepository {
           )
           .timeout(ApiConfig.timeout);
 
-      if (auth.wasRejected(response)) return 'Sign in to report this.';
+      if (auth.wasRejected(response)) {
+        return tr('Masuk untuk melaporkan ini.', 'Sign in to report this.');
+      }
       if (response.statusCode == 200 || response.statusCode == 201) return null;
 
-      return _messageOf(response.body) ?? 'That report did not send.';
+      return _messageOf(response.body) ??
+          tr('Laporan tidak terkirim.', 'That report did not send.');
     } catch (_) {
-      return 'That report did not send.';
+      return tr('Laporan tidak terkirim.', 'That report did not send.');
     }
   }
 

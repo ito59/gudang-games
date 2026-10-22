@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
@@ -84,7 +85,7 @@ class _ChatComposerState extends State<ChatComposer> {
                   color: AppColors.onSurface,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Message',
+                  hintText: context.tr('Tulis pesan', 'Message'),
                   hintStyle: AppTextStyles.bodyMd.copyWith(
                     color: AppColors.onSurfaceVariant.withValues(alpha: 0.7),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_post.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -77,7 +78,10 @@ class _PostComposerState extends State<_PostComposer> {
                   ),
                 ),
               ),
-              Text('New post', style: AppTextStyles.titleMd),
+              Text(
+                context.tr('Postingan baru', 'New post'),
+                style: AppTextStyles.titleMd,
+              ),
               const SizedBox(height: AppTheme.md),
 
               Wrap(
@@ -85,7 +89,7 @@ class _PostComposerState extends State<_PostComposer> {
                 children: [
                   for (final kind in PostKind.composable)
                     ChoiceChip(
-                      label: Text(kind.label),
+                      label: Text(kind.label(context)),
                       selected: _kind == kind,
                       onSelected: (_) => setState(() => _kind = kind),
                       backgroundColor: AppColors.surfaceContainerHigh,
@@ -113,7 +117,10 @@ class _PostComposerState extends State<_PostComposer> {
                   color: AppColors.onSurface,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'What happened in-game?',
+                  hintText: context.tr(
+                    'Ada cerita apa di game?',
+                    'What happened in-game?',
+                  ),
                   hintStyle: AppTextStyles.bodyMd.copyWith(
                     color: AppColors.onSurfaceVariant.withValues(alpha: 0.7),
                   ),
@@ -139,7 +146,7 @@ class _PostComposerState extends State<_PostComposer> {
                   child: GradientButton(
                     icon: AppIcons.send,
                     iconFill: 1,
-                    label: 'Post',
+                    label: context.tr('Posting', 'Post'),
                     expand: true,
                     onPressed: () => Navigator.of(context).pop(
                       (body: text, kind: _kind),

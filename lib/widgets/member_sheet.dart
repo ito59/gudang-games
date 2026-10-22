@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_member.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -30,8 +31,8 @@ class _MemberSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = member.playing == null
-        ? 'Offline'
-        : 'Playing ${member.playing}';
+        ? context.tr('Offline', 'Offline')
+        : context.tr('Sedang main ${member.playing}', 'Playing ${member.playing}');
 
     return SafeArea(
       child: Padding(
@@ -110,14 +111,14 @@ class _MemberSheet extends StatelessWidget {
             const SizedBox(height: AppTheme.lg),
             _SheetAction(
               icon: AppIcons.accountCircle,
-              label: 'View profile',
+              label: context.tr('Lihat profil', 'View profile'),
               onTap: () => Navigator.of(context).pop(MemberAction.viewProfile),
             ),
             const SizedBox(height: AppTheme.sm),
             if (!member.blocked) ...[
               _SheetAction(
                 icon: AppIcons.chatBubble,
-                label: 'Message',
+                label: context.tr('Pesan', 'Message'),
                 primary: true,
                 onTap: () => Navigator.of(context).pop(MemberAction.message),
               ),
@@ -130,15 +131,15 @@ class _MemberSheet extends StatelessWidget {
             const SizedBox(height: AppTheme.md),
             _SheetAction(
               icon: AppIcons.flag,
-              label: 'Report ${member.name}',
+              label: context.tr('Laporkan ${member.name}', 'Report ${member.name}'),
               onTap: () => Navigator.of(context).pop(MemberAction.report),
             ),
             const SizedBox(height: AppTheme.sm),
             _SheetAction(
               icon: AppIcons.block,
               label: member.blocked
-                  ? 'Unblock ${member.name}'
-                  : 'Block ${member.name}',
+                  ? context.tr('Buka blokir ${member.name}', 'Unblock ${member.name}')
+                  : context.tr('Blokir ${member.name}', 'Block ${member.name}'),
               danger: !member.blocked,
               onTap: () => Navigator.of(
                 context,

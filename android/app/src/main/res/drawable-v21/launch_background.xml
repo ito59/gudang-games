@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Splash while the engine boots. Brand background, not white, so launching
-     the app does not flash a bright screen before the dark UI appears. -->
+<!-- Splash while the engine boots: the app's cream page with the trophy
+     badge, so launching hands over to the home screen without a flash. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/ic_launcher_background" />
+    <item android:drawable="@color/splash_background" />
 
     <item>
         <bitmap

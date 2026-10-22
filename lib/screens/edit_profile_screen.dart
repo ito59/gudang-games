@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/language.dart';
 import '../models/user_profile.dart';
 import '../services/photo_picker.dart';
 import '../state/profile_scope.dart';
@@ -87,11 +88,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       // Backing out of the gallery is an answer, not a failure.
       if (photo == null || !mounted) return;
 
-      await _run(() => controller.setPhoto(photo), done: 'Photo updated.');
+      await _run(
+        () => controller.setPhoto(photo),
+        done: context.tr('Foto diperbarui.', 'Photo updated.'),
+      );
       return;
     }
 
-    await _run(controller.removePhoto, done: 'Photo removed.');
+    await _run(
+      controller.removePhoto,
+      done: context.tr('Foto dihapus.', 'Photo removed.'),
+    );
   }
 
   Future<void> _run(
@@ -123,12 +130,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             ListTile(
               leading: const Icon(AppIcons.photoCamera, color: AppColors.primary),
-              title: const Text('Choose a photo'),
+              title: Text(context.tr('Pilih foto', 'Choose a photo')),
               onTap: () => Navigator.of(context).pop(false),
             ),
             ListTile(
               leading: const Icon(AppIcons.close, color: AppColors.tertiary),
-              title: const Text('Remove photo'),
+              title: Text(context.tr('Hapus foto', 'Remove photo')),
               onTap: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -149,19 +156,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       // Colours and type come from AppTheme.dialogTheme.
       builder: (context) => AlertDialog(
-        title: const Text('Discard changes?'),
-        content: const Text('Your edits will be lost.'),
+        title: Text(context.tr('Buang perubahan?', 'Discard changes?')),
+        content: Text(
+          context.tr('Perubahanmu akan hilang.', 'Your edits will be lost.'),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Keep editing'),
+            child: Text(context.tr('Lanjut edit', 'Keep editing')),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: TextButton.styleFrom(
               foregroundColor: AppColors.tertiary,
             ),
-            child: const Text('Discard'),
+            child: Text(context.tr('Buang', 'Discard')),
           ),
         ],
       ),
@@ -184,11 +193,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         body: Column(
           children: [
             PageHeader(
-              title: 'Edit Profile',
+              title: context.tr('Edit Profil', 'Edit Profile'),
               onBack: _confirmDiscard,
               trailing: IconButton(
                 onPressed: _save,
-                tooltip: 'Save',
+                tooltip: context.tr('Simpan', 'Save'),
                 icon: const Icon(AppIcons.check, color: AppColors.primary),
               ),
             ),
@@ -212,17 +221,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     const SizedBox(height: AppTheme.xl),
                     _Field(
                       controller: _name,
-                      label: 'Display name',
+                      label: context.tr('Nama tampilan', 'Display name'),
                       textCapitalization: TextCapitalization.words,
                       validator: (value) =>
                           (value == null || value.trim().isEmpty)
-                          ? 'Display name cannot be empty'
+                          ? context.tr(
+                              'Nama tampilan tidak boleh kosong',
+                              'Display name cannot be empty',
+                            )
                           : null,
                     ),
                     const SizedBox(height: AppTheme.md),
                     _Field(
                       controller: _username,
-                      label: 'Username',
+                      label: context.tr('Nama pengguna', 'Username'),
                       prefix: '@',
                       // Usernames are handles: no spaces, no punctuation.
                       inputFormatters: [
@@ -232,9 +244,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                       validator: (value) {
                         final text = value?.trim() ?? '';
-                        if (text.isEmpty) return 'Username cannot be empty';
+                        if (text.isEmpty) {
+                          return context.tr(
+                            'Nama pengguna tidak boleh kosong',
+                            'Username cannot be empty',
+                          );
+                        }
                         if (text.length < 3) {
-                          return 'Use at least 3 characters';
+                          return context.tr(
+                            'Gunakan minimal 3 karakter',
+                            'Use at least 3 characters',
+                          );
                         }
                         return null;
                       },
@@ -242,7 +262,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     const SizedBox(height: AppTheme.md),
                     _Field(
                       controller: _bio,
-                      label: 'Bio',
+                      label: context.tr('Bio', 'Bio'),
                       maxLines: 3,
                       maxLength: _bioLimit,
                       textCapitalization: TextCapitalization.sentences,
@@ -250,13 +270,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     const SizedBox(height: AppTheme.md),
                     _Field(
                       controller: _location,
-                      label: 'Location',
+                      label: context.tr('Lokasi', 'Location'),
                       textCapitalization: TextCapitalization.words,
                     ),
                     const SizedBox(height: AppTheme.xl),
                     GradientButton(
                       icon: AppIcons.check,
-                      label: 'Save changes',
+                      label: context.tr('Simpan perubahan', 'Save changes'),
                       expand: true,
                       onPressed: _save,
                     ),
@@ -334,7 +354,7 @@ class _AvatarPicker extends StatelessWidget {
                     padding: const EdgeInsets.all(7),
                     child: Semantics(
                       button: true,
-                      label: 'Change photo',
+                      label: context.tr('Ganti foto', 'Change photo'),
                       child: const Icon(
                         AppIcons.photoCamera,
                         size: 18,

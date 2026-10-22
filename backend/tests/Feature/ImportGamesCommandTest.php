@@ -113,4 +113,16 @@ class ImportGamesCommandTest extends TestCase
         $this->assertSame(1, Category::count());
         $this->assertFalse(Game::firstOrFail()->is_published);
     }
+
+    public function test_a_category_named_only_by_a_game_is_created(): void
+    {
+        $this->zip('soccer.zip', ['index.html' => 'x']);
+        $this->manifest(['games' => [
+            ['zip' => 'soccer.zip', 'title' => 'Bubble Soccer', 'category' => 'Sports'],
+        ]]);
+
+        $this->artisan('games:import', ['folder' => $this->folder])->assertSuccessful();
+
+        $this->assertSame('Sports', Game::firstOrFail()->category?->name);
+    }
 }

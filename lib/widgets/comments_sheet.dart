@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_post.dart';
 import '../services/feed_repository.dart';
 import '../services/report_repository.dart';
@@ -125,7 +126,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
       context,
       target: ReportTarget.comment,
       id: comment.id,
-      subject: 'this comment',
+      subject: context.tr('komentar ini', 'this comment'),
       repository: widget.reports,
     );
     if (!filed || !mounted) return;
@@ -133,7 +134,14 @@ class _CommentsSheetState extends State<_CommentsSheet> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        const SnackBar(content: Text('Thanks — a moderator will look at it.')),
+        SnackBar(
+          content: Text(
+            context.tr(
+              'Makasih — moderator akan memeriksanya.',
+              'Thanks — a moderator will look at it.',
+            ),
+          ),
+        ),
       );
   }
 
@@ -164,7 +172,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                 ),
                 child: Row(
                   children: [
-                    Text('Comments', style: AppTextStyles.titleMd),
+                    Text(context.tr('Komentar', 'Comments'), style: AppTextStyles.titleMd),
                     const SizedBox(width: AppTheme.sm),
                     Text(
                       // The post's own count, not the page in hand.
@@ -176,7 +184,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                     const Spacer(),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(_added),
-                      tooltip: 'Close',
+                      tooltip: context.tr('Tutup', 'Close'),
                       icon: const Icon(
                         AppIcons.close,
                         color: AppColors.onSurfaceVariant,
@@ -197,7 +205,10 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                     ? Padding(
                         padding: const EdgeInsets.all(AppTheme.xl),
                         child: Text(
-                          'No comments yet. Say something.',
+                          context.tr(
+                            'Belum ada komentar. Ayo tulis sesuatu.',
+                            'No comments yet. Say something.',
+                          ),
                           style: AppTextStyles.bodyMd.copyWith(
                             color: AppColors.onSurfaceVariant,
                           ),
@@ -240,7 +251,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                           color: AppColors.onSurface,
                         ),
                         decoration: InputDecoration(
-                          hintText: 'Add a comment',
+                          hintText: context.tr('Tulis komentar', 'Add a comment'),
                           counterText: '',
                           filled: true,
                           fillColor: AppColors.surfaceContainerHigh,
@@ -257,7 +268,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                     ),
                     IconButton(
                       onPressed: _sending ? null : _send,
-                      tooltip: 'Send',
+                      tooltip: context.tr('Kirim', 'Send'),
                       icon: Icon(
                         AppIcons.send,
                         fill: 1,

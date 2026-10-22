@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_post.dart';
 import '../services/feed_repository.dart';
 import '../services/member_repository.dart';
@@ -60,7 +61,7 @@ mixin PostActions<T extends StatefulWidget> on State<T>, SignInGate<T> {
 
     if (likes == null) {
       replacePost(post);
-      snack('That like did not save.');
+      snack(context.tr('Suka tadi gagal disimpan.', 'That like did not save.'));
       return;
     }
 
@@ -87,7 +88,7 @@ mixin PostActions<T extends StatefulWidget> on State<T>, SignInGate<T> {
   Future<void> moreOnPost(CommunityPost post) async {
     final action = await showContentActions(
       context,
-      subject: 'this post',
+      subject: context.tr('postingan ini', 'this post'),
       blockName: post.author,
     );
     if (action == null || !mounted) return;
@@ -101,10 +102,17 @@ mixin PostActions<T extends StatefulWidget> on State<T>, SignInGate<T> {
           context,
           target: ReportTarget.post,
           id: post.id,
-          subject: 'this post',
+          subject: tr('postingan ini', 'this post'),
           repository: reports,
         );
-        if (filed) snack('Thanks — a moderator will look at it.');
+        if (filed) {
+          snack(
+            tr(
+              'Makasih — moderator akan memeriksanya.',
+              'Thanks — a moderator will look at it.',
+            ),
+          );
+        }
 
       case ContentAction.block:
         await blockAuthor(post);
@@ -126,7 +134,9 @@ mixin PostActions<T extends StatefulWidget> on State<T>, SignInGate<T> {
     if (!mounted) return;
 
     if (blocked != true) {
-      snack('That did not save. Try again.');
+      snack(
+        context.tr('Gagal menyimpan. Coba lagi.', 'That did not save. Try again.'),
+      );
       return;
     }
 
@@ -135,6 +145,6 @@ mixin PostActions<T extends StatefulWidget> on State<T>, SignInGate<T> {
           .where((candidate) => candidate.authorId != post.authorId)
           .toList();
     });
-    snack('${post.author} is blocked.');
+    snack(context.tr('${post.author} diblokir.', '${post.author} is blocked.'));
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
+import '../l10n/language.dart';
 import '../models/user_profile.dart';
 import '../services/api_config.dart';
 import '../services/photo_picker.dart';
@@ -128,7 +129,10 @@ class ProfileController extends ChangeNotifier {
 
       return _messageFrom(response);
     } catch (_) {
-      return 'Could not reach the server.';
+      return tr(
+        'Tidak bisa terhubung ke server.',
+        'Could not reach the server.',
+      );
     }
   }
 
@@ -137,7 +141,9 @@ class ProfileController extends ChangeNotifier {
   /// straight through.
   Future<String?> setPhoto(PickedPhoto photo) async {
     final auth = _auth;
-    if (auth == null || !auth.isSignedIn) return 'Please sign in first.';
+    if (auth == null || !auth.isSignedIn) {
+      return tr('Silakan masuk dulu.', 'Please sign in first.');
+    }
 
     try {
       final request =
@@ -157,14 +163,19 @@ class ProfileController extends ChangeNotifier {
 
       return _adopt(response);
     } catch (_) {
-      return 'Could not reach the server.';
+      return tr(
+        'Tidak bisa terhubung ke server.',
+        'Could not reach the server.',
+      );
     }
   }
 
   /// Drops the photo and goes back to initials.
   Future<String?> removePhoto() async {
     final auth = _auth;
-    if (auth == null || !auth.isSignedIn) return 'Please sign in first.';
+    if (auth == null || !auth.isSignedIn) {
+      return tr('Silakan masuk dulu.', 'Please sign in first.');
+    }
 
     try {
       final response = await _client
@@ -173,7 +184,10 @@ class ProfileController extends ChangeNotifier {
 
       return _adopt(response);
     } catch (_) {
-      return 'Could not reach the server.';
+      return tr(
+        'Tidak bisa terhubung ke server.',
+        'Could not reach the server.',
+      );
     }
   }
 
@@ -196,7 +210,9 @@ class ProfileController extends ChangeNotifier {
   }
 
   String _messageFrom(http.Response response) {
-    if (response.statusCode == 401) return 'Please sign in again.';
+    if (response.statusCode == 401) {
+      return tr('Silakan masuk lagi.', 'Please sign in again.');
+    }
 
     try {
       final body = jsonDecode(response.body);
@@ -210,7 +226,10 @@ class ProfileController extends ChangeNotifier {
       }
     } catch (_) {}
 
-    return 'That did not save (${response.statusCode}).';
+    return tr(
+      'Gagal menyimpan (${response.statusCode}).',
+      'That did not save (${response.statusCode}).',
+    );
   }
 }
 

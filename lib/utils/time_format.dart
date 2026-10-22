@@ -1,3 +1,5 @@
+import '../l10n/language.dart';
+
 /// Small date helpers so the app stays free of the `intl` dependency.
 /// Times are shown in 24-hour form, matching the app's Indonesian audience.
 ///
@@ -23,9 +25,9 @@ class TimeFormat {
     final day = _dateOnly(time.toLocal());
     final difference = today.difference(day).inDays;
 
-    if (difference == 0) return 'Today';
-    if (difference == 1) return 'Yesterday';
-    return '${day.day} ${_months[day.month - 1]} ${day.year}';
+    if (difference == 0) return tr('Hari ini', 'Today');
+    if (difference == 1) return tr('Kemarin', 'Yesterday');
+    return '${day.day} ${_month(day.month)} ${day.year}';
   }
 
   /// Compact "now / 5m / 3h / 2d / 12 Mar" for a conversation list.
@@ -36,11 +38,13 @@ class TimeFormat {
     final diff = reference.difference(time);
     final local = time.toLocal();
 
-    if (diff.inMinutes < 1) return 'now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m';
-    if (diff.inHours < 24) return '${diff.inHours}h';
-    if (diff.inDays < 7) return '${diff.inDays}d';
-    return '${local.day} ${_months[local.month - 1]}';
+    if (diff.inMinutes < 1) return tr('baru saja', 'now');
+    if (diff.inMinutes < 60) {
+      return tr('${diff.inMinutes} mnt', '${diff.inMinutes}m');
+    }
+    if (diff.inHours < 24) return tr('${diff.inHours} j', '${diff.inHours}h');
+    if (diff.inDays < 7) return tr('${diff.inDays} h', '${diff.inDays}d');
+    return '${local.day} ${_month(local.month)}';
   }
 
   /// Whether two instants fall on the same day *for the reader* — a message
@@ -56,7 +60,10 @@ class TimeFormat {
   static DateTime _dateOnly(DateTime time) =>
       DateTime(time.year, time.month, time.day);
 
-  static const _months = [
+  static String _month(int month) =>
+      (AppLanguage.current == AppLanguage.id ? _monthsId : _monthsEn)[month - 1];
+
+  static const _monthsEn = [
     'Jan',
     'Feb',
     'Mar',
@@ -69,5 +76,20 @@ class TimeFormat {
     'Oct',
     'Nov',
     'Dec',
+  ];
+
+  static const _monthsId = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Mei',
+    'Jun',
+    'Jul',
+    'Agu',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des',
   ];
 }

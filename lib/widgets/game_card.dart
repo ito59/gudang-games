@@ -23,7 +23,9 @@ class GameCard extends StatelessWidget {
   /// Separate from [onTap] so watching a trailer never starts the game.
   final VoidCallback? onPlayTrailer;
 
-  static const coverSize = 76.0;
+  /// 3:2, the shape of most game covers, so the art is not cropped to a
+  /// square sliver.
+  static const coverSize = Size(120, 80);
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +45,8 @@ class GameCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-                child: SizedBox.square(
-                  dimension: coverSize,
+                child: SizedBox.fromSize(
+                  size: coverSize,
                   child: GameCover(game: game),
                 ),
               ),

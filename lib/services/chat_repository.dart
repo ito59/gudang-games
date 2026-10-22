@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../l10n/language.dart';
 import '../models/chat_message.dart';
 import '../models/community_post.dart';
 import '../models/conversation.dart';
@@ -119,7 +120,7 @@ class ChatRepository {
           .timeout(ApiConfig.timeout);
 
       if (auth.wasRejected(response)) {
-        return (message: null, error: 'Sign in to send that.');
+        return (message: null, error: tr('Masuk dulu untuk mengirim pesan.', 'Sign in to send that.'));
       }
 
       if (response.statusCode != 201) {
@@ -130,9 +131,9 @@ class ChatRepository {
 
       return data is Map<String, dynamic>
           ? (message: messageFrom(data), error: null)
-          : (message: null, error: 'That message did not send.');
+          : (message: null, error: tr('Pesan itu gagal terkirim.', 'That message did not send.'));
     } catch (_) {
-      return (message: null, error: 'That message did not send.');
+      return (message: null, error: tr('Pesan itu gagal terkirim.', 'That message did not send.'));
     }
   }
 
@@ -142,7 +143,7 @@ class ChatRepository {
   /// filter. A 403 is a block, which is answered without saying so: telling
   /// somebody they have been blocked is the one thing blocking must not do.
   static String _refusalOf(http.Response response) {
-    const generic = 'That message did not send.';
+    final generic = tr('Pesan itu gagal terkirim.', 'That message did not send.');
 
     if (response.statusCode != 422) return generic;
 

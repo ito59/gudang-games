@@ -39,7 +39,7 @@ only for reading extra profile data, which the app does not do.
 
 **Credentials → Create credentials → OAuth client ID → Android**
 
-- **Package name**: `id.co.lds.bandargames` (the `applicationId` in
+- **Package name**: `id.co.ki89.gudanggames` (the `applicationId` in
   `android/app/build.gradle.kts`)
 - **SHA-1**: the fingerprint of the key that signs the build you install.
 
@@ -71,7 +71,7 @@ is needed. Copy the client ID; it ends in `.apps.googleusercontent.com`.
 
 ### d. iOS client — only if you ship an iOS build
 
-Create an iOS client with the bundle ID `id.co.lds.bandargames`, put its ID in
+Create an iOS client with the bundle ID `id.co.ki89.gudanggames`, put its ID in
 `GOOGLE_IOS_CLIENT_ID`, then edit `ios/Runner/Info.plist`:
 
 ```xml

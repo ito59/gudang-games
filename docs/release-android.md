@@ -63,7 +63,7 @@ fingerprint is registered:
    does not exist before then.
 3. Google Cloud (the same project as the web client) → **Credentials →
    Create credentials → OAuth client ID → Android**, package
-   `id.co.lds.bandargames`, that SHA-1. An Android client holds exactly one
+   `id.co.ki89.gudanggames`, that SHA-1. An Android client holds exactly one
    fingerprint, so this is a **new** client beside the existing one, not an
    edit of it. Nothing to paste anywhere afterwards; the change can take a few
    minutes to reach devices.
@@ -72,7 +72,7 @@ Do the same with the **Upload key certificate** SHA-1 — same page, second
 block — so a release APK built and installed locally signs in as well. See
 [google-sign-in.md](google-sign-in.md) for the rest of the OAuth setup.
 
-The three Android clients this app needs, all package `id.co.lds.bandargames`:
+The three Android clients this app needs, all package `id.co.ki89.gudanggames`:
 
 | Client | SHA-1 | Signs |
 | --- | --- | --- |
@@ -85,7 +85,7 @@ still fail with `[16] Account reauth failed`, read the certificate off the
 installed app rather than the console — with the phone on adb:
 
 ```sh
-adb pull "$(adb shell pm path id.co.lds.bandargames | grep base.apk | cut -d: -f2 | tr -d '\r')" installed.apk
+adb pull "$(adb shell pm path id.co.ki89.gudanggames | grep base.apk | cut -d: -f2 | tr -d '\r')" installed.apk
 $ANDROID_HOME/build-tools/<version>/apksigner verify --print-certs installed.apk
 ```
 

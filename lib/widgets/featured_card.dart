@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/game.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -82,7 +83,7 @@ class FeaturedCard extends StatelessWidget {
             tone: ButtonTone.red,
             icon: AppIcons.playArrow,
             iconFill: 1,
-            label: 'Play Now',
+            label: context.tr('Main Sekarang', 'Play Now'),
             expand: true,
             onPressed: onPlay,
           ),
@@ -127,7 +128,10 @@ class _ShowcasePanel extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _Stat(label: 'Played', value: _compact(game.playsCount)),
+                _Stat(
+                  label: context.tr('Dimainkan', 'Played'),
+                  value: _compact(game.playsCount),
+                ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: AppTheme.sm),
                   child: Divider(height: 1, color: AppColors.outlineVariant),
@@ -210,7 +214,7 @@ class _FeaturedBadge extends StatelessWidget {
           ),
           const SizedBox(width: AppTheme.xs),
           Text(
-            'FEATURED',
+            context.tr('UNGGULAN', 'FEATURED'),
             style: AppTextStyles.labelSm.copyWith(
               fontSize: 11,
               color: AppColors.onImage,

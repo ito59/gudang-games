@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../services/api_config.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -18,21 +19,32 @@ class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({super.key});
 
   static final _pages =
-      <({IconData icon, String label, String path, String? section})>[
+      <
+        ({
+          IconData icon,
+          String labelId,
+          String label,
+          String path,
+          String? section,
+        })
+      >[
         (
           icon: AppIcons.description,
+          labelId: 'Kebijakan privasi',
           label: 'Privacy Policy',
           path: 'policy',
           section: null,
         ),
         (
           icon: AppIcons.gavel,
+          labelId: 'Ketentuan layanan',
           label: 'Terms of Service',
           path: 'terms',
           section: null,
         ),
         (
           icon: AppIcons.personRemove,
+          labelId: 'Hapus akun',
           label: 'Delete account',
           path: 'policy',
           section: 'delete',
@@ -41,16 +53,14 @@ class PrivacyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // The site has English and Indonesian; the phone's language picks. Read
-    // from the platform: the app itself only declares English, so its own
-    // locale would always say `en`.
-    final language = View.of(context).platformDispatcher.locale.languageCode;
+    // The site has English and Indonesian; the app's chosen language picks.
+    final language = context.language.name;
 
     return Scaffold(
       body: Column(
         children: [
           PageHeader(
-            title: 'Privacy',
+            title: context.tr('Privasi', 'Privacy'),
             onBack: () => Navigator.of(context).pop(),
           ),
           Expanded(
@@ -60,11 +70,11 @@ class PrivacyScreen extends StatelessWidget {
                 for (final page in _pages) ...[
                   MenuRow(
                     icon: page.icon,
-                    label: page.label,
+                    label: context.tr(page.labelId, page.label),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => WebPageScreen(
-                          title: page.label,
+                          title: context.tr(page.labelId, page.label),
                           url: ApiConfig.page(
                             page.path,
                             language: language,
@@ -78,8 +88,12 @@ class PrivacyScreen extends StatelessWidget {
                 ],
                 const SizedBox(height: AppTheme.sm),
                 Text(
-                  'What we collect, how it is used, and how to have your '
-                  'account and its data removed.',
+                  context.tr(
+                    'Data apa yang kami kumpulkan, bagaimana digunakan, dan '
+                        'cara menghapus akun serta datanya.',
+                    'What we collect, how it is used, and how to have your '
+                        'account and its data removed.',
+                  ),
                   style: AppTextStyles.bodyMd.copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),

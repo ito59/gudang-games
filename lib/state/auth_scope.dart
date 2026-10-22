@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/language.dart';
 import '../services/api_config.dart';
 import '../services/google_authenticator.dart';
 import '../services/realtime.dart';
@@ -142,9 +143,18 @@ class Auth extends ChangeNotifier {
           )
           .timeout(ApiConfig.timeout);
 
-      return _adoptSession(response, fallback: 'Those details did not work.');
+      return _adoptSession(
+        response,
+        fallback: tr(
+          'Email atau kata sandi tidak cocok.',
+          'Those details did not work.',
+        ),
+      );
     } catch (error) {
-      return 'Could not reach the server.';
+      return tr(
+        'Tidak bisa terhubung ke server.',
+        'Could not reach the server.',
+      );
     }
   }
 
@@ -158,7 +168,10 @@ class Auth extends ChangeNotifier {
     try {
       body = jsonDecode(response.body);
     } catch (_) {
-      return 'Sign in failed (${response.statusCode}).';
+      return tr(
+        'Gagal masuk (${response.statusCode}).',
+        'Sign in failed (${response.statusCode}).',
+      );
     }
 
     if (response.statusCode != 200 || body is! Map<String, dynamic>) {
@@ -172,7 +185,10 @@ class Auth extends ChangeNotifier {
         if (body['message'] is String) return body['message'] as String;
         return fallback;
       }
-      return 'Sign in failed (${response.statusCode}).';
+      return tr(
+        'Gagal masuk (${response.statusCode}).',
+        'Sign in failed (${response.statusCode}).',
+      );
     }
 
     final token = body['token'];
@@ -238,7 +254,12 @@ class Auth extends ChangeNotifier {
   /// place.
   Future<String?> signInWithGoogle() async {
     final google = _google;
-    if (google == null) return 'This build has no Google sign-in.';
+    if (google == null) {
+      return tr(
+        'Versi aplikasi ini tidak mendukung masuk dengan Google.',
+        'This build has no Google sign-in.',
+      );
+    }
 
     // The client ID arrives with the config at launch. If that call failed —
     // no signal, a VPN in the way — ask again now rather than failing until
@@ -270,9 +291,18 @@ class Auth extends ChangeNotifier {
           )
           .timeout(ApiConfig.timeout);
 
-      return _adoptSession(response, fallback: 'Google sign-in was refused.');
+      return _adoptSession(
+        response,
+        fallback: tr(
+          'Masuk dengan Google ditolak.',
+          'Google sign-in was refused.',
+        ),
+      );
     } catch (_) {
-      return 'Could not reach the server.';
+      return tr(
+        'Tidak bisa terhubung ke server.',
+        'Could not reach the server.',
+      );
     }
   }
 

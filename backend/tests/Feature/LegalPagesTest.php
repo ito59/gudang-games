@@ -26,7 +26,7 @@ class LegalPagesTest extends TestCase
             ->assertSee('Privacy Policy')
             ->assertSee('PT Example')
             ->assertSee('privacy@example.test')
-            ->assertSee('id.co.lds.bandargames')
+            ->assertSee('id.co.ki89.gudanggames')
             ->assertSee('id="delete"', false);
 
         $this->get('/policy?lang=id')->assertOk()

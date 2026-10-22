@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#0B1326</color>
+    <!-- Solid fallback of the gold header gradient, for places that need a
+         plain colour rather than drawable/ic_launcher_background_gradient. -->
+    <color name="ic_launcher_background">#E6CF9C</color>
+    <!-- The app's cream page, so the splash hands over without a flash. -->
+    <color name="splash_background">#F7F1E5</color>
 </resources>

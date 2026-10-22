@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
@@ -25,11 +26,11 @@ class LoungeNavBar extends StatelessWidget {
   /// whether it is worth a look.
   final Set<int> unreadTabs;
 
-  static const _items = <({IconData icon, String label})>[
-    (icon: AppIcons.home, label: 'Home'),
-    (icon: AppIcons.sportsEsports, label: 'Library'),
-    (icon: AppIcons.group, label: 'Community'),
-    (icon: AppIcons.person, label: 'Profile'),
+  static const _items = <({IconData icon, String id, String en})>[
+    (icon: AppIcons.home, id: 'Beranda', en: 'Home'),
+    (icon: AppIcons.sportsEsports, id: 'Koleksi', en: 'Library'),
+    (icon: AppIcons.group, id: 'Komunitas', en: 'Community'),
+    (icon: AppIcons.person, id: 'Profil', en: 'Profile'),
   ];
 
   @override
@@ -67,7 +68,7 @@ class LoungeNavBar extends StatelessWidget {
                   Expanded(
                     child: _NavItem(
                       icon: _items[i].icon,
-                      label: _items[i].label,
+                      label: context.tr(_items[i].id, _items[i].en),
                       selected: i == currentIndex,
                       unread: unreadTabs.contains(i),
                       onTap: () => onTap(i),
@@ -104,7 +105,7 @@ class _Marked extends StatelessWidget {
           right: -2,
           top: -1,
           child: Semantics(
-            label: 'unread',
+            label: context.tr('belum dibaca', 'unread'),
             child: Container(
               width: 9,
               height: 9,

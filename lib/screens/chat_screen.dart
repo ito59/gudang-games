@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/chat_message.dart';
 import '../models/conversation.dart';
 import '../services/member_repository.dart';
@@ -91,7 +92,7 @@ class _ChatScreenState extends State<ChatScreen> with SignInGate {
   Future<void> _actOn(ChatMessage message, Conversation chat) async {
     final action = await showContentActions(
       context,
-      subject: 'this message',
+      subject: context.tr('pesan ini', 'this message'),
       blockName: chat.name,
     );
     if (action == null || !mounted) return;
@@ -102,10 +103,16 @@ class _ChatScreenState extends State<ChatScreen> with SignInGate {
           context,
           target: ReportTarget.message,
           id: message.id,
-          subject: 'this message',
+          subject: context.tr('pesan ini', 'this message'),
           repository: _reports!,
         );
-        if (filed) _say('Thanks — a moderator will look at it.');
+        if (!filed || !mounted) return;
+        _say(
+          context.tr(
+            'Makasih — moderator akan memeriksanya.',
+            'Thanks — a moderator will look at it.',
+          ),
+        );
 
       case ContentAction.block:
         if (!await confirmBlock(context, name: chat.name)) return;
@@ -114,14 +121,24 @@ class _ChatScreenState extends State<ChatScreen> with SignInGate {
         if (!mounted) return;
 
         if (blocked != true) {
-          _say('That did not save. Try again.');
+          _say(
+            context.tr(
+              'Gagal disimpan. Coba lagi.',
+              'That did not save. Try again.',
+            ),
+          );
           return;
         }
 
         await ChatScope.of(context).load();
         if (!mounted) return;
 
-        _say('${chat.name} is blocked.');
+        _say(
+          context.tr(
+            '${chat.name} sudah diblokir.',
+            '${chat.name} is blocked.',
+          ),
+        );
         Navigator.of(context).pop();
 
       case ContentAction.unblock:
@@ -291,7 +308,10 @@ class _EmptyThread extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppTheme.xl),
         child: Text(
-          'No messages with $name yet.\nSay something.',
+          context.tr(
+            'Belum ada pesan dengan $name.\nSapa dulu, yuk.',
+            'No messages with $name yet.\nSay something.',
+          ),
           textAlign: TextAlign.center,
           style: AppTextStyles.bodyMd.copyWith(
             color: AppColors.onSurfaceVariant,

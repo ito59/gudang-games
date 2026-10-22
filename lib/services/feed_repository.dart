@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../l10n/language.dart';
 import '../models/community_post.dart';
 import '../state/auth_scope.dart';
 import 'api_config.dart';
@@ -72,10 +73,10 @@ class FeedRepository {
           .timeout(ApiConfig.timeout);
 
       if (auth.wasRejected(response)) {
-        return const FeedResult(
-          posts: [],
+        return FeedResult(
+          posts: const [],
           fromBackend: false,
-          error: 'Please sign in again.',
+          error: tr('Silakan masuk lagi.', 'Please sign in again.'),
         );
       }
 
@@ -83,17 +84,20 @@ class FeedRepository {
         return FeedResult(
           posts: const [],
           fromBackend: false,
-          error: 'Feed unavailable (${response.statusCode}).',
+          error: tr(
+            'Feed tidak tersedia (${response.statusCode}).',
+            'Feed unavailable (${response.statusCode}).',
+          ),
         );
       }
 
       final body = jsonDecode(response.body);
       final data = (body is Map<String, dynamic>) ? body['data'] : null;
       if (data is! List) {
-        return const FeedResult(
-          posts: [],
+        return FeedResult(
+          posts: const [],
           fromBackend: false,
-          error: 'Unexpected response.',
+          error: tr('Respons tidak terduga.', 'Unexpected response.'),
         );
       }
 
@@ -108,7 +112,10 @@ class FeedRepository {
       return FeedResult(
         posts: const [],
         fromBackend: false,
-        error: 'Could not reach the server.',
+        error: tr(
+          'Tidak bisa terhubung ke server.',
+          'Could not reach the server.',
+        ),
       );
     }
   }
@@ -139,7 +146,10 @@ class FeedRepository {
 
       return (null, _messageFrom(response));
     } catch (_) {
-      return (null, 'Could not reach the server.');
+      return (
+        null,
+        tr('Tidak bisa terhubung ke server.', 'Could not reach the server.'),
+      );
     }
   }
 
@@ -207,13 +217,18 @@ class FeedRepository {
 
       return (null, _messageFrom(response));
     } catch (_) {
-      return (null, 'Could not reach the server.');
+      return (
+        null,
+        tr('Tidak bisa terhubung ke server.', 'Could not reach the server.'),
+      );
     }
   }
 
   /// Surfaces the server's own wording rather than a generic failure.
   String _messageFrom(http.Response response) {
-    if (response.statusCode == 401) return 'Please sign in first.';
+    if (response.statusCode == 401) {
+      return tr('Silakan masuk dulu.', 'Please sign in first.');
+    }
 
     try {
       final body = jsonDecode(response.body);
@@ -227,6 +242,9 @@ class FeedRepository {
       }
     } catch (_) {}
 
-    return 'That did not work (${response.statusCode}).';
+    return tr(
+      'Gagal (${response.statusCode}).',
+      'That did not work (${response.statusCode}).',
+    );
   }
 }

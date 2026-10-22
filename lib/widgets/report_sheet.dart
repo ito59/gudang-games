@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../services/report_repository.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -38,14 +39,16 @@ Future<ContentAction?> showContentActions(
             const _Handle(),
             _ActionTile(
               icon: AppIcons.flag,
-              label: 'Report $subject',
+              label: context.tr('Laporkan $subject', 'Report $subject'),
               onTap: () => Navigator.of(context).pop(ContentAction.report),
             ),
             if (blockName != null) ...[
               const SizedBox(height: AppTheme.sm),
               _ActionTile(
                 icon: AppIcons.block,
-                label: blocked ? 'Unblock $blockName' : 'Block $blockName',
+                label: blocked
+                    ? context.tr('Buka blokir $blockName', 'Unblock $blockName')
+                    : context.tr('Blokir $blockName', 'Block $blockName'),
                 danger: !blocked,
                 onTap: () => Navigator.of(context).pop(
                   blocked ? ContentAction.unblock : ContentAction.block,
@@ -93,22 +96,30 @@ Future<bool> confirmBlock(BuildContext context, {required String name}) async {
     builder: (context) => AlertDialog(
       backgroundColor: AppColors.surfaceContainer,
       title: Text(
-        'Block $name?',
+        context.tr('Blokir $name?', 'Block $name?'),
         style: AppTextStyles.titleMd.copyWith(color: AppColors.onSurface),
       ),
       content: Text(
-        'You will not see their posts or messages, and they cannot reach '
-        'you. They are not told. You can undo this from your profile.',
+        context.tr(
+          'Kamu tidak akan melihat postingan atau pesan mereka, dan mereka '
+              'tidak bisa menghubungimu. Mereka tidak diberi tahu. Kamu bisa '
+              'membatalkannya dari profilmu.',
+          'You will not see their posts or messages, and they cannot reach '
+              'you. They are not told. You can undo this from your profile.',
+        ),
         style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
+          child: Text(context.tr('Batal', 'Cancel')),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text('Block', style: TextStyle(color: AppColors.tertiary)),
+          child: Text(
+            context.tr('Blokir', 'Block'),
+            style: TextStyle(color: AppColors.tertiary),
+          ),
         ),
       ],
     ),
@@ -208,11 +219,20 @@ class _ReportSheetState extends State<_ReportSheet> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _Handle(),
-                Text('Report ${widget.subject}', style: AppTextStyles.titleMd),
+                Text(
+                  context.tr(
+                    'Laporkan ${widget.subject}',
+                    'Report ${widget.subject}',
+                  ),
+                  style: AppTextStyles.titleMd),
                 const SizedBox(height: AppTheme.xs),
                 Text(
-                  'A moderator reads every report. The member is not told who '
-                  'reported them.',
+                  context.tr(
+                    'Moderator membaca setiap laporan. Anggota yang dilaporkan '
+                        'tidak diberi tahu siapa yang melaporkannya.',
+                    'A moderator reads every report. The member is not told who '
+                        'reported them.',
+                  ),
                   style: AppTextStyles.labelSm.copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -235,7 +255,10 @@ class _ReportSheetState extends State<_ReportSheet> {
                     color: AppColors.onSurface,
                   ),
                   decoration: InputDecoration(
-                    hintText: 'Anything else we should know? (optional)',
+                    hintText: context.tr(
+                      'Ada hal lain yang perlu kami tahu? (opsional)',
+                      'Anything else we should know? (optional)',
+                    ),
                     counterText: '',
                     filled: true,
                     fillColor: AppColors.surfaceContainerHigh,
@@ -248,7 +271,9 @@ class _ReportSheetState extends State<_ReportSheet> {
                 ),
                 const SizedBox(height: AppTheme.lg),
                 GradientButton(
-                  label: _sending ? 'Sending…' : 'Send report',
+                  label: _sending
+                      ? context.tr('Mengirim…', 'Sending…')
+                      : context.tr('Kirim laporan', 'Send report'),
                   icon: AppIcons.flag,
                   expand: true,
                   // Nothing is sent until a reason is picked: "reported, no

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../state/auth_scope.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -103,7 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
       body: Column(
         children: [
           PageHeader(
-            title: 'Sign in',
+            title: context.tr('Masuk', 'Sign in'),
             onBack: () => Navigator.of(context).pop(false),
           ),
           Expanded(
@@ -111,8 +112,12 @@ class _SignInScreenState extends State<SignInScreen> {
               padding: const EdgeInsets.all(AppTheme.marginMobile),
               children: [
                 Text(
-                  'Sign in to post, like and comment. Browsing works without '
-                  'an account.',
+                  context.tr(
+                    'Masuk untuk posting, menyukai, dan berkomentar. Kamu tetap '
+                        'bisa menjelajah tanpa akun.',
+                    'Sign in to post, like and comment. Browsing works without '
+                        'an account.',
+                  ),
                   style: AppTextStyles.bodyMd.copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -140,14 +145,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 ],
                 _Field(
                   controller: _email,
-                  label: 'Email',
+                  label: context.tr('Email', 'Email'),
                   hint: 'you@example.com',
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: AppTheme.md),
                 _Field(
                   controller: _password,
-                  label: 'Password',
+                  label: context.tr('Kata sandi', 'Password'),
                   obscure: true,
                   onSubmitted: (_) => _submit(),
                 ),
@@ -177,7 +182,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 else
                   GradientButton(
                     icon: AppIcons.check,
-                    label: 'Sign in',
+                    label: context.tr('Masuk', 'Sign in'),
                     expand: true,
                     onPressed: _googleBusy ? null : _submit,
                   ),

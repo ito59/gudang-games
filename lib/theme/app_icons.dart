@@ -70,4 +70,6 @@ class AppIcons {
   static const editSquare = IconData(0xf88d, fontFamily: _family);
   static const refresh = IconData(0xe5d5, fontFamily: _family);
   static const cloudOff = IconData(0xe2c1, fontFamily: _family);
+  static const language = IconData(0xe894, fontFamily: _family);
+  static const gridView = IconData(0xe9b0, fontFamily: _family);
 }

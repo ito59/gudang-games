@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_post.dart';
 import '../services/feed_repository.dart';
 import '../services/member_repository.dart';
@@ -89,7 +90,7 @@ class _ArticleScreenState extends State<ArticleScreen>
         body: Column(
           children: [
             PageHeader(
-              title: 'News',
+              title: context.tr('Berita', 'News'),
               onBack: () => Navigator.of(context).pop(_post),
             ),
             Expanded(
@@ -112,7 +113,7 @@ class _ArticleScreenState extends State<ArticleScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          post.title ?? 'From the team',
+                          post.title ?? context.tr('Dari tim', 'From the team'),
                           style: AppTextStyles.headlineLgMobile.copyWith(
                             color: AppColors.onSurface,
                           ),
@@ -277,7 +278,9 @@ class _Actions extends StatelessWidget {
             _Action(
               icon: AppIcons.favorite,
               label: '${post.likes}',
-              semanticLabel: post.likedByMe ? 'Unlike' : 'Like',
+              semanticLabel: post.likedByMe
+                  ? context.tr('Batal suka', 'Unlike')
+                  : context.tr('Suka', 'Like'),
               active: post.likedByMe,
               activeColor: AppColors.tertiary,
               onTap: onToggleLike,
@@ -286,7 +289,7 @@ class _Actions extends StatelessWidget {
             _Action(
               icon: AppIcons.modeComment,
               label: '${post.comments}',
-              semanticLabel: 'Comments',
+              semanticLabel: context.tr('Komentar', 'Comments'),
               onTap: onComment,
             ),
           ],

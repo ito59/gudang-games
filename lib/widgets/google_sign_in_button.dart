@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
@@ -22,7 +23,7 @@ class GoogleSignInButton extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: !busy && onPressed != null,
-      label: 'Continue with Google',
+      label: context.tr('Lanjutkan dengan Google', 'Continue with Google'),
       child: Material(
         color: Colors.white,
         borderRadius: radius,
@@ -49,7 +50,10 @@ class GoogleSignInButton extends StatelessWidget {
                       const SizedBox(width: AppTheme.sm),
                       Flexible(
                         child: Text(
-                          'Continue with Google',
+                          context.tr(
+                            'Lanjutkan dengan Google',
+                            'Continue with Google',
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.bodyMd.copyWith(
@@ -97,9 +101,10 @@ class _GoogleMark extends StatelessWidget {
 
 /// A hairline with a word in it, separating the two ways to sign in.
 class OrDivider extends StatelessWidget {
-  const OrDivider({super.key, this.label = 'or'});
+  const OrDivider({super.key, this.label});
 
-  final String label;
+  /// Defaults to "or" in the current language.
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +121,7 @@ class OrDivider extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.md),
           child: Text(
-            label,
+            label ?? context.tr('atau', 'or'),
             style: AppTextStyles.labelSm.copyWith(
               color: AppColors.onSurfaceVariant,
             ),

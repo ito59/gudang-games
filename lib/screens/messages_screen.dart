@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/conversation.dart';
 import '../state/auth_scope.dart';
 import '../state/chat_scope.dart';
@@ -59,7 +60,7 @@ class _MessagesScreenState extends State<MessagesScreen> with SignInGate {
       body: Column(
         children: [
           PageHeader(
-            title: 'Messages',
+            title: context.tr('Pesan', 'Messages'),
             onBack: () => Navigator.of(context).pop(),
           ),
           Expanded(
@@ -108,7 +109,10 @@ class _Empty extends StatelessWidget {
           )
         else
           Text(
-            'No messages yet. Open somebody\'s profile to start one.',
+            context.tr(
+              'Belum ada pesan. Buka profil seseorang untuk mulai ngobrol.',
+              'No messages yet. Open somebody\'s profile to start one.',
+            ),
             textAlign: TextAlign.center,
             style: AppTextStyles.bodyMd.copyWith(
               color: AppColors.onSurfaceVariant,
@@ -213,7 +217,11 @@ class _ConversationTile extends StatelessWidget {
                           ],
                           Expanded(
                             child: Text(
-                              last?.text ?? 'No messages yet',
+                              last?.text ??
+                                  context.tr(
+                                    'Belum ada pesan',
+                                    'No messages yet',
+                                  ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.bodyMd.copyWith(

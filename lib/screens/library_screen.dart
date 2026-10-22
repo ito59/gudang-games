@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../services/game_repository.dart';
 import '../state/play_history.dart';
 import '../theme/app_colors.dart';
@@ -26,7 +27,7 @@ class LibraryScreen extends StatelessWidget {
 
     return Column(
       children: [
-        const PageHeader(title: 'Library'),
+        PageHeader(title: context.tr('Koleksi', 'Library')),
         Expanded(
           child: !history.isLoaded
               ? const Center(
@@ -119,8 +120,12 @@ class _PlayedRow extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${entry.plays} ${entry.plays == 1 ? 'play' : 'plays'}'
-                        ' · ${TimeFormat.relative(entry.lastPlayed)}',
+                        context.tr(
+                          '${entry.plays} kali main'
+                              ' · ${TimeFormat.relative(entry.lastPlayed)}',
+                          '${entry.plays} ${entry.plays == 1 ? 'play' : 'plays'}'
+                              ' · ${TimeFormat.relative(entry.lastPlayed)}',
+                        ),
                         style: AppTextStyles.labelSm.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),
@@ -160,12 +165,15 @@ class _EmptyLibrary extends StatelessWidget {
             ),
             const SizedBox(height: AppTheme.md),
             Text(
-              'Nothing played yet',
+              context.tr('Belum ada yang dimainkan', 'Nothing played yet'),
               style: AppTextStyles.cardTitle,
             ),
             const SizedBox(height: AppTheme.xs),
             Text(
-              'Games you play show up here, most played first.',
+              context.tr(
+                'Game yang kamu mainkan muncul di sini, yang paling sering dimainkan di atas.',
+                'Games you play show up here, most played first.',
+              ),
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMd.copyWith(
                 color: AppColors.onSurfaceVariant,

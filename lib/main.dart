@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'data/mock_data.dart';
+import 'l10n/language.dart';
 import 'screens/app_shell.dart';
 import 'services/chat_repository.dart';
 import 'services/feed_repository.dart';
@@ -72,6 +74,7 @@ class GudangGamesApp extends StatefulWidget {
     this.pushMessaging,
     this.auth,
     this.profileController,
+    this.language,
   });
 
   /// Injectable so tests never reach for the network.
@@ -87,6 +90,7 @@ class GudangGamesApp extends StatefulWidget {
   /// passed in is owned by the caller and not disposed with this widget.
   final Auth? auth;
   final ProfileController? profileController;
+  final LanguageController? language;
 
   @override
   State<GudangGamesApp> createState() => _GudangGamesAppState();
@@ -112,11 +116,13 @@ class _GudangGamesAppState extends State<GudangGamesApp> {
     auth: _auth,
   );
   late final _presence = PresenceTracker(auth: _auth);
+  late final _language = widget.language ?? LanguageController();
 
   @override
   void initState() {
     super.initState();
     _history.load();
+    _language.load();
     _presence.start();
     // Restores the session first; the profile follows whoever that is.
     _auth.load().then((_) => _profile.load());
@@ -131,6 +137,7 @@ class _GudangGamesAppState extends State<GudangGamesApp> {
     _push.dispose();
     _presence.dispose();
     _history.dispose();
+    if (widget.language == null) _language.dispose();
     super.dispose();
   }
 
@@ -146,15 +153,29 @@ class _GudangGamesAppState extends State<GudangGamesApp> {
             notifier: _history,
             child: AuthScope(
               notifier: _auth,
-              child: MaterialApp(
-                title: 'GudangGames',
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.light,
-                home: AppShell(
-                  gameRepository: widget.gameRepository,
-                  feedRepository: widget.feedRepository,
-                  memberRepository: widget.memberRepository,
-                  reportRepository: widget.reportRepository,
+              child: LanguageScope(
+                notifier: _language,
+                child: ListenableBuilder(
+                  listenable: _language,
+                  builder: (context, _) => MaterialApp(
+                    title: 'GudangGames',
+                    debugShowCheckedModeBanner: false,
+                    theme: AppTheme.light,
+                    // The chosen language, not the phone's: Indonesian
+                    // unless somebody picks English on the Profile page.
+                    locale: _language.language.locale,
+                    supportedLocales: [
+                      for (final language in AppLanguage.values)
+                        language.locale,
+                    ],
+                    localizationsDelegates: GlobalMaterialLocalizations.delegates,
+                    home: AppShell(
+                      gameRepository: widget.gameRepository,
+                      feedRepository: widget.feedRepository,
+                      memberRepository: widget.memberRepository,
+                      reportRepository: widget.reportRepository,
+                    ),
+                  ),
                 ),
               ),
             ),

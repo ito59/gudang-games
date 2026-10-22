@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/user_profile.dart';
 import '../state/auth_scope.dart';
 import '../state/profile_scope.dart';
@@ -68,7 +69,7 @@ class TopBar extends StatelessWidget {
           ),
           const SizedBox(height: AppTheme.lg),
           Text(
-            'Ready to play?',
+            context.tr('Siap main?', 'Ready to play?'),
             style: AppTextStyles.headlineLgMobile.copyWith(
               color: AppColors.onGold,
               fontWeight: FontWeight.w700,
@@ -76,7 +77,10 @@ class TopBar extends StatelessWidget {
           ),
           const SizedBox(height: AppTheme.xs),
           Text(
-            'Pick a category or jump into today\'s featured game.',
+            context.tr(
+              'Pilih kategori atau langsung main game unggulan hari ini.',
+              'Pick a category or jump into today\'s featured game.',
+            ),
             style: AppTextStyles.bodyMd.copyWith(
               fontSize: 14,
               height: 20 / 14,
@@ -133,7 +137,7 @@ class _GamesChip extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Games',
+                context.tr('Game', 'Games'),
                 style: AppTextStyles.labelSm.copyWith(
                   fontSize: 11,
                   height: 14 / 11,

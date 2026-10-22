@@ -1,4 +1,4 @@
-package id.co.lds.bandargames
+package id.co.ki89.gudanggames
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_post.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -147,7 +148,7 @@ class _Header extends StatelessWidget {
         if (onMore != null)
           IconButton(
             onPressed: onMore,
-            tooltip: 'More',
+            tooltip: context.tr('Lainnya', 'More'),
             visualDensity: VisualDensity.compact,
             icon: const Icon(
               AppIcons.moreHoriz,
@@ -224,20 +225,22 @@ class _Actions extends StatelessWidget {
           active: liked,
           activeColor: AppColors.tertiary,
           onTap: onToggleLike,
-          semanticLabel: liked ? 'Unlike' : 'Like',
+          semanticLabel: liked
+              ? context.tr('Batal suka', 'Unlike')
+              : context.tr('Suka', 'Like'),
         ),
         const SizedBox(width: AppTheme.lg),
         _ActionButton(
           icon: AppIcons.modeComment,
           label: '${post.comments}',
           onTap: onComment,
-          semanticLabel: 'Comments',
+          semanticLabel: context.tr('Komentar', 'Comments'),
         ),
         const Spacer(),
         _ActionButton(
           icon: AppIcons.share,
           onTap: onShare,
-          semanticLabel: 'Share',
+          semanticLabel: context.tr('Bagikan', 'Share'),
         ),
       ],
     );

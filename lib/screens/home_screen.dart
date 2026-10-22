@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/mock_data.dart';
+import '../l10n/language.dart';
 import '../models/game.dart';
 import '../models/game_category.dart';
 import '../services/game_repository.dart';
@@ -73,6 +74,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _showAll() => setState(() => _selectedCategory = null);
 
+  /// "Popular Games", or the chosen category's name while filtering.
+  String _listTitle(BuildContext context) {
+    for (final category in _categories) {
+      if (category.slug == _selectedCategory) {
+        return context.tr('Game ${category.label}', '${category.label} Games');
+      }
+    }
+    return context.tr('Game Populer', 'Popular Games');
+  }
+
   @override
   Widget build(BuildContext context) {
     final padding = MediaQuery.paddingOf(context);
@@ -121,9 +132,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        HeroSlider(games: _slides, onPlay: _openGame),
-                        const SizedBox(height: AppTheme.xl),
-                        const _Gutter(child: SectionTitle('Popular Games')),
+                        // Out of the way while a category is chosen, so the
+                        // filtered games sit right under the menu instead of
+                        // below a slide that has nothing to do with them.
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeOut,
+                          alignment: Alignment.topCenter,
+                          child: _selectedCategory == null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: AppTheme.xl,
+                                  ),
+                                  child: HeroSlider(
+                                    games: _slides,
+                                    onPlay: _openGame,
+                                  ),
+                                )
+                              : const SizedBox(width: double.infinity),
+                        ),
+                        _Gutter(child: SectionTitle(_listTitle(context))),
                         const SizedBox(height: AppTheme.md),
                         _Gutter(
                           child: _PopularGames(
@@ -187,8 +215,8 @@ class _Gutter extends StatelessWidget {
   }
 }
 
-/// The cream shortcut panel: every category as an icon in a four-column
-/// grid, led by "All", like the menu grid in `games-design.webp`.
+/// The category filter: one row of chips that scrolls sideways, led by
+/// "All", on the cream band under the header.
 class _CategoryMenu extends StatelessWidget {
   const _CategoryMenu({
     required this.categories,
@@ -199,8 +227,6 @@ class _CategoryMenu extends StatelessWidget {
 
   static const fill = AppColors.surfaceContainerLow;
 
-  static const _all = GameCategory(label: 'All', icon: AppIcons.videogameAsset);
-
   final List<GameCategory> categories;
   final String? selected;
   final ValueChanged<GameCategory> onTap;
@@ -208,45 +234,46 @@ class _CategoryMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(
-        AppTheme.sm,
-        AppTheme.md,
-        AppTheme.sm,
-        AppTheme.lg,
+    final chips = [
+      CategoryCard(
+        category: GameCategory(
+          label: context.tr('Semua', 'All'),
+          icon: AppIcons.gridView,
+        ),
+        selected: selected == null,
+        onTap: onShowAll,
       ),
+      for (final category in categories)
+        CategoryCard(
+          category: category,
+          selected: category.slug == selected,
+          onTap: () => onTap(category),
+        ),
+    ];
+
+    return Container(
+      padding: const EdgeInsets.only(top: 22, bottom: 28),
       decoration: const BoxDecoration(
         color: fill,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppTheme.radiusSheet),
         ),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final width = constraints.maxWidth / 4;
-          return Wrap(
-            runSpacing: AppTheme.xs,
-            children: [
-              SizedBox(
-                width: width,
-                child: CategoryCard(
-                  category: _all,
-                  selected: selected == null,
-                  onTap: onShowAll,
-                ),
-              ),
-              for (final category in categories)
-                SizedBox(
-                  width: width,
-                  child: CategoryCard(
-                    category: category,
-                    selected: category.slug == selected,
-                    onTap: () => onTap(category),
-                  ),
-                ),
+      // A Row in a scroll view rather than a fixed-height list, so the strip
+      // grows with the text size instead of clipping the labels.
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppTheme.marginMobile,
+        ),
+        child: Row(
+          children: [
+            for (var i = 0; i < chips.length; i++) ...[
+              if (i > 0) const SizedBox(width: AppTheme.sm),
+              chips[i],
             ],
-          );
-        },
+          ],
+        ),
       ),
     );
   }
@@ -272,12 +299,18 @@ class _PopularGames extends StatelessWidget {
     final result = this.result;
 
     if (result == null) {
-      return const _GamesMessage(text: 'Loading games…', busy: true);
+      return _GamesMessage(
+        text: context.tr('Memuat game…', 'Loading games…'),
+        busy: true,
+      );
     }
 
     if (result.games.isEmpty) {
-      return const _GamesMessage(
-        text: 'No published games yet.\nAdd one in the admin panel.',
+      return _GamesMessage(
+        text: context.tr(
+          'Belum ada game yang diterbitkan.\nTambahkan di panel admin.',
+          'No published games yet.\nAdd one in the admin panel.',
+        ),
       );
     }
 
@@ -311,14 +344,17 @@ class _EmptyCategory extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'No games in this category yet.',
+            context.tr(
+              'Belum ada game di kategori ini.',
+              'No games in this category yet.',
+            ),
             textAlign: TextAlign.center,
             style: AppTextStyles.bodyMd.copyWith(
               color: AppColors.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: AppTheme.sm),
-          TextButton(onPressed: onClear, child: const Text('Show all games')),
+          TextButton(onPressed: onClear, child: Text(context.tr('Lihat semua game', 'Show all games'))),
         ],
       ),
     );
@@ -344,7 +380,10 @@ class _OfflineNotice extends StatelessWidget {
         border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.35)),
       ),
       child: Text(
-        'Showing sample games — the server could not be reached.',
+        context.tr(
+          'Menampilkan contoh game — tidak bisa terhubung ke server.',
+          'Showing sample games — the server could not be reached.',
+        ),
         style: AppTextStyles.labelSm.copyWith(color: AppColors.tertiary),
       ),
     );

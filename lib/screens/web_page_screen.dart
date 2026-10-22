@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../l10n/language.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
 import '../theme/app_text_styles.dart';
@@ -39,7 +40,10 @@ class _WebPageScreenState extends State<WebPageScreen> {
       _controller = _buildController();
     } catch (_) {
       // No WebView on this platform (and none in unit tests).
-      _error = 'This page cannot be shown on this device.';
+      _error = tr(
+        'Halaman ini tidak bisa ditampilkan di perangkat ini.',
+        'This page cannot be shown on this device.',
+      );
     }
   }
 
@@ -70,7 +74,12 @@ class _WebPageScreenState extends State<WebPageScreen> {
           onWebResourceError: (error) {
             if (!(error.isForMainFrame ?? true)) return;
             if (mounted) {
-              setState(() => _error = 'Could not reach the server.');
+              setState(
+                () => _error = context.tr(
+                  'Tidak bisa terhubung ke server.',
+                  'Could not reach the server.',
+                ),
+              );
             }
           },
         ),
@@ -108,7 +117,12 @@ class _WebPageScreenState extends State<WebPageScreen> {
           Expanded(
             child: _error != null || controller == null
                 ? _PageError(
-                    message: _error ?? 'This page cannot be shown.',
+                    message:
+                        _error ??
+                        context.tr(
+                          'Halaman ini tidak bisa ditampilkan.',
+                          'This page cannot be shown.',
+                        ),
                     onRetry: controller == null ? null : _retry,
                   )
                 : WebViewWidget(controller: controller),
@@ -151,7 +165,7 @@ class _PageError extends StatelessWidget {
               TextButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(AppIcons.refresh, size: 18),
-                label: const Text('Try again'),
+                label: Text(context.tr('Coba lagi', 'Try again')),
               ),
             ],
           ],

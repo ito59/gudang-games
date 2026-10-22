@@ -30,9 +30,9 @@ class ExampleTest extends TestCase
         config(['legal.play_store_url' => null]);
         $this->get('/?lang=en')->assertSee('Coming soon to Google Play');
 
-        config(['legal.play_store_url' => 'https://play.google.com/store/apps/details?id=id.co.lds.bandargames']);
+        config(['legal.play_store_url' => 'https://play.google.com/store/apps/details?id=id.co.ki89.gudanggames']);
         $this->get('/?lang=en')
             ->assertSee('Get it on Google Play')
-            ->assertSee('details?id=id.co.lds.bandargames', false);
+            ->assertSee('details?id=id.co.ki89.gudanggames', false);
     }
 }

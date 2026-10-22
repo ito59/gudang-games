@@ -27,12 +27,13 @@
 <h3>Data yang Anda berikan</h3>
 <ul>
     <li><strong>Data akun</strong> — nama, alamat email, dan kata sandi jika Anda masuk dengan email (hanya disimpan dalam bentuk hash satu arah).</li>
-    <li><strong>Masuk dengan Google</strong> — jika Anda memilih "Continue with Google", Google membagikan nama, alamat email, ID akun Google, dan foto profil Anda kepada kami. Kami tidak menerima kata sandi Google atau akses ke data Google Anda yang lain.</li>
+    <li><strong>Masuk dengan Google</strong> — jika Anda memilih "Lanjutkan dengan Google", Google membagikan nama, alamat email, ID akun Google, dan foto profil Anda kepada kami. Kami tidak menerima kata sandi Google atau akses ke data Google Anda yang lain.</li>
     <li><strong>Profil</strong> — username, bio, lokasi (kolom teks bebas yang Anda isi sendiri; kami tidak memakai lokasi perangkat), foto profil, warna aksen, dan game yang sedang Anda mainkan.</li>
+    <li><strong>Status online</strong> — saat aplikasi terbuka, kami mencatat bahwa Anda sedang online dan game apa yang sedang Anda mainkan, agar pengguna lain dapat melihatnya. Status ini hilang tidak lama setelah Anda menutup aplikasi.</li>
     <li><strong>Konten</strong> — postingan, komentar, suka (like), permintaan pertemanan dan daftar teman, serta pesan yang Anda kirim di chat.</li>
     <li><strong>Foto</strong> — saat Anda memilih foto profil, aplikasi membuka kamera atau galeri atas permintaan Anda dan hanya mengunggah foto yang Anda pilih. Aplikasi tidak memiliki akses berkelanjutan ke foto Anda.</li>
     <li><strong>Laporan dan blokir</strong> — alasan dan catatan yang Anda kirim saat melaporkan konten atau pengguna, serta daftar pengguna yang Anda blokir.</li>
-    <li><strong>Pengaturan</strong> — preferensi notifikasi Anda.</li>
+    <li><strong>Pengaturan</strong> — preferensi notifikasi Anda. Pilihan bahasa aplikasi (Bahasa Indonesia atau English) hanya disimpan di perangkat Anda.</li>
 </ul>
 
 <h3>Data yang terkumpul secara otomatis</h3>
@@ -41,7 +42,7 @@
     <li><strong>Token notifikasi</strong> — jika Anda mengizinkan notifikasi, Firebase Cloud Messaging memberikan token perangkat yang kami simpan bersama akun Anda untuk mengirim notifikasi chat dan berita. Token ini mengenali instalasi aplikasi, bukan diri Anda secara pribadi.</li>
     <li><strong>Aktivitas game</strong> — saat sebuah game dibuka, kami menambah penghitung jumlah main game tersebut. Penghitung ini tidak terhubung dengan akun Anda.</li>
     <li><strong>Log teknis</strong> — seperti layanan web pada umumnya, server kami mencatat alamat IP, waktu permintaan, dan detail galat untuk keamanan dan perbaikan masalah.</li>
-    <li><strong>Di perangkat Anda</strong> — aplikasi menyimpan token masuk dan beberapa preferensi secara lokal agar Anda tetap masuk.</li>
+    <li><strong>Di perangkat Anda</strong> — aplikasi menyimpan token masuk dan beberapa preferensi secara lokal agar Anda tetap masuk. Game HTML5 berjalan di dalam aplikasi dan dapat menyimpan progres, skor, atau pengaturan game di penyimpanan lokal perangkat Anda; data ini tidak dikirim ke server kami dan terhapus saat Anda menghapus data aplikasi.</li>
 </ul>
 
 <p>Kami tidak mengumpulkan lokasi tepat maupun perkiraan, kontak, log panggilan, SMS, ID iklan, atau informasi pembayaran.</p>
@@ -62,7 +63,7 @@
 
 <h2 id="visible">3. Apa yang dapat dilihat pengguna lain</h2>
 <ul>
-    <li><strong>Publik bagi semua pengguna aplikasi</strong>, termasuk yang belum masuk: nama, username, bio, lokasi, foto profil, warna aksen, game yang sedang dimainkan, statistik game di profil, serta postingan, komentar, dan jumlah suka Anda.</li>
+    <li><strong>Publik bagi semua pengguna aplikasi</strong>, termasuk yang belum masuk: nama, username, bio, lokasi, foto profil, warna aksen, status online dan game yang sedang dimainkan, statistik game di profil, serta postingan, komentar, dan jumlah suka Anda.</li>
     <li><strong>Hanya peserta percakapan</strong>: pesan chat Anda dan status sudah dibaca.</li>
     <li><strong>Tidak pernah ditampilkan ke pengguna lain</strong>: alamat email, kata sandi, ID akun Google, token perangkat, pengaturan notifikasi, laporan yang Anda buat, dan daftar blokir Anda. Pengguna yang Anda blokir tidak diberi tahu bahwa ia diblokir.</li>
 </ul>
@@ -101,9 +102,11 @@
 
 <h3>Game dan tautan pihak ketiga</h3>
 <p>
-    Sebagian game di katalog di-hosting oleh pengembangnya sendiri dan dibuka di dalam aplikasi.
-    Game tersebut, dan tautan eksternal lainnya, tunduk pada kebijakan privasi masing-masing; kami
-    tidak mengendalikan data yang mereka kumpulkan. Kami tidak meneruskan data akun Anda kepada mereka.
+    Game di katalog dibuat oleh pengembang pihak ketiga. Sebagian besar kami simpan di server kami
+    sendiri dan dijalankan di dalam aplikasi; sebagian lagi dapat di-hosting oleh pengembangnya. Kami
+    tidak meneruskan data akun Anda ke game mana pun. Video trailer diputar dari server kami. Game yang
+    di-hosting pihak lain, dan tautan eksternal lainnya, tunduk pada kebijakan privasi masing-masing;
+    kami tidak mengendalikan data yang mereka kumpulkan.
 </p>
 
 <h2 id="security">5. Keamanan</h2>

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
+import '../l10n/language.dart';
 import '../models/chat_message.dart';
 import '../models/conversation.dart';
 import '../services/chat_repository.dart';
@@ -134,7 +135,7 @@ class ChatController extends ChangeNotifier {
 
     final repository = _repository;
     final index = _conversations.indexWhere((chat) => chat.id == id);
-    if (repository == null || index < 0) return 'That message did not send.';
+    if (repository == null || index < 0) return tr('Pesan itu gagal terkirim.', 'That message did not send.');
 
     final pending = ChatMessage(
       id: 'pending-${DateTime.now().microsecondsSinceEpoch}',
@@ -170,7 +171,7 @@ class ChatController extends ChangeNotifier {
               .toList(),
         ),
       );
-      return error ?? 'That message did not send.';
+      return error ?? tr('Pesan itu gagal terkirim.', 'That message did not send.');
     }
 
     _replace(

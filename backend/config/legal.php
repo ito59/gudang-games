@@ -15,7 +15,7 @@ return [
 
     'contact_email' => env('LEGAL_CONTACT_EMAIL'),
 
-    'package' => 'id.co.lds.bandargames',
+    'package' => 'id.co.ki89.gudanggames',
 
     /*
      * The landing page's download button. Left empty while the listing is
@@ -30,5 +30,5 @@ return [
      * Bump this whenever the text changes in substance; the pages print it as
      * the date the current version took effect.
      */
-    'effective_date' => '2026-09-23',
+    'effective_date' => '2026-10-22',
 ];

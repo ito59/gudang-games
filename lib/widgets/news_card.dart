@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_post.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -70,7 +71,7 @@ class NewsCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppTheme.sm),
                 Text(
-                  post.title ?? 'From the team',
+                  post.title ?? context.tr('Dari tim', 'From the team'),
                   style: AppTextStyles.titleMd.copyWith(
                     color: AppColors.onSurface,
                     fontWeight: FontWeight.w700,
@@ -118,7 +119,7 @@ class NewsCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Read',
+                      context.tr('Baca', 'Read'),
                       style: AppTextStyles.labelSm.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -182,7 +183,7 @@ class _NewsBadge extends StatelessWidget {
           const Icon(AppIcons.bolt, size: 13, color: AppColors.primary),
           const SizedBox(width: 4),
           Text(
-            'NEWS',
+            context.tr('BERITA', 'NEWS'),
             style: AppTextStyles.labelSm.copyWith(
               fontSize: 10,
               letterSpacing: 0.8,

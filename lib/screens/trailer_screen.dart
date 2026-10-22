@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../l10n/language.dart';
 import '../models/game.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
@@ -43,7 +44,14 @@ class _TrailerScreenState extends State<TrailerScreen> {
       setState(() => _controller = controller);
     } catch (error) {
       // No video plugin on this platform, or the file will not decode.
-      if (mounted) setState(() => _error = 'This trailer could not be played.');
+      if (mounted) {
+        setState(
+          () => _error = context.tr(
+            'Trailer ini tidak bisa diputar.',
+            'This trailer could not be played.',
+          ),
+        );
+      }
     }
   }
 
@@ -128,9 +136,9 @@ class _TrailerScreenState extends State<TrailerScreen> {
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
                   onTap: () => Navigator.of(context).pop(),
-                  child: const Tooltip(
-                    message: 'Back',
-                    child: Padding(
+                  child: Tooltip(
+                    message: context.tr('Kembali', 'Back'),
+                    child: const Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
                         AppIcons.arrowBack,

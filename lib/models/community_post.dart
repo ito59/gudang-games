@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../utils/time_format.dart';
 
 enum PostKind {
-  clip('Clips'),
-  squad('Squads'),
-  update('Updates'),
+  clip('Klip', 'Clips'),
+  squad('Skuad', 'Squads'),
+  update('Kabar', 'Updates'),
 
   /// Announcements from the team, written in the dashboard rather than the
   /// app: a headline, an article under it, and a page of its own.
-  news('News');
+  news('Berita', 'News');
 
-  const PostKind(this.label);
+  const PostKind(this._id, this._en);
 
-  final String label;
+  final String _id;
+  final String _en;
+
+  String label(BuildContext context) => context.tr(_id, _en);
 
   /// What a member may write. News speaks for the team, so the composer does
   /// not offer it and the backend refuses it.

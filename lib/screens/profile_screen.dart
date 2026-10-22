@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/user_profile.dart';
 import '../state/auth_scope.dart';
 import '../state/profile_scope.dart';
@@ -9,6 +10,7 @@ import '../theme/app_text_styles.dart';
 import '../theme/app_theme.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/glass_panel.dart';
+import '../widgets/language_sheet.dart';
 import '../widgets/menu_row.dart';
 import '../widgets/page_header.dart';
 import '../widgets/profile_photo.dart';
@@ -30,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
 
     return Column(
       children: [
-        const PageHeader(title: 'Profile'),
+        PageHeader(title: context.tr('Profil', 'Profile')),
         Expanded(
           child: RefreshIndicator(
             onRefresh: controller.load,
@@ -65,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: GradientButton(
                         icon: AppIcons.edit,
-                        label: 'Edit Profile',
+                        label: context.tr('Edit Profil', 'Edit Profile'),
                         expand: true,
                         onPressed: () => _openEditor(context),
                       ),
@@ -86,6 +88,7 @@ class ProfileScreen extends StatelessWidget {
   Future<void> _openEditor(BuildContext context) async {
     final controller = ProfileScope.of(context);
     final messenger = ScaffoldMessenger.of(context);
+    final updatedText = context.tr('Profil diperbarui', 'Profile updated');
 
     final updated = await Navigator.of(context).push<UserProfile>(
       MaterialPageRoute(
@@ -98,7 +101,7 @@ class ProfileScreen extends StatelessWidget {
     final error = await controller.save(updated);
     messenger
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(error ?? 'Profile updated')));
+      ..showSnackBar(SnackBar(content: Text(error ?? updatedText)));
   }
 }
 
@@ -217,10 +220,13 @@ class _SignedOut extends StatelessWidget {
                 color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
               ),
               const SizedBox(height: AppTheme.md),
-              Text('Not signed in', style: AppTextStyles.cardTitle),
+              Text(context.tr('Belum masuk', 'Not signed in'), style: AppTextStyles.cardTitle),
               const SizedBox(height: AppTheme.xs),
               Text(
-                'Sign in to see your profile and edit it.',
+                context.tr(
+                  'Masuk untuk melihat dan mengedit profilmu.',
+                  'Sign in to see your profile and edit it.',
+                ),
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMd.copyWith(
                   color: AppColors.onSurfaceVariant,
@@ -229,7 +235,7 @@ class _SignedOut extends StatelessWidget {
               const SizedBox(height: AppTheme.lg),
               GradientButton(
                 icon: AppIcons.person,
-                label: 'Sign in',
+                label: context.tr('Masuk', 'Sign in'),
                 expand: true,
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const SignInScreen()),
@@ -256,12 +262,12 @@ class _CouldNotLoad extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Your profile did not load',
+              context.tr('Profilmu gagal dimuat', 'Your profile did not load'),
               style: AppTextStyles.cardTitle,
             ),
             const SizedBox(height: AppTheme.xs),
             Text(
-              'Pull down to try again.',
+              context.tr('Tarik ke bawah untuk coba lagi.', 'Pull down to try again.'),
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMd.copyWith(
                 color: AppColors.onSurfaceVariant,
@@ -285,17 +291,17 @@ class _Stats extends StatelessWidget {
       (
         icon: AppIcons.videogameAsset,
         value: '${profile.gamesOwned}',
-        label: 'Games',
+        label: context.tr('Game', 'Games'),
       ),
       (
         icon: AppIcons.schedule,
         value: '${profile.hoursPlayed}',
-        label: 'Hours',
+        label: context.tr('Jam', 'Hours'),
       ),
       (
         icon: AppIcons.trophy,
         value: '${profile.achievements}',
-        label: 'Awards',
+        label: context.tr('Penghargaan', 'Awards'),
       ),
     ];
 
@@ -355,19 +361,23 @@ class _Menu extends StatelessWidget {
   /// A null `opens` means the row is still a placeholder. Account settings
   /// and Help & support stay off the list until they have screens behind
   /// them.
-  static final _items = <({IconData icon, String label, WidgetBuilder? opens})>[
+  static final _items =
+      <({IconData icon, String labelId, String label, WidgetBuilder? opens})>[
     (
       icon: AppIcons.notifications,
+      labelId: 'Notifikasi',
       label: 'Notifications',
       opens: (_) => const NotificationsScreen(),
     ),
     (
       icon: AppIcons.block,
+      labelId: 'Akun diblokir',
       label: 'Blocked accounts',
       opens: (_) => const BlockedAccountsScreen(),
     ),
     (
       icon: AppIcons.privacyTip,
+      labelId: 'Privasi',
       label: 'Privacy',
       opens: (_) => const PrivacyScreen(),
     ),
@@ -382,7 +392,7 @@ class _Menu extends StatelessWidget {
           for (final item in _items) ...[
             MenuRow(
               icon: item.icon,
-              label: item.label,
+              label: context.tr(item.labelId, item.label),
               onTap: item.opens == null
                   ? null
                   : () => Navigator.of(
@@ -392,8 +402,17 @@ class _Menu extends StatelessWidget {
             const SizedBox(height: AppTheme.sm),
           ],
           MenuRow(
+            icon: AppIcons.language,
+            label:
+                '${context.tr('Bahasa', 'Language')} · ${context.language.label}',
+            onTap: () => showLanguageSheet(context),
+          ),
+          const SizedBox(height: AppTheme.sm),
+          MenuRow(
             icon: AppIcons.logout,
-            label: AuthScope.of(context).isSignedIn ? 'Sign out' : 'Sign in',
+            label: AuthScope.of(context).isSignedIn
+                ? context.tr('Keluar', 'Sign out')
+                : context.tr('Masuk', 'Sign in'),
             danger: AuthScope.of(context).isSignedIn,
             onTap: () => _toggleSession(context),
           ),
@@ -407,6 +426,7 @@ class _Menu extends StatelessWidget {
   Future<void> _toggleSession(BuildContext context) async {
     final auth = AuthScope.of(context);
     final messenger = ScaffoldMessenger.of(context);
+    final signedOutText = context.tr('Kamu sudah keluar.', 'Signed out.');
 
     if (!auth.isSignedIn) {
       await Navigator.of(context).push(
@@ -418,6 +438,6 @@ class _Menu extends StatelessWidget {
     await auth.signOut();
     messenger
       ..hideCurrentSnackBar()
-      ..showSnackBar(const SnackBar(content: Text('Signed out.')));
+      ..showSnackBar(SnackBar(content: Text(signedOutText)));
   }
 }

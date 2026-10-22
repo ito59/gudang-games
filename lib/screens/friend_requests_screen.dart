@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_member.dart';
 import '../services/member_repository.dart';
 import '../state/auth_scope.dart';
@@ -62,7 +63,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
       body: Column(
         children: [
           PageHeader(
-            title: 'Friend requests',
+            title: context.tr('Permintaan pertemanan', 'Friend requests'),
             onBack: () => Navigator.of(context).pop(),
           ),
           Expanded(
@@ -90,7 +91,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(AppTheme.lg),
                         child: Text(
-                          'Nobody is waiting on you.',
+                          context.tr('Belum ada yang menunggu jawabanmu.', 'Nobody is waiting on you.'),
                           textAlign: TextAlign.center,
                           style: AppTextStyles.bodyMd.copyWith(
                             color: AppColors.onSurfaceVariant,
@@ -154,10 +155,10 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
         SnackBar(
           content: Text(
             state == null
-                ? 'That did not save. Try again.'
+                ? context.tr('Gagal menyimpan. Coba lagi.', 'That did not save. Try again.')
                 : accept
-                ? 'You and ${member.name} are friends.'
-                : 'Request from ${member.name} declined.',
+                ? context.tr('Kamu dan ${member.name} sekarang berteman.', 'You and ${member.name} are friends.')
+                : context.tr('Permintaan dari ${member.name} ditolak.', 'Request from ${member.name} declined.'),
           ),
         ),
       );
@@ -223,13 +224,13 @@ class _RequestRow extends StatelessWidget {
                 ),
                 _RowAction(
                   icon: AppIcons.check,
-                  label: 'Accept ${member.name}',
+                  label: context.tr('Terima ${member.name}', 'Accept ${member.name}'),
                   color: AppColors.primary,
                   onPressed: busy ? null : onAccept,
                 ),
                 _RowAction(
                   icon: AppIcons.close,
-                  label: 'Decline ${member.name}',
+                  label: context.tr('Tolak ${member.name}', 'Decline ${member.name}'),
                   color: AppColors.onSurfaceVariant,
                   onPressed: busy ? null : onDecline,
                 ),

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher icon background: the gold band from the home header
+     (TopBar.gradient), deeper gold top-left easing to pale gold. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:startColor="#D9BC80"
+        android:centerColor="#E6CF9C"
+        android:endColor="#F3E4BF"
+        android:type="linear" />
+</shape>

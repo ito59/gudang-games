@@ -29,10 +29,11 @@
     <li><strong>Account details</strong> — your name, email address and, if you sign in with an email address, a password (stored only as a one-way hash).</li>
     <li><strong>Google Sign-In</strong> — if you choose "Continue with Google", Google shares your name, email address, Google account identifier and profile picture with us. We do not receive your Google password or access to your other Google data.</li>
     <li><strong>Profile</strong> — username, bio, location (a free-text field you fill in yourself; we do not use your device's location), profile photo, accent colour and the game you are currently playing.</li>
+    <li><strong>Online status</strong> — while the app is open we record that you are online and which game you are playing, so other members can see it. It clears shortly after you close the app.</li>
     <li><strong>Content</strong> — posts, comments, likes, friend requests and friends list, and messages you send in chat.</li>
     <li><strong>Photos</strong> — when you choose to set a profile photo, the app opens your camera or photo gallery at your request and uploads only the photo you pick. The app has no ongoing access to your photos.</li>
     <li><strong>Reports and blocks</strong> — the reason and note you submit when reporting content or a user, and the list of users you have blocked.</li>
-    <li><strong>Settings</strong> — your notification preferences.</li>
+    <li><strong>Settings</strong> — your notification preferences. The app language you choose (Bahasa Indonesia or English) is stored only on your device.</li>
 </ul>
 
 <h3>Information collected automatically</h3>
@@ -41,7 +42,7 @@
     <li><strong>Push notification token</strong> — if you allow notifications, Firebase Cloud Messaging gives the app a device token which we store with your account so we can deliver chat and news notifications. It identifies the app installation, not you personally.</li>
     <li><strong>Game activity</strong> — when a game is opened we increase that game's public play counter. This counter is not linked to your account.</li>
     <li><strong>Technical logs</strong> — like any web service, our servers record IP addresses, request times and error details in logs used for security and troubleshooting.</li>
-    <li><strong>On your device</strong> — the app stores your sign-in token and a few preferences locally so you stay signed in.</li>
+    <li><strong>On your device</strong> — the app stores your sign-in token and a few preferences locally so you stay signed in. HTML5 games run inside the app and may keep their progress, scores or settings in your device's local storage; this is not sent to our servers and is removed when you clear the app's data.</li>
 </ul>
 
 <p>We do not collect your precise or approximate location, contacts, call logs, SMS, advertising ID, or payment information.</p>
@@ -62,7 +63,7 @@
 
 <h2 id="visible">3. What other users can see</h2>
 <ul>
-    <li><strong>Public to everyone using the app</strong>, including people who are not signed in: your name, username, bio, location, profile photo, accent colour, the game you are playing, game statistics on your profile, and your posts, comments and like counts.</li>
+    <li><strong>Public to everyone using the app</strong>, including people who are not signed in: your name, username, bio, location, profile photo, accent colour, your online status and the game you are playing, game statistics on your profile, and your posts, comments and like counts.</li>
     <li><strong>Visible only to conversation participants</strong>: your chat messages and whether you have read them.</li>
     <li><strong>Never shown to other users</strong>: your email address, password, Google account identifier, device tokens, notification settings, reports you make, and your block list. A blocked user is not told that you blocked them.</li>
 </ul>
@@ -101,9 +102,11 @@
 
 <h3>Games and links from third parties</h3>
 <p>
-    Some games in the catalogue are hosted by their own developers and open inside the app.
-    Those games, and any external links, are governed by their own privacy policies; we do not
-    control what they collect. We do not pass your account details to them.
+    The games in the catalogue are made by third-party developers. Most are stored on our own
+    servers and run inside the app; some may be hosted by their developers. We do not pass your
+    account details to any game. Trailer videos are streamed from our servers. Games hosted by
+    others, and any external links, are governed by their own privacy policies; we do not control
+    what they collect.
 </p>
 
 <h2 id="security">5. Security</h2>

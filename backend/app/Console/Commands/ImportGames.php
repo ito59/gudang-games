@@ -56,7 +56,13 @@ class ImportGames extends Command
             return self::FAILURE;
         }
 
-        $categories = $this->categories($manifest['categories'] ?? []);
+        // A game may name a category the list leaves out; it is created too
+        // rather than the game silently landing uncategorised.
+        $named = collect($manifest['games'])
+            ->pluck('category')
+            ->filter()
+            ->map(fn ($name) => ['name' => (string) $name]);
+        $categories = $this->categories([...($manifest['categories'] ?? []), ...$named]);
         $failed = 0;
 
         foreach ($manifest['games'] as $entry) {

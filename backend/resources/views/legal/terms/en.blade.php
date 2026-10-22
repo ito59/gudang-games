@@ -72,6 +72,21 @@
     is at your own risk. Game names, images and trademarks belong to their respective owners.
 </p>
 
+<h3 id="casino">Casino-style games</h3>
+<p>
+    Some games, such as slots, blackjack, roulette, bingo and video poker, imitate casino games.
+    They are <strong>simulations for entertainment only</strong>:
+</p>
+<ul>
+    <li>there is no betting with real money, and no money, prizes or anything of real-world value can be won;</li>
+    <li>coins, chips or credits inside a game cannot be bought, sold, exchanged or cashed out, and have no value outside the game;</li>
+    <li>success in these games does not imply future success at real gambling.</li>
+</ul>
+<p>
+    {{ $legal['app_name'] }} does not offer, promote or link to gambling services. If you feel your playing
+    habits are getting in the way of your life, take a break and seek help.
+</p>
+
 <h2 id="ours">7. Our app</h2>
 <p>
     The app, its design, software and content that we provide (excluding your content and third-party

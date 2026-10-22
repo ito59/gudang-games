@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_member.dart';
 import '../models/community_post.dart';
 import '../services/feed_repository.dart';
@@ -121,14 +122,14 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
       body: Column(
         children: [
           PageHeader(
-            title: member?.name ?? 'Profile',
+            title: member?.name ?? context.tr('Profil', 'Profile'),
             onBack: () => Navigator.of(context).pop(),
             // Not on one's own profile: there is nobody to report or block.
             trailing: loaded == null || loaded.friendship == Friendship.self
                 ? null
                 : IconButton(
                     onPressed: () => _moreOnMember(loaded),
-                    tooltip: 'More',
+                    tooltip: context.tr('Lainnya', 'More'),
                     icon: const Icon(
                       AppIcons.moreHoriz,
                       color: AppColors.onSurfaceVariant,
@@ -167,7 +168,7 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
                     _Stats(member: loaded),
                     const SizedBox(height: AppTheme.xl),
                   ],
-                  _Gutter(child: SectionTitle('Posts')),
+                  _Gutter(child: SectionTitle(context.tr('Postingan', 'Posts'))),
                   const SizedBox(height: AppTheme.md),
                   ..._postList(member),
                 ],
@@ -196,7 +197,10 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
             child: Padding(
               padding: const EdgeInsets.all(AppTheme.lg),
               child: Text(
-                '${member?.name ?? 'They'} has not posted yet.',
+                context.tr(
+                  '${member?.name ?? 'Dia'} belum membuat postingan.',
+                  '${member?.name ?? 'They'} has not posted yet.',
+                ),
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMd.copyWith(
                   color: AppColors.onSurfaceVariant,
@@ -222,7 +226,7 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
                   liked: post.likedByMe,
                   onToggleLike: () => toggleLike(post),
                   onComment: () => openComments(post),
-                  onShare: () => snack('Share — coming soon'),
+                  onShare: () => snack(context.tr('Bagikan — segera hadir', 'Share — coming soon')),
                   onMore: () => moreOnPost(post),
                 ),
         ),
@@ -269,7 +273,14 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
           subject: member.name,
           repository: reports,
         );
-        if (filed) snack('Thanks — a moderator will look at it.');
+        if (filed && mounted) {
+          snack(
+            context.tr(
+              'Terima kasih — moderator akan memeriksanya.',
+              'Thanks — a moderator will look at it.',
+            ),
+          );
+        }
 
       case ContentAction.block:
         if (!await confirmBlock(context, name: member.name)) return;
@@ -294,14 +305,18 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
     setState(() => _busy = false);
 
     if (now == null) {
-      snack('That did not save. Try again.');
+      snack(context.tr('Gagal menyimpan. Coba lagi.', 'That did not save. Try again.'));
       return;
     }
 
     await _load();
     if (!mounted) return;
 
-    snack(now ? '${member.name} is blocked.' : '${member.name} is unblocked.');
+    snack(
+      now
+          ? context.tr('${member.name} diblokir.', '${member.name} is blocked.')
+          : context.tr('Blokir ${member.name} sudah dibuka.', '${member.name} is unblocked.'),
+    );
   }
 
   /// What the one friend button does depends on where the pair stands.
@@ -315,23 +330,36 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
       case Friendship.none:
         await _friendCall(
           () => _memberApi.addFriend(member.id),
-          done: 'Friend request sent to ${member.name}.',
+          done: context.tr(
+            'Permintaan pertemanan terkirim ke ${member.name}.',
+            'Friend request sent to ${member.name}.',
+          ),
         );
       case Friendship.requested:
         await _friendCall(
           () => _memberApi.removeFriend(member.id),
-          done: 'Request to ${member.name} withdrawn.',
+          done: context.tr(
+            'Permintaan ke ${member.name} dibatalkan.',
+            'Request to ${member.name} withdrawn.',
+          ),
         );
       case Friendship.pending:
         await _friendCall(
           () => _memberApi.acceptFriend(member.id),
-          done: 'You and ${member.name} are friends.',
+          done: context.tr(
+            'Kamu dan ${member.name} sekarang berteman.',
+            'You and ${member.name} are friends.',
+          ),
         );
       case Friendship.friends:
         if (!await _confirmRemove(member)) return;
+        if (!mounted) return;
         await _friendCall(
           () => _memberApi.removeFriend(member.id),
-          done: 'Removed ${member.name} from your friends.',
+          done: context.tr(
+            '${member.name} dihapus dari temanmu.',
+            'Removed ${member.name} from your friends.',
+          ),
         );
       case Friendship.self:
         break;
@@ -346,7 +374,10 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
 
     await _friendCall(
       () => _memberApi.removeFriend(member.id),
-      done: 'Request from ${member.name} declined.',
+      done: context.tr(
+        'Permintaan dari ${member.name} ditolak.',
+        'Request from ${member.name} declined.',
+      ),
     );
   }
 
@@ -363,7 +394,11 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
       if (state != null) _member = _member?.copyWith(friendship: state);
     });
 
-    snack(state == null ? 'That did not save. Try again.' : done);
+    snack(
+      state == null
+          ? context.tr('Gagal menyimpan. Coba lagi.', 'That did not save. Try again.')
+          : done,
+    );
   }
 
   Future<bool> _confirmRemove(CommunityMember member) async {
@@ -372,11 +407,14 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surfaceContainer,
         title: Text(
-          'Remove ${member.name}?',
+          context.tr('Hapus ${member.name}?', 'Remove ${member.name}?'),
           style: AppTextStyles.titleMd.copyWith(color: AppColors.onSurface),
         ),
         content: Text(
-          'You will stop being friends. Either of you can ask again later.',
+          context.tr(
+            'Kalian tidak lagi berteman. Kalian berdua bisa mengirim permintaan lagi nanti.',
+            'You will stop being friends. Either of you can ask again later.',
+          ),
           style: AppTextStyles.bodyMd.copyWith(
             color: AppColors.onSurfaceVariant,
           ),
@@ -384,12 +422,12 @@ class _MemberProfileScreenState extends State<MemberProfileScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Keep'),
+            child: Text(context.tr('Simpan teman', 'Keep')),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(
-              'Remove',
+              context.tr('Hapus', 'Remove'),
               style: TextStyle(color: AppColors.tertiary),
             ),
           ),
@@ -422,8 +460,12 @@ class _BlockedNotice extends StatelessWidget {
               const SizedBox(width: AppTheme.md),
               Expanded(
                 child: Text(
-                  'You blocked this member. Unblock them from the menu above '
-                  'to message them again.',
+                  context.tr(
+                    'Kamu memblokir anggota ini. Buka blokir dari menu di atas '
+                    'untuk mengirim pesan lagi.',
+                    'You blocked this member. Unblock them from the menu above '
+                    'to message them again.',
+                  ),
                   style: AppTextStyles.bodyMd.copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -545,10 +587,10 @@ class _StatusPill extends StatelessWidget {
           Flexible(
             child: Text(
               !online
-                  ? 'Offline'
+                  ? context.tr('Offline', 'Offline')
                   : member.playing == null
-                  ? 'Online'
-                  : 'Playing ${member.playing}',
+                  ? context.tr('Online', 'Online')
+                  : context.tr('Sedang main ${member.playing}', 'Playing ${member.playing}'),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.labelSm.copyWith(color: color),
@@ -590,7 +632,7 @@ class _Actions extends StatelessWidget {
               Expanded(
                 child: GradientButton(
                   icon: AppIcons.chatBubble,
-                  label: 'Message',
+                  label: context.tr('Pesan', 'Message'),
                   expand: true,
                   onPressed: () => _openChat(context),
                 ),
@@ -601,7 +643,7 @@ class _Actions extends StatelessWidget {
                 const SizedBox(width: AppTheme.md),
                 _SecondaryAction(
                   icon: _icon,
-                  tooltip: _tooltip,
+                  tooltip: _tooltip(context),
                   onPressed: busy ? null : onFriend,
                 ),
               ],
@@ -627,13 +669,23 @@ class _Actions extends StatelessWidget {
     _ => AppIcons.personAdd,
   };
 
-  String get _tooltip => switch (member.friendship) {
-    Friendship.friends => 'Friends — tap to remove',
-    Friendship.requested => 'Requested — tap to withdraw',
-    _ => 'Add friend',
+  String _tooltip(BuildContext context) => switch (member.friendship) {
+    Friendship.friends => context.tr(
+      'Berteman — ketuk untuk menghapus',
+      'Friends — tap to remove',
+    ),
+    Friendship.requested => context.tr(
+      'Permintaan terkirim — ketuk untuk membatalkan',
+      'Requested — tap to withdraw',
+    ),
+    _ => context.tr('Tambah teman', 'Add friend'),
   };
 
   Future<void> _openChat(BuildContext context) async {
+    final failed = context.tr(
+      'Tidak bisa membuka chat itu.',
+      'Could not open that chat.',
+    );
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
     // Taken before the sign-in prompt, which is an async gap this widget's
@@ -646,7 +698,7 @@ class _Actions extends StatelessWidget {
     if (chat == null) {
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(const SnackBar(content: Text('Could not open that chat.')));
+        ..showSnackBar(SnackBar(content: Text(failed)));
       return;
     }
 
@@ -681,7 +733,10 @@ class _RequestPanel extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${member.name} wants to be friends.',
+              context.tr(
+                '${member.name} ingin berteman.',
+                '${member.name} wants to be friends.',
+              ),
               style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurface),
             ),
             const SizedBox(height: AppTheme.md),
@@ -690,7 +745,7 @@ class _RequestPanel extends StatelessWidget {
                 Expanded(
                   child: GradientButton(
                     icon: AppIcons.check,
-                    label: 'Accept',
+                    label: context.tr('Terima', 'Accept'),
                     expand: true,
                     onPressed: busy ? null : onAccept,
                   ),
@@ -698,7 +753,7 @@ class _RequestPanel extends StatelessWidget {
                 const SizedBox(width: AppTheme.md),
                 _SecondaryAction(
                   icon: AppIcons.close,
-                  tooltip: 'Decline',
+                  tooltip: context.tr('Tolak', 'Decline'),
                   onPressed: busy ? null : onDecline,
                 ),
               ],
@@ -763,17 +818,17 @@ class _Stats extends StatelessWidget {
       (
         icon: AppIcons.videogameAsset,
         value: '${member.gamesOwned}',
-        label: 'Games',
+        label: context.tr('Game', 'Games'),
       ),
       (
         icon: AppIcons.schedule,
         value: '${member.hoursPlayed}',
-        label: 'Hours',
+        label: context.tr('Jam', 'Hours'),
       ),
       (
         icon: AppIcons.trophy,
         value: '${member.achievements}',
-        label: 'Awards',
+        label: context.tr('Penghargaan', 'Awards'),
       ),
     ];
 

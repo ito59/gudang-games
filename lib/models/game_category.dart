@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../theme/app_icons.dart';
 
 class GameCategory {
@@ -12,7 +13,7 @@ class GameCategory {
   /// Builds a category from the `/api/v1/categories` payload.
   factory GameCategory.fromJson(Map<String, dynamic> json) {
     return GameCategory(
-      label: (json['label'] as String?) ?? 'Games',
+      label: (json['label'] as String?) ?? tr('Game', 'Games'),
       slug: (json['slug'] as String?) ?? '',
       icon: iconFor(json['icon'] as String?),
     );

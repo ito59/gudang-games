@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_member.dart';
 import '../models/community_post.dart';
 import '../services/feed_repository.dart';
@@ -146,7 +147,7 @@ class _CommunityScreenState extends State<CommunityScreen>
     return Column(
       children: [
         PageHeader(
-          title: 'Community',
+          title: context.tr('Komunitas', 'Community'),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -161,7 +162,7 @@ class _CommunityScreenState extends State<CommunityScreen>
               ),
               IconButton(
                 onPressed: _compose,
-                tooltip: 'New post',
+                tooltip: context.tr('Postingan baru', 'New post'),
                 icon: const Icon(AppIcons.editSquare, color: AppColors.primary),
               ),
             ],
@@ -181,7 +182,9 @@ class _CommunityScreenState extends State<CommunityScreen>
                 // Left out entirely while the strip is empty, so a server
                 // that did not answer leaves a heading over nothing.
                 if (_online.isNotEmpty) ...[
-                  const _Gutter(child: SectionTitle('Online now')),
+                  _Gutter(
+                    child: SectionTitle(context.tr('Sedang online', 'Online now')),
+                  ),
                   const SizedBox(height: AppTheme.md),
                   _OnlineStrip(members: _online, onTap: _openMember),
                   const SizedBox(height: AppTheme.xl),
@@ -234,7 +237,12 @@ class _CommunityScreenState extends State<CommunityScreen>
                               onToggleLike: () => toggleLike(post),
                               onAuthorTap: () => _openAuthor(post),
                               onComment: () => openComments(post),
-                              onShare: () => snack('Share — coming soon'),
+                              onShare: () => snack(
+                                context.tr(
+                                  'Bagikan — segera hadir',
+                                  'Share — coming soon',
+                                ),
+                              ),
                               onMore: () => moreOnPost(post),
                             ),
                     ),
@@ -262,7 +270,13 @@ class _CommunityScreenState extends State<CommunityScreen>
     if (!mounted) return;
 
     if (post == null) {
-      snack(error ?? 'The post could not be sent.');
+      snack(
+        error ??
+            context.tr(
+              'Postingan tidak bisa dikirim.',
+              'The post could not be sent.',
+            ),
+      );
       return;
     }
 
@@ -302,7 +316,7 @@ class _CommunityScreenState extends State<CommunityScreen>
 
         final chat = await chats.openWith(member.id);
         if (chat == null) {
-          snack('Could not open that chat.');
+          snack(tr('Chat itu tidak bisa dibuka.', 'Could not open that chat.'));
           return;
         }
 
@@ -327,7 +341,14 @@ class _CommunityScreenState extends State<CommunityScreen>
           subject: member.name,
           repository: reports,
         );
-        if (filed) snack('Thanks — a moderator will look at it.');
+        if (filed) {
+          snack(
+            tr(
+              'Makasih — moderator akan memeriksanya.',
+              'Thanks — a moderator will look at it.',
+            ),
+          );
+        }
 
       case MemberAction.block:
       case MemberAction.unblock:
@@ -351,14 +372,23 @@ class _CommunityScreenState extends State<CommunityScreen>
     if (!mounted) return;
 
     if (now == null) {
-      snack('That did not save. Try again.');
+      snack(
+        context.tr('Gagal menyimpan. Coba lagi.', 'That did not save. Try again.'),
+      );
       return;
     }
 
     await _load();
     if (!mounted) return;
 
-    snack(now ? '${member.name} is blocked.' : '${member.name} is unblocked.');
+    snack(
+      now
+          ? context.tr('${member.name} diblokir.', '${member.name} is blocked.')
+          : context.tr(
+              'Blokir ${member.name} dibuka.',
+              '${member.name} is unblocked.',
+            ),
+    );
   }
 
   /// The article comes back with whatever the reader changed in it, so the
@@ -428,7 +458,7 @@ class _FriendRequestsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onPressed,
-      tooltip: 'Friend requests',
+      tooltip: context.tr('Permintaan pertemanan', 'Friend requests'),
       icon: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -469,7 +499,7 @@ class _MessagesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onPressed,
-      tooltip: 'Messages',
+      tooltip: context.tr('Pesan', 'Messages'),
       icon: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -624,14 +654,14 @@ class _FilterBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: AppTheme.marginMobile),
         children: [
           _FilterChip(
-            label: 'All',
+            label: context.tr('Semua', 'All'),
             selected: selected == null,
             onTap: () => onChanged(null),
           ),
           for (final kind in PostKind.values) ...[
             const SizedBox(width: AppTheme.sm),
             _FilterChip(
-              label: kind.label,
+              label: kind.label(context),
               selected: selected == kind,
               onTap: () => onChanged(kind),
             ),
@@ -709,7 +739,10 @@ class _FeedProblem extends StatelessWidget {
                 color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
               ),
               const SizedBox(height: AppTheme.md),
-              Text('The feed did not load', style: AppTextStyles.cardTitle),
+              Text(
+                context.tr('Feed gagal dimuat', 'The feed did not load'),
+                style: AppTextStyles.cardTitle,
+              ),
               const SizedBox(height: AppTheme.xs),
               Text(
                 message,
@@ -722,7 +755,7 @@ class _FeedProblem extends StatelessWidget {
               TextButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(AppIcons.refresh, size: 18),
-                label: const Text('Try again'),
+                label: Text(context.tr('Coba lagi', 'Try again')),
               ),
             ],
           ),
@@ -755,12 +788,21 @@ class _EmptyFeed extends StatelessWidget {
                 color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
               ),
               const SizedBox(height: AppTheme.md),
-              Text('Nothing here yet', style: AppTextStyles.cardTitle),
+              Text(
+                context.tr('Belum ada apa-apa', 'Nothing here yet'),
+                style: AppTextStyles.cardTitle,
+              ),
               const SizedBox(height: AppTheme.xs),
               Text(
                 filtered
-                    ? 'No posts match this filter.'
-                    : 'Be the first to post something.',
+                    ? context.tr(
+                        'Tidak ada postingan yang cocok dengan filter ini.',
+                        'No posts match this filter.',
+                      )
+                    : context.tr(
+                        'Jadilah yang pertama memposting sesuatu.',
+                        'Be the first to post something.',
+                      ),
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMd.copyWith(
                   color: AppColors.onSurfaceVariant,
@@ -771,7 +813,7 @@ class _EmptyFeed extends StatelessWidget {
                 TextButton.icon(
                   onPressed: onCompose,
                   icon: const Icon(AppIcons.editSquare, size: 18),
-                  label: const Text('Write a post'),
+                  label: Text(context.tr('Tulis postingan', 'Write a post')),
                 ),
               ],
             ],

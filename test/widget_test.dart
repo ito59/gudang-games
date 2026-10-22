@@ -45,30 +45,23 @@ void main() {
     );
   });
 
-  testWidgets('category tile keeps its icon centred over the label', (
+  testWidgets('category chip puts its icon beside the label', (
     tester,
   ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.light,
         home: Scaffold(
-          body: Center(
-            child: SizedBox(
-              width: 90,
-              child: CategoryCard(category: gameCategories.first),
-            ),
-          ),
+          body: Center(child: CategoryCard(category: gameCategories.first)),
         ),
       ),
     );
 
-    final tile = tester.getRect(find.byType(CategoryCard));
     final icon = tester.getRect(find.byType(Icon));
     final label = tester.getRect(find.text(gameCategories.first.label));
 
-    expect(icon.center.dx, closeTo(tile.center.dx, 0.5));
-    expect(label.center.dx, closeTo(tile.center.dx, 0.5));
-    expect(label.top, greaterThan(icon.bottom));
+    expect(label.left, greaterThan(icon.right));
+    expect(icon.center.dy, closeTo(label.center.dy, 1));
   });
 
   testWidgets('tapping a nav destination updates the selection', (

@@ -73,6 +73,21 @@
     dan penggunaannya menjadi risiko Anda sendiri. Nama, gambar, dan merek dagang game adalah milik pemiliknya masing-masing.
 </p>
 
+<h3 id="casino">Game bergaya kasino</h3>
+<p>
+    Sebagian game, seperti slot, blackjack, roulette, bingo, dan video poker, meniru permainan kasino.
+    Game tersebut <strong>hanya simulasi untuk hiburan</strong>:
+</p>
+<ul>
+    <li>tidak ada taruhan dengan uang sungguhan, dan tidak ada uang, hadiah, atau barang bernilai nyata yang dapat dimenangkan;</li>
+    <li>koin, chip, atau kredit di dalam game tidak dapat dibeli, dijual, ditukar, atau dicairkan, dan tidak memiliki nilai di luar game;</li>
+    <li>keberhasilan di game ini tidak berarti akan berhasil dalam perjudian sungguhan.</li>
+</ul>
+<p>
+    {{ $legal['app_name'] }} tidak menyediakan, mempromosikan, atau menautkan layanan perjudian. Jika Anda
+    merasa kebiasaan bermain Anda mulai mengganggu, istirahatlah dan carilah bantuan.
+</p>
+
 <h2 id="ours">7. Aplikasi kami</h2>
 <p>
     Aplikasi, desain, perangkat lunak, dan konten yang kami sediakan (tidak termasuk konten Anda dan game

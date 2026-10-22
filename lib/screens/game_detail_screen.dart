@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/game.dart';
 import '../services/game_repository.dart';
 import '../state/play_history.dart';
@@ -53,7 +54,7 @@ class GameDetailScreen extends StatelessWidget {
                   ),
                   if (game.description.isNotEmpty) ...[
                     const SizedBox(height: AppTheme.xl),
-                    Text('About', style: AppTextStyles.titleMd.copyWith(
+                    Text(context.tr('Tentang', 'About'), style: AppTextStyles.titleMd.copyWith(
                       color: AppColors.primary,
                     )),
                     const SizedBox(height: AppTheme.sm),
@@ -95,7 +96,7 @@ class _Poster extends StatelessWidget {
         padding: const EdgeInsets.all(AppTheme.sm),
         child: IconButton.filled(
           onPressed: () => Navigator.of(context).pop(),
-          tooltip: 'Back',
+          tooltip: context.tr('Kembali', 'Back'),
           style: IconButton.styleFrom(
             backgroundColor: AppColors.surfaceContainer,
             foregroundColor: AppColors.onSurface,
@@ -167,7 +168,10 @@ class _MetaRow extends StatelessWidget {
           ],
         ),
         Text(
-          '${_compact(game.playsCount)} plays',
+          context.tr(
+            '${_compact(game.playsCount)} kali main',
+            '${_compact(game.playsCount)} plays',
+          ),
           style: AppTextStyles.labelSm.copyWith(
             color: AppColors.onSurfaceVariant,
           ),
@@ -208,7 +212,7 @@ class _Actions extends StatelessWidget {
           GradientButton(
             icon: AppIcons.playArrow,
             iconFill: 1,
-            label: 'Play Game',
+            label: context.tr('Main Game', 'Play Game'),
             expand: true,
             onPressed: () => _play(context),
           )
@@ -221,7 +225,10 @@ class _Actions extends StatelessWidget {
                 vertical: 14,
               ),
               child: Text(
-                'This game has no playable source yet.',
+                context.tr(
+                  'Game ini belum bisa dimainkan.',
+                  'This game has no playable source yet.',
+                ),
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMd.copyWith(
                   color: AppColors.onSurfaceVariant,
@@ -233,7 +240,7 @@ class _Actions extends StatelessWidget {
           const SizedBox(height: AppTheme.sm),
           _SecondaryButton(
             icon: AppIcons.playCircle,
-            label: 'Play Trailer',
+            label: context.tr('Putar Trailer', 'Play Trailer'),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => TrailerScreen(game: game)),
             ),
@@ -304,12 +311,14 @@ class _Stats extends StatelessWidget {
       (
         icon: AppIcons.bolt,
         value: _compact(game.playsCount),
-        label: 'Plays',
+        label: context.tr('Dimainkan', 'Plays'),
       ),
       (
         icon: AppIcons.videogameAsset,
-        value: game.isHosted ? 'Hosted' : 'Link',
-        label: 'Delivery',
+        value: game.isHosted
+            ? context.tr('Di server', 'Hosted')
+            : context.tr('Tautan', 'Link'),
+        label: context.tr('Sumber', 'Delivery'),
       ),
     ];
 

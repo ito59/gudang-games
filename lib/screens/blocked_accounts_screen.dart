@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../models/community_member.dart';
 import '../services/member_repository.dart';
 import '../state/auth_scope.dart';
@@ -84,14 +85,18 @@ class _BlockedAccountsScreenState extends State<BlockedAccountsScreen>
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(content: Text('That did not save. Try again.')),
+          SnackBar(
+            content: Text(
+              context.tr('Gagal menyimpan. Coba lagi.', 'That did not save. Try again.'),
+            ),
+          ),
         );
       return;
     }
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('${member.name} is unblocked.')));
+      ..showSnackBar(SnackBar(content: Text(context.tr('Blokir ${member.name} sudah dibuka.', '${member.name} is unblocked.'))));
   }
 
   @override
@@ -100,7 +105,7 @@ class _BlockedAccountsScreenState extends State<BlockedAccountsScreen>
       body: Column(
         children: [
           PageHeader(
-            title: 'Blocked accounts',
+            title: context.tr('Akun diblokir', 'Blocked accounts'),
             onBack: () => Navigator.of(context).pop(),
           ),
           Expanded(
@@ -126,8 +131,12 @@ class _BlockedAccountsScreenState extends State<BlockedAccountsScreen>
                           const _Empty()
                         else ...[
                           Text(
-                            'They cannot message you or see your posts, and '
-                            'they have not been told.',
+                            context.tr(
+                              'Mereka tidak bisa mengirim pesan ke kamu atau melihat postinganmu, '
+                              'dan mereka tidak diberi tahu.',
+                              'They cannot message you or see your posts, and '
+                              'they have not been told.',
+                            ),
                             style: AppTextStyles.bodyMd.copyWith(
                               color: AppColors.onSurfaceVariant,
                             ),
@@ -201,7 +210,7 @@ class _BlockedRow extends StatelessWidget {
             TextButton(
               onPressed: busy ? null : onUnblock,
               child: Text(
-                busy ? 'Working…' : 'Unblock',
+                busy ? context.tr('Memproses…', 'Working…') : context.tr('Buka blokir', 'Unblock'),
                 style: AppTextStyles.labelSm.copyWith(
                   color: busy ? AppColors.onSurfaceVariant : AppColors.primary,
                 ),
@@ -231,7 +240,7 @@ class _Empty extends StatelessWidget {
             ),
             const SizedBox(height: AppTheme.md),
             Text(
-              'You have not blocked anyone.',
+              context.tr('Kamu belum memblokir siapa pun.', 'You have not blocked anyone.'),
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMd.copyWith(
                 color: AppColors.onSurfaceVariant,

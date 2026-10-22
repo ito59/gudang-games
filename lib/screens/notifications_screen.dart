@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/language.dart';
 import '../services/notification_settings.dart';
 import '../state/auth_scope.dart';
 import '../state/push_scope.dart';
@@ -70,6 +71,10 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     // must not be read across.
     final push = PushScope.maybeOf(context);
     final messenger = ScaffoldMessenger.of(context);
+    final failed = context.tr(
+      'Pengaturan itu gagal disimpan.',
+      'That setting did not save.',
+    );
 
     // Flipped straight away: a switch that waits on a round trip feels
     // broken, and there is a truthful state to fall back to.
@@ -98,7 +103,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(content: Text('That setting did not save.')),
+          SnackBar(content: Text(failed)),
         );
     }
   }
@@ -111,7 +116,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
       body: Column(
         children: [
           PageHeader(
-            title: 'Notifications',
+            title: context.tr('Notifikasi', 'Notifications'),
             onBack: () => Navigator.of(context).pop(),
           ),
           Expanded(
@@ -131,15 +136,21 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                   const _CouldNotLoad()
                 else ...[
                   _Switch(
-                    label: 'Messages',
-                    detail: 'When somebody writes to you.',
+                    label: context.tr('Pesan', 'Messages'),
+                    detail: context.tr(
+                      'Saat ada yang mengirimi kamu pesan.',
+                      'When somebody writes to you.',
+                    ),
                     value: settings.chat,
                     onChanged: (on) => _set(chat: on),
                   ),
                   const SizedBox(height: AppTheme.sm),
                   _Switch(
-                    label: 'News from the team',
-                    detail: 'New games and announcements.',
+                    label: context.tr('Kabar dari tim', 'News from the team'),
+                    detail: context.tr(
+                      'Game baru dan pengumuman.',
+                      'New games and announcements.',
+                    ),
                     value: settings.news,
                     onChanged: (on) => _set(news: on),
                   ),
@@ -213,9 +224,14 @@ class _NotDeliverableYet extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppTheme.md),
         child: Text(
-          'This server cannot send notifications yet, so nothing will arrive '
-          'while the app is closed. Your choices here are saved for when it '
-          'can.',
+          context.tr(
+            'Server ini belum bisa mengirim notifikasi, jadi tidak akan ada '
+            'yang masuk selama aplikasi ditutup. Pilihan kamu di sini tetap '
+            'disimpan untuk nanti.',
+            'This server cannot send notifications yet, so nothing will arrive '
+            'while the app is closed. Your choices here are saved for when it '
+            'can.',
+          ),
           style: AppTextStyles.labelSm.copyWith(
             color: AppColors.onSurfaceVariant,
           ),
@@ -234,7 +250,10 @@ class _CouldNotLoad extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppTheme.lg),
         child: Text(
-          'Could not load your settings. Pull down or try again later.',
+          context.tr(
+            'Pengaturan kamu gagal dimuat. Tarik ke bawah atau coba lagi nanti.',
+            'Could not load your settings. Pull down or try again later.',
+          ),
           textAlign: TextAlign.center,
           style: AppTextStyles.bodyMd.copyWith(
             color: AppColors.onSurfaceVariant,

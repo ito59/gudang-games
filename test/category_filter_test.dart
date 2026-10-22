@@ -50,10 +50,7 @@ Future<void> _pumpHome(WidgetTester tester) async {
   await tester.pumpWidget(
     wrapScreen(
       HomeScreen(
-        repository: fakeGameRepository(
-          games: _games,
-          categories: _categories,
-        ),
+        repository: fakeGameRepository(games: _games, categories: _categories),
       ),
     ),
   );
@@ -99,6 +96,9 @@ void main() {
   testWidgets('an empty category offers a way back', (tester) async {
     await _pumpHome(tester);
 
+    // The chip strip scrolls sideways; Puzzle starts past the edge.
+    await tester.ensureVisible(find.text('Puzzle'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Puzzle'));
     await tester.pumpAndSettle();
 
@@ -109,5 +109,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Spiderman Rush'), findsOneWidget);
+  });
+
+  testWidgets('the featured slider steps aside while filtering', (
+    tester,
+  ) async {
+    await _pumpHome(tester);
+    expect(find.text('Play Now'), findsOneWidget);
+    expect(find.text('Popular Games'), findsOneWidget);
+
+    await tester.tap(find.text('Arcade'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Play Now'), findsNothing);
+    expect(find.text('Arcade Games'), findsOneWidget);
+
+    await tester.tap(find.text('All'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Play Now'), findsOneWidget);
+    expect(find.text('Popular Games'), findsOneWidget);
   });
 }
